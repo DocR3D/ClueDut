@@ -6,6 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import static com.example.maxime.testenvoie.Server.nbJoueur;
+import static com.example.maxime.testenvoie.Server.players;
+
 /**
  * Created by Maxime  on 29/11/2018.
  */
@@ -20,8 +23,10 @@ public class Server  {
     public Server(int nbJoueur) throws IOException {
         players = new ArrayList<>();
         this.nbJoueur = nbJoueur;
-        Thread thrConnexion = new Thread(new ThreadConnection());
-        thrConnexion.start();
+            Thread thrConnexion = new Thread(new ThreadConnection());
+
+            thrConnexion.start();
+
     }
 
 
@@ -30,8 +35,8 @@ public class Server  {
         return nbJoueur;
     }
 
-    public static ArrayList<Player> getPlayers() {
-        return players;
+    public static void addPlayers(Player unJoueur) {
+        players.add(unJoueur);
     }
 
 
@@ -43,8 +48,8 @@ class ThreadConnection implements Runnable {
 
     public void run() {
         try {
-            socketEcoute = new ServerSocket(9090, Server.getNbJoueur());
-            ajouterJoueur(socketEcoute.accept());
+                socketEcoute = new ServerSocket(9090, Server.getNbJoueur());
+                ajouterJoueur(socketEcoute.accept());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,6 +57,6 @@ class ThreadConnection implements Runnable {
     }
 
     public void ajouterJoueur(Socket socket){
-        Server.getPlayers().add(new Player(socket));
+        Server.addPlayers(new Player(socket));
     }
 }
