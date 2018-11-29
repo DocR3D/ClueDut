@@ -17,10 +17,12 @@ public class Client {
     static Socket leSocket;
     static PrintWriter out = null;
     static BufferedReader in  = null;
+    InetAddress ip;
 
     public Client(InetAddress ip) throws IOException {
         leSocket = new Socket();
-        Thread unThread = new Thread(new thrConnexion());
+        this.ip = ip;
+        Thread unThread = new Thread(new thrConnexion(ip));
     }
 
     public static Socket getLeSocket() {
@@ -34,15 +36,29 @@ public class Client {
     public static BufferedReader getIn() {
         return in;
     }
+    public static void setOut(PrintWriter out) {
+        Client.out = out;
+    }
+
+    public static void setIn(BufferedReader in) {
+        Client.in = in;
+    }
 }
 class thrConnexion implements Runnable {
+    InetAddress ip;
 
-
+    public thrConnexion(InetAddress ip) {
+        this.ip = ip;
+    }
 
     @Override
     public void run() {
-        Client.getLeSocket().connect(new InetSocketAddress(ip,9090));
-        //Client.getIn() = new BufferedReader(new InputStreamReader(Client.leSocket.getInputStream()));
-        //out = new PrintWriter(leSocket.getOutputStream(), true);
+        try {
+            Client.getLeSocket().connect(new InetSocketAddress(ip,9090));
+            Client.setIn(new BufferedReader(new InputStreamReader(Client.leSocket.getInputStream())));
+            Client.setOut(new PrintWriter(Client.getLeSocket().getOutputStream(), true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
