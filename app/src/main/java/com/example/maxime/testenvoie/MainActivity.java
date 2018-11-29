@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -127,8 +128,10 @@ public class MainActivity extends AppCompatActivity {
         reception.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for(int i=0; i<5; i=0) {
                     Thread thrConnexion = new Thread(new ThreadConnection());
                     thrConnexion.start();
+                }
             }
         });
         leChoix.setOnClickListener(new View.OnClickListener() {
@@ -186,45 +189,16 @@ public class MainActivity extends AppCompatActivity {
 
                 socket = socketEcoute.accept();
                 System.out.println("client connecté");
-
                 in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
                 bytes = new byte[1024];
-
-                System.out.println("réception des données - début");
                 size = in.readLong();
-                System.out.println("réception de " + size + " octets");
-
-                while ((count = in.read(bytes)) > 0) {
-                    fos.write(bytes, 0, count);
-                    total += count;
-                }
-                System.out.println("réception des données - fin");
-                System.out.println(total + " octets reçus");
-
-                fos.close();
 
                 in.close();
                 socketEcoute.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            Thread thread = new Thread()
-            {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() //run on ui thread
-                    {
-                        public void run()
-                        {
-                            laPhoto.setImageURI(Uri.fromFile(leFichier));
-
-                        }
-                    });
-                }
-            };
-            thread.start();
 
 
             return ;
@@ -241,71 +215,20 @@ public class MainActivity extends AppCompatActivity {
         byte[]            bytes  = null;
         int			     count;
 
-        if(theUri== null) file = new File("/sdcard/png.PNG");
-        else{
-            file = new File(leChemin);
-        }
 
-        try {
-            fis = new DataInputStream(
-                    new BufferedInputStream(
-                            new FileInputStream(file)));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Pas de fichier !");
-            System.exit(-1);
-        }
-
-        System.out.println("Taille du fichier = " + file.length());
-
-        try {
-            sa = new InetSocketAddress(InetAddress.getByName(lip), 9002);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-
-        // 1 - socket
-        System.out.println("socket créé");
-
-
-        // 2 - connect
-        try {
             socket = new Socket();
             socket.connect(sa);
             System.out.println("socket connecté");
 
             out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         bytes = new byte[1024];
 
         System.out.println("envoi des données - début");
-        try {
 
-            out.writeLong(file.length());
-            if(file.length()>0) {
-                while ((count = fis.read(bytes)) > 0) {
-                    out.write(bytes, 0, count);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("envoi des données - fin");
-
-        try {
-            if(fis != null) fis.close();
-
-            if (out != null) out.close();
-            if (socket != null) socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fis.close();
+        out.close();
+        socket.close();
         return;
     }
 
