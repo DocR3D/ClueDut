@@ -13,14 +13,36 @@ import java.net.Socket;
  */
 
 public class Client {
-    Socket leSocket;
-    PrintWriter out = null;
-    BufferedReader in  = null;
+
+    static Socket leSocket;
+    static PrintWriter out = null;
+    static BufferedReader in  = null;
 
     public Client(InetAddress ip) throws IOException {
         leSocket = new Socket();
-        leSocket.connect(new InetSocketAddress(ip,9090));
-        in  = new BufferedReader(new InputStreamReader(leSocket.getInputStream()));
-        out = new PrintWriter(leSocket.getOutputStream(), true);
+        Thread unThread = new Thread(new thrConnexion());
+    }
+
+    public static Socket getLeSocket() {
+        return leSocket;
+    }
+
+    public static  PrintWriter getOut() {
+        return out;
+    }
+
+    public static BufferedReader getIn() {
+        return in;
+    }
+}
+class thrConnexion implements Runnable {
+
+
+
+    @Override
+    public void run() {
+        Client.getLeSocket().connect(new InetSocketAddress(ip,9090));
+        //Client.getIn() = new BufferedReader(new InputStreamReader(Client.leSocket.getInputStream()));
+        //out = new PrintWriter(leSocket.getOutputStream(), true);
     }
 }

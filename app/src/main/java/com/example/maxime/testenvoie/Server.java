@@ -1,5 +1,6 @@
 package com.example.maxime.testenvoie;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -38,6 +39,7 @@ public class Server  {
 
 class ThreadConnection implements Runnable {
     ServerSocket socketEcoute;
+    DataInputStream in = null;
 
     public void run() {
         try {

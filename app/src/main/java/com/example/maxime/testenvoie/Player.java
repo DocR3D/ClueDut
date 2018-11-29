@@ -1,5 +1,10 @@
 package com.example.maxime.testenvoie;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -8,19 +13,30 @@ import java.net.Socket;
 
 class Player {
     Socket leSocket;
-    String ip;
+    InetAddress ip;
     String pseudo;
     int couleur;
+    private BufferedReader in;                   // lecture dans le socket
+    private PrintWriter out;                  // ecriture dans le socket
 
     public Player(Socket leSocket){
         this.leSocket = leSocket;
+        this.ip = leSocket.getInetAddress();
+
+        try {
+            this.in = new BufferedReader(new InputStreamReader(this.leSocket.getInputStream()));
+            this.out = new PrintWriter(this.leSocket.getOutputStream(), true);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public String getIp() {
+    public InetAddress getIp() {
         return ip;
     }
 
-    public void setIp(String ip) {
+    public void setIp(InetAddress ip) {
         this.ip = ip;
     }
 
