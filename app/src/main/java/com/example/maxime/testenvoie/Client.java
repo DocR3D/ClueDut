@@ -22,28 +22,18 @@ public class Client implements Runnable {
     public Client(InetAddress ip) throws IOException {
         leSocket = new Socket();
         this.ip = ip;
-        Thread unThread = new Thread(this);
-        unThread.start();
     }
 
     public static Socket getLeSocket() {
         return leSocket;
     }
 
-    public static void setOut(PrintWriter out) {
-        Client.out = out;
-    }
-
-    public static void setIn(BufferedReader in) {
-        Client.in = in;
-    }
-
     @Override
     public void run() {
         try {
             Client.getLeSocket().connect(new InetSocketAddress(ip, 9090));
-            Client.setIn(new BufferedReader(new InputStreamReader(Client.leSocket.getInputStream())));
-            Client.setOut(new PrintWriter(Client.getLeSocket().getOutputStream(), true));
+            //Client.setIn(new BufferedReader(new InputStreamReader(Client.leSocket.getInputStream())));
+            //Client.setOut(new PrintWriter(Client.getLeSocket().getOutputStream(), true));
         } catch (IOException e) {
             e.printStackTrace();
         }

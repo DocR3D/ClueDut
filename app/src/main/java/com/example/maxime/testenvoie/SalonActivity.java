@@ -27,13 +27,12 @@ public class SalonActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-
-                    Client client = new Client(InetAddress.getByName("0.0.0.0"));
+                    Thread unThread = new Thread(new Client(InetAddress.getByName("0.0.0.0")));
+                    unThread.start();
                     Log.e("Players","" + serveur.players.size());
                     Log.e("Joueurs","" + serveur.getNbJoueur());
                 } catch (IOException e) {
