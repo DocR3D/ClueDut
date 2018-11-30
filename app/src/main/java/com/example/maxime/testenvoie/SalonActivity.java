@@ -12,33 +12,27 @@ import java.net.InetAddress;
 
 public class SalonActivity extends AppCompatActivity {
 
-    Button client;
     Server serveur;
+    static TextView nbClients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salon);
 
-        client = (Button) findViewById(R.id.client);
+        nbClients = (TextView) findViewById(R.id.nbClient);
 
         try {
             serveur = new Server(4);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        client.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Thread unThread = new Thread(new Client(InetAddress.getByName("0.0.0.0")));
-                    unThread.start();
-                    Log.e("Players","" + serveur.players.size());
-                    Log.e("Joueurs","" + serveur.getNbJoueur());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+        try {
+            Thread unThread = new Thread(new Client(InetAddress.getByName("0.0.0.0")));
+            unThread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

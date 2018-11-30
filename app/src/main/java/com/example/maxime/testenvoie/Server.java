@@ -38,6 +38,7 @@ class ThreadConnection implements Runnable {
             for(int i=0; i<Server.getNbJoueur();i++) ajouterJoueur(socketEcoute.accept());
 
             socketEcoute.close();
+            SalonActivity.nbClients.setText("Client : " + Server.players.size() + 1);
         } catch (IOException e) {
             e.printStackTrace();
         }

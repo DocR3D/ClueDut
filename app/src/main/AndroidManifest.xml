@@ -21,7 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SalonActivity"></activity>
+        <activity android:name=".SalonActivity" />
+        <activity android:name=".SalonActivityClient"></activity>
     </application>
 
 </manifest>
