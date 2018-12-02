@@ -16,7 +16,7 @@ public class SalonActivityClient extends AppCompatActivity {
         setContentView(R.layout.activity_salon_client);
 
         try {
-            Thread unThread = new Thread(new Client(InetAddress.getByName(lip)));
+            Thread unThread = new Thread(new Client(InetAddress.getByName(MainActivity.connectIp.getText().toString()), MainActivity.connectPseudo.getText().toString()));
             unThread.start();
         } catch (IOException e) {
             e.printStackTrace();

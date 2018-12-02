@@ -29,7 +29,7 @@ public class SalonActivity extends AppCompatActivity {
         }
 
         try {
-            Thread unThread = new Thread(new Client(InetAddress.getByName("0.0.0.0")));
+            Thread unThread = new Thread(new Client(InetAddress.getByName(MainActivity.connectIp.getText().toString()), MainActivity.connectPseudo.getText().toString()));
             unThread.start();
         } catch (IOException e) {
             e.printStackTrace();

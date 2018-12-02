@@ -18,7 +18,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button creerPartie;
     Button rejoindrePartie;
-    EditText connectIp;
+    static EditText connectIp;
+    static EditText connectPseudo;
     TextView ip;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         creerPartie = (Button) findViewById(R.id.creerPartie);
         rejoindrePartie = (Button) findViewById(R.id.rejoindrePartie);
         connectIp = (EditText) findViewById(R.id.connectIp);
+        connectPseudo = (EditText) findViewById(R.id.connectPseudo);
         ip = (TextView) findViewById(R.id.ip);
 
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         creerPartie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 accèderActivity();
             }
         });
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SalonActivityClient.lip = connectIp.getText().toString();
+
                 accèderActivityCient();
             }
         });

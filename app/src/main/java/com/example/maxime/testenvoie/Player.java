@@ -16,20 +16,11 @@ class Player {
     InetAddress ip;
     String pseudo;
     int couleur;
-    private BufferedReader in;                   // lecture dans le socket
-    private PrintWriter out;                  // ecriture dans le socket
 
-    public Player(Socket leSocket){
+    public Player(Socket leSocket) throws IOException {
         this.leSocket = leSocket;
         this.ip = leSocket.getInetAddress();
 
-        try {
-            this.in = new BufferedReader(new InputStreamReader(this.leSocket.getInputStream()));
-            this.out = new PrintWriter(this.leSocket.getOutputStream(), true);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public InetAddress getIp() {
