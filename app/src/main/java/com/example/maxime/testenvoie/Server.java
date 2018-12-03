@@ -51,9 +51,28 @@ public class Server implements Runnable {
         Thread thrConnexion = new Thread(this);
         thrConnexion.start();
 
-        String[] s = new String[2];
-        s[0] = "/sdcard/map/image.png";
-        s[1] = "/sdcard/map/unText.txt";
+        String[] s = new String[20];
+        s[0] = "/sdcard/cuisine.png";
+        s[1] = "/sdcard/sallemanger1.png";
+        s[2] = "/sdcard/sallemanger2.png";
+        s[3] = "/sdcard/salon1.png";
+        s[4] = "/sdcard/salon2.png";
+        s[5] = "/sdcard/bibliotheque1.png";
+        s[6] = "/sdcard/bibliotheque2.png";
+        s[7] = "/sdcard/bibliotheque3.png";
+        s[8] = "/sdcard/bureau.png";
+        s[9] = "/sdcard/clickcase.png";
+        s[10] = "/sdcard/cluedo.png";
+        s[11] = "/sdcard/deplacement.png";
+        s[12] = "/sdcard/fond.png";
+        s[13] = "/sdcard/hall.png";
+        s[14] = "/sdcard/pawn.png";
+        s[15] = "/sdcard/sallebal1.png";
+        s[16] = "/sdcard/sallebal2.png";
+        s[17] = "/sdcard/sallebillard.png";
+        s[18] = "/sdcard/veranda1.png";
+        s[19] = "/sdcard/veranda2.png";
+        //s[1] = "/sdcard/map/unText.txt";
         ZipManager zipManager = new ZipManager();
         zipManager.zip(s, "/sdcard/map/map");
 
