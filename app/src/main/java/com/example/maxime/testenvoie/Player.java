@@ -17,9 +17,11 @@ class Player {
     String pseudo;
     int couleur;
 
-    public Player(Socket leSocket) throws IOException {
+    public Player(Socket leSocket, String pPseudo) throws IOException {
         this.leSocket = leSocket;
         this.ip = leSocket.getInetAddress();
+        this.couleur = -1;
+        this.pseudo = pPseudo;
 
     }
 

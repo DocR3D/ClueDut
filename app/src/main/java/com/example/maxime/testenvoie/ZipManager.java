@@ -44,7 +44,8 @@ class ZipManager {
     public void unzip(String _zipFile, String _targetLocation) {
 
         try {
-            float tailleGlabole = 0;
+            int tailleGlabole = 0;
+            int taille = 0;
             FileInputStream fin = new FileInputStream(_zipFile);
             File fileRar = new File(_zipFile);
             ZipInputStream zin = new ZipInputStream(fin);
@@ -55,15 +56,19 @@ class ZipManager {
                 if (ze.isDirectory()) {
                 } else {
                     FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
+                    File file = new File(_targetLocation + ze.getName());
                     for (int c = zin.read(); c != -1; c = zin.read()) {
                         fout.write(c);
-                        File file = new File(_targetLocation + ze.getName());
-                        System.out.println((file.length() * 100) / fileRar.length());
+                        taille = (int) ((file.length() * 100) / fileRar.length());
                     }
+                    tailleGlabole += taille;
+                    SalonActivityClient.progressBar.setProgress(tailleGlabole);
                     zin.closeEntry();
                     fout.close();
                 }
             }
+            SalonActivityClient.progressBar.setProgress(100);
+            SalonActivityClient.ready.setEnabled(true);
             System.out.println("Fin");
             zin.close();
         } catch (Exception e) {

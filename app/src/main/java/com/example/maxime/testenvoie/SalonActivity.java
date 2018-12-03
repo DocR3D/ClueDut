@@ -17,8 +17,6 @@ public class SalonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salon);
 
-        nbClients = (TextView) findViewById(R.id.nbClient);
-
         try {
             serveur = new Server(4);
         } catch (IOException e) {

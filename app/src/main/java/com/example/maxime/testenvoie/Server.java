@@ -96,7 +96,6 @@ public class Server implements Runnable {
             recupererJoueur();
             socketEcoute.close();
 
-            SalonActivity.nbClients.setText("Client : " + players.size() + 1);
         } catch (IOException e) {
             e.printStackTrace();
         }

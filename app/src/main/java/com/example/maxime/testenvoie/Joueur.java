@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.Iterator;
 
 public class Joueur {
+
     private Case caseJ;
     Bitmap myBitmap;
 
