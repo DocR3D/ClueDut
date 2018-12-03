@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
@@ -43,7 +44,9 @@ class ZipManager {
     public void unzip(String _zipFile, String _targetLocation) {
 
         try {
+            float tailleGlabole = 0;
             FileInputStream fin = new FileInputStream(_zipFile);
+            File fileRar = new File(_zipFile);
             ZipInputStream zin = new ZipInputStream(fin);
             ZipEntry ze = null;
             while ((ze = zin.getNextEntry()) != null) {
@@ -54,13 +57,15 @@ class ZipManager {
                     FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
                     for (int c = zin.read(); c != -1; c = zin.read()) {
                         fout.write(c);
+                        File file = new File(_targetLocation + ze.getName());
+                        System.out.println((file.length() * 100) / fileRar.length());
                     }
-
                     zin.closeEntry();
                     fout.close();
                 }
 
             }
+            System.out.println("Fin");
             zin.close();
         } catch (Exception e) {
             System.out.println(e);

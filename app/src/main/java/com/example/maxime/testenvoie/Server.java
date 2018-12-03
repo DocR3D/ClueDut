@@ -52,8 +52,8 @@ public class Server implements Runnable {
         thrConnexion.start();
 
         String[] s = new String[2];
-        s[0] = "/sdcard/image.png";
-        s[1] = "/sdcard/unText.txt";
+        s[0] = "/sdcard/map/image.png";
+        s[1] = "/sdcard/map/unText.txt";
         ZipManager zipManager = new ZipManager();
         zipManager.zip(s, "/sdcard/map/map");
 
