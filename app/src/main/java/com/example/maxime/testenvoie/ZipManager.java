@@ -63,7 +63,6 @@ class ZipManager {
                     zin.closeEntry();
                     fout.close();
                 }
-
             }
             System.out.println("Fin");
             zin.close();

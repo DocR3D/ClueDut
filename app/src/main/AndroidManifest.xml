@@ -22,7 +22,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".SalonActivity" />
-        <activity android:name=".SalonActivityClient"></activity>
+        <activity android:name=".SalonActivityClient" />
+        <activity android:name=".JouerActivity"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

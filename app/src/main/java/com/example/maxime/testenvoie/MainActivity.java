@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     static EditText connectIp;
     static EditText connectPseudo;
     TextView ip;
+    Button jouer;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         connectIp = (EditText) findViewById(R.id.connectIp);
         connectPseudo = (EditText) findViewById(R.id.connectPseudo);
         ip = (TextView) findViewById(R.id.ip);
+        jouer = (Button) findViewById(R.id.jouer);
 
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
 
@@ -77,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
                 accèderActivityCient();
             }
         });
+
+        jouer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accèderActivityJouer();
+            }
+        });
     }
 
     private void accèderActivity() {
@@ -86,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void accèderActivityCient(){
         Intent intent = new Intent(this, SalonActivityClient.class);
+        startActivity(intent);
+    }
+
+    private void accèderActivityJouer(){
+        Intent intent = new Intent(this, JouerActivity.class);
         startActivity(intent);
     }
 }
