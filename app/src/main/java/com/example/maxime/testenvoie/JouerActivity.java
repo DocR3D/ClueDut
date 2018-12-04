@@ -121,18 +121,20 @@ public class JouerActivity extends AppCompatActivity {
 
 
         ImageView imageCuisine = new ImageButton(this);
-        File imgFile = new  File("sdcard/map/cuisine.png");
-        if(imgFile.exists()){
+        //File imgFile = new  File("sdcard/map/cuisine.png");
+        Bitmap bmp = BitmapFactory.decodeFile("sdcard/map/cuisine.png");
+        imageCuisine.setImageBitmap(bmp);
+        /*if(imgFile.exists()){
             myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             imageCuisine.setImageBitmap(myBitmap);
-        }
+        }*/
         //imageCuisine.setBackgroundResource(R.drawable.cuisine);
 
         afficherSalle(imageCuisine, 6,6, 0, 1 );
 
 
-        ImageButton imageManger1 = new ImageButton(this);
-        imgFile = new  File("sdcard/map/sallemanger1.png");
+        ImageView imageManger1 = new ImageButton(this);
+        File imgFile = new  File("sdcard/map/sallemanger1.png");
         if(imgFile.exists()){
             myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             imageManger1.setImageBitmap(myBitmap);

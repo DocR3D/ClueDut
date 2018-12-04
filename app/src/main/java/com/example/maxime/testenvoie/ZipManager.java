@@ -35,7 +35,6 @@ class ZipManager {
                 }
                 origin.close();
             }
-
             out.close();
         } catch (Exception e) {
             e.printStackTrace();
