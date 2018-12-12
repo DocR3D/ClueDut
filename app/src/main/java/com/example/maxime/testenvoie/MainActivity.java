@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         creerClient = (Button) findViewById(R.id.creerClient);
         connectPseudo = (EditText) findViewById(R.id.connectPseudo);
         commandeConnect = (Button) findViewById(R.id.commandeConnect);
+        connectIp = (EditText) findViewById(R.id.ip);
 
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         creerClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Client client = new Client(""+connectPseudo.getText());
+                Client client = new Client(""+connectPseudo.getText(), "" + connectIp.getText());
             }
         });
 

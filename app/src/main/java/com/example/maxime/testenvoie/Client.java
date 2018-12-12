@@ -34,10 +34,12 @@ public class Client implements Runnable{
     protected static boolean    gameOver         = false;
     protected static boolean    disconnected     = false;
 
+    private String ip;
     private String pseudo;
 
-    public Client(String pseudo) {
+    public Client(String pseudo, String ip) {
         this.pseudo = pseudo;
+        this.ip = ip;
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -54,7 +56,7 @@ public class Client implements Runnable{
         int i = 0;
 
         try {
-            sa = new InetSocketAddress(InetAddress.getByName(SERVEUR_TCP_IP), SERVEUR_TCP_PORT);
+            sa = new InetSocketAddress(InetAddress.getByName(ip), SERVEUR_TCP_PORT);
         } catch (UnknownHostException e) {
             e.printStackTrace();
             return;
