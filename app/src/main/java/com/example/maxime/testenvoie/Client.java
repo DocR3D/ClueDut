@@ -1,6 +1,7 @@
 package com.example.maxime.testenvoie;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -16,100 +17,179 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
 
 /**
  * Created by i174085 on 29/11/2018.
  */
 
-public class Client implements Runnable {
+public class Client implements Runnable{
 
-    static Socket leSocket;
-    static PrintWriter out = null;
-    static BufferedReader in = null;
-    InetAddress ip;
-    String pseudo;
+    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED};
 
-    File leFichier;
+    private static final String SERVEUR_TCP_IP   = new String("0.0.0.0");
+    private static final int    SERVEUR_TCP_PORT = 8001;
 
-    public Client(InetAddress ip, String pseudo) throws IOException {
-        leSocket = new Socket();
-        this.ip = ip;
+    protected static boolean    gameOver         = false;
+    protected static boolean    disconnected     = false;
+
+    private String pseudo;
+
+    public Client(String pseudo) {
         this.pseudo = pseudo;
+        Thread thread = new Thread(this);
+        thread.start();
     }
 
-    public static Socket getLeSocket() {
-        return leSocket;
-    }
+    public void run(){
+        Thread     thrReceiver       = null;
 
-    public void recevoirFichier(){
-        DataOutputStream fos = null;
+        InetSocketAddress sa = null;
 
-        Socket socket = leSocket;
-        DataInputStream fis = null;
-        byte[] bytes = null;
-        int count;
-        long total = 0;
-        long size;
-
-
-        leFichier = new File("/sdcard/map/mapRecu");
+        Socket            sCom = null;
+        PrintWriter       out = null;
+        BufferedReader    in  = null;
+        String            command = null;
+        int i = 0;
 
         try {
-            fos = new DataOutputStream(
-                    new BufferedOutputStream(
-                            new FileOutputStream(leFichier)));
-        } catch (IOException e) {
+            sa = new InetSocketAddress(InetAddress.getByName(SERVEUR_TCP_IP), SERVEUR_TCP_PORT);
+        } catch (UnknownHostException e) {
             e.printStackTrace();
-            System.out.println("Création du fichier impossible !");
-            System.exit(-1);
+            return;
         }
 
         try {
-            fis = new DataInputStream(new BufferedInputStream(leSocket.getInputStream()));
+            // 1 - socket
+            sCom = new Socket();
 
-            bytes = new byte[1024];
+            // 2 - connect
+            Log.e("Connection","préparé");
+            sCom.connect(sa);
+            Log.e("Connection","ok");
+            in  = new BufferedReader(new InputStreamReader(sCom.getInputStream()));
+            out = new PrintWriter(sCom.getOutputStream(), true);
 
-            System.out.println("réception des données - début");
-            size = fis.readLong();
-            System.out.println("réception de " + size + " octets");
+            System.out.println("Connecté au serveur !");
+            Log.e("connection","OK");
 
-            while ((count = fis.read(bytes)) > 0) {
-                fos.write(bytes, 0, count);
-                total += count;
+            thrReceiver = new Thread(new ThreadListener(in));
+            thrReceiver.start();
+
+            //Scanner scanner = new Scanner(socketEcoute.getInputStream());
+
+            while ((! disconnected) && (! gameOver)) {
+                //while (scanner.hasNextLine()){
+                //System.out.print("Commande : ");
+                // command = scanner.nextLine();
+                if (i == 0){
+                    command = "Connect " + this.pseudo;
+                    out.println(command);
+                }
+                i = 1;
+                command = null;
+
+                //if (command.compareToIgnoreCase("END") == 0) break;
+                //}
             }
-            System.out.println("réception des données - fin");
-            System.out.println(total + " octets reçus");
+            if (disconnected)
+                System.out.println("Connexion refusée !");
+            else
+                System.out.println("Game Over !");
 
-            fos.close();
+            //scanner.close();
 
-            fis.close();
-        } catch (IOException e) {
+            thrReceiver.join();
+
+            in.close();
+            out.close();
+
+            sCom.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    private void extraireFichier() {
+    class ThreadListener implements Runnable {
+        BufferedReader in;
 
-        ZipManager zipManager = new ZipManager();
-        zipManager.unzip("/sdcard/map/mapRecu", "/sdcard/map/");
-
-    }
-    @Override
-    public void run() {
-        try {
-            Client.getLeSocket().connect(new InetSocketAddress(ip, 9090));
-            Client.in = new BufferedReader(new InputStreamReader(Client.leSocket.getInputStream()));
-            Client.out = new PrintWriter(Client.getLeSocket().getOutputStream(), true);
-            out.print(pseudo);
-        } catch (IOException e) {
-            e.printStackTrace();
+        public ThreadListener(BufferedReader in) {
+            this.in = in;
         }
-        recevoirFichier();
-        extraireFichier();
+
+        private Client.Command checkCommand(String[] items) {
+            if (items[0].compareToIgnoreCase("OK") == 0)
+                if (items.length >= 1)
+                    return Client.Command.OK;
+
+            if (items[0].compareToIgnoreCase("NOK") == 0)
+                if (items.length >= 1)
+                    return Client.Command.NOK;
+
+            if (items[0].compareToIgnoreCase("PLAYER") == 0)
+                if (items.length == 3)
+                    return Client.Command.PLAYER;
+
+            if (items[0].compareToIgnoreCase("COLORS") == 0)
+                if (items.length >= 2)
+                    return Client.Command.COLORS;
+
+            if (items[0].compareToIgnoreCase("READY") == 0)
+                if (items.length == 2)
+                    return Client.Command.READY;
+
+            if (items[0].compareToIgnoreCase("NOTREADY") == 0)
+                if (items.length == 2)
+                    return Client.Command.NOTREADY;
+
+            if (items[0].compareToIgnoreCase("GAMEOVER") == 0)
+                if (items.length == 1)
+                    return Client.Command.GAMEOVER;
+
+            if (items[0].compareToIgnoreCase("REJECTED") == 0)
+                return Client.Command.REJECTED;
+
+            return null;
+        }
+
+        // exécution du thread
+        public void run(){
+            String msg = null;
+            String[] items = null;
+
+            while (!Client.gameOver) {
+                try {
+                    if ((msg = in.readLine()) == null) break;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Réponse du serveur : " + msg);
+
+                items = msg.split(" +");
+
+                switch (checkCommand(items)) {
+                    case GAMEOVER:
+                        Client.gameOver = true;
+                        break;
+
+                    case REJECTED:
+                        Client.disconnected = true;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            if (msg == null) {
+                System.out.println("Connexion fermée par le serveur");
+                Client.gameOver = true;
+            }
+        }
     }
-
-
-
-
 }
 
 

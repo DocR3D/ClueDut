@@ -1,0 +1,218 @@
+package com.example.maxime.testenvoie;
+
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.format.Formatter;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button creerPartie;
+    Button rejoindrePartie;
+    static EditText connectIp;
+    static EditText connectPseudo;
+    TextView ip;
+    Button jouer;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        creerPartie = (Button) findViewById(R.id.creerPartie);
+        rejoindrePartie = (Button) findViewById(R.id.rejoindrePartie);
+        connectIp = (EditText) findViewById(R.id.connectIp);
+        connectPseudo = (EditText) findViewById(R.id.connectPseudo);
+        ip = (TextView) findViewById(R.id.ip);
+        jouer = (Button) findViewById(R.id.jouer);
+
+        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
+
+        ip.setText("Votre Ip : " + Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()));
+
+        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE_ASK_PERMISSIONS);
+            }
+        } else {
+        }
+        int hasWriteContactsPermission2 = checkSelfPermission(Manifest.permission.INTERNET);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.INTERNET)) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},REQUEST_CODE_ASK_PERMISSIONS);
+            }
+        }
+
+        creerPartie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                accèderActivity();
+            }
+        });
+
+        rejoindrePartie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SalonActivityClient.lip = connectIp.getText().toString();
+
+                accèderActivityCient();
+            }
+        });
+
+        jouer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accèderActivityJouer();
+            }
+        });
+    }
+
+    private void accèderActivity() {
+        Intent intent = new Intent(this, SalonActivity.class);
+        startActivity(intent);
+    }
+
+    private void accèderActivityCient(){
+        Intent intent = new Intent(this, SalonActivityClient.class);
+        startActivity(intent);
+    }
+
+    private void accèderActivityJouer(){
+        Intent intent = new Intent(this, JouerActivity.class);
+        startActivity(intent);
+    }
+}
+
+
+
+
+Layout :
+
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/creerPartie"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="CreerPartie"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectPseudo" />
+
+    <Button
+        android:id="@+id/rejoindrePartie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="RejoindrePartie"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/creerPartie" />
+
+    <EditText
+        android:id="@+id/connectIp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="0.0.0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ip" />
+
+    <EditText
+        android:id="@+id/connectPseudo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectIp" />
+
+    <TextView
+        android:id="@+id/ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Ip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/IpTexte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Ip : "
+        app:layout_constraintBottom_toTopOf="@+id/connectPseudo"
+        app:layout_constraintEnd_toStartOf="@+id/connectIp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ip" />
+
+    <TextView
+        android:id="@+id/pseudoTexte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Pseudo"
+        app:layout_constraintBottom_toBottomOf="@+id/connectPseudo"
+        app:layout_constraintEnd_toStartOf="@+id/connectPseudo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/connectPseudo" />
+
+    <Button
+        android:id="@+id/jouer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Jouer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rejoindrePartie" />
+
+</android.support.constraint.ConstraintLayout>

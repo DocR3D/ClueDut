@@ -9,35 +9,35 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public class MainActivity extends AppCompatActivity {
 
-    Button creerPartie;
-    Button rejoindrePartie;
+    Button creerServer;
+    Button creerClient;
     static EditText connectIp;
     static EditText connectPseudo;
     TextView ip;
-    Button jouer;
+    Button commandeConnect;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        creerPartie = (Button) findViewById(R.id.creerPartie);
-        rejoindrePartie = (Button) findViewById(R.id.rejoindrePartie);
-        connectIp = (EditText) findViewById(R.id.connectIp);
+        creerServer = (Button) findViewById(R.id.creerServer);
+        creerClient = (Button) findViewById(R.id.creerClient);
         connectPseudo = (EditText) findViewById(R.id.connectPseudo);
-        ip = (TextView) findViewById(R.id.ip);
-        jouer = (Button) findViewById(R.id.jouer);
+        commandeConnect = (Button) findViewById(R.id.commandeConnect);
 
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-
-        ip.setText("Votre Ip : " + Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()));
 
         int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -63,43 +63,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        creerPartie.setOnClickListener(new View.OnClickListener() {
+        creerServer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-                accèderActivity();
+            public void onClick(View view) {
+                Server server = new Server();
             }
         });
 
-        rejoindrePartie.setOnClickListener(new View.OnClickListener() {
+        creerClient.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                SalonActivityClient.lip = connectIp.getText().toString();
-
-                accèderActivityCient();
+            public void onClick(View view) {
+                Client client = new Client(""+connectPseudo.getText());
             }
         });
 
-        jouer.setOnClickListener(new View.OnClickListener() {
+        commandeConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accèderActivityJouer();
+
             }
         });
-    }
-
-    private void accèderActivity() {
-        Intent intent = new Intent(this, SalonActivity.class);
-        startActivity(intent);
-    }
-
-    private void accèderActivityCient(){
-        Intent intent = new Intent(this, SalonActivityClient.class);
-        startActivity(intent);
-    }
-
-    private void accèderActivityJouer(){
-        Intent intent = new Intent(this, JouerActivity.class);
-        startActivity(intent);
     }
 }

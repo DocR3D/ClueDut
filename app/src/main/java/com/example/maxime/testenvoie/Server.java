@@ -1,3 +1,4 @@
+
 package com.example.maxime.testenvoie;
 
 import android.util.Log;
@@ -20,149 +21,425 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by Maxime  on 29/11/2018.
  */
 
-public class Server implements Runnable {
-    //Information indispensable
-    static int nbJoueur;
-    static ArrayList<Player> players = new ArrayList<>();
+public class Server implements Runnable{
 
-    //Pour le serveur
-    ServerSocket socketEcoute;
-    static PrintWriter out = null;
-    static BufferedReader in = null;
+    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, NULL};
 
-    //Pour le fichier zip
-    DataOutputStream fos = null;
-    DataInputStream fis = null;
 
-    byte[] bytes = null;
-    int count;
-    long total = 0;
-    long size;
+    protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
 
-    File leFichier = new File("/sdcard/map/map");
+    protected static final int           MAX_COLORS       = 6;     // nombre max de couleurs
+    protected static final int           NB_PLAYERS       = 2;     // nombre de joueurs de la partie
 
-    public Server(int nbJoueur) throws IOException {
-        this.nbJoueur = nbJoueur;
-        Thread thrConnexion = new Thread(this);
+    private static   Thread              thrConnexion     = null;  // thread de supervision du jeu
+    protected static Thread[]            thrPlayers       = null;  // thread de réception pour chacun des joueurs
+
+    protected static boolean             gameOver         = false; // fin de partie
+
+    protected static Semaphore semClient        = null;  // commande reçue d'un joueur
+
+    protected static LinkedList<Message> queueCommands    = null;  // file des commandes reçues
+
+    protected static int                 nbPlayers        = 0;     // nombre de joueurs prêts à jouer
+    public static Player[]            players          = null;  // joueurs
+
+    protected static boolean[]           colorsAvailable  = null;  // couleurs disponibles
+
+    protected static Carte[]            cartesReponses = null;
+
+
+    private static String getAvalaibleColors() {
+        // calcul des couleurs disponibles
+        String colors = new String();
+
+        for (int i = 0; i < Server.colorsAvailable.length; i++)
+            if (Server.colorsAvailable[i])
+                colors += " " + i;
+
+        return colors;
+    }
+
+    protected static void sendToPlayer(int player, String response) {
+        // envoi d'un message à un joueur
+        Server.players[player].getWriter().println(response);
+    }
+
+    protected static void sendToAllPlayers(int excludedPlayer, String response) {
+        // envoi d'un message à l'ensemble des joueurs
+        for (int i = 0; i < Server.nbPlayers; i++)
+            if ((i != excludedPlayer) && (! Server.players[i].disconnected()))
+                Server.players[i].getWriter().println(response);
+    }
+
+    public Server(){
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public void run(){
+        ServerSocket      socketEcoute     = null;  // socket d'ecoute
+
+
+        int player;                         // numéro de joueur ayant envoyé une commande
+        int playersReady            = 0;    // joueurs ayant fourni un pseudo et choisi une couleur
+        String response             = null; // réponse envoyée au joueur
+        String responseToAllPlayers = null; // réponse envoyée à l'ensemble des joueurs
+        Message msg                 = null; // message reçu d'un joueur
+        String[] items              = null; // éléments de la commande reçue
+
+        // création du sémaphore
+        semClient = new Semaphore(0);
+
+        // initialisation de la file des messsages client
+        queueCommands = new LinkedList<Message>();
+
+        // initialisation du nombre de joueurs
+        players = new Player[NB_PLAYERS];
+        thrPlayers = new Thread[NB_PLAYERS];
+        cartesReponses = new Carte[3];
+
+        // initialisation des couleurs disponibles
+        colorsAvailable = new boolean[Server.MAX_COLORS];
+        for (int i = 0; i < MAX_COLORS; i++) colorsAvailable[i] = true;
+
+        // Création du socket d'écoute
+        try {
+            socketEcoute = new ServerSocket(SERVEUR_TCP_PORT, NB_PLAYERS);
+        }
+        catch (IOException e) {
+            System.out.println("Démarrage du serveur impossible !");
+            e.printStackTrace();
+            return;
+        }
+
+        // affichage des informations du socket d'écoute
+        System.out.println("Serveur TCP en écoute sur l'IP    " + socketEcoute.getInetAddress().toString());
+        System.out.println("Serveur TCP en écoute sur le port " + socketEcoute.getLocalPort());
+
+        // création du thread de connexion
+        thrConnexion = new Thread(new ThreadConnection(socketEcoute));
+
+        // démarrage du thread de connexion
         thrConnexion.start();
 
-        String[] s = new String[20];
-        s[0] = "/sdcard/cuisine.png";
-        s[1] = "/sdcard/sallemanger1.png";
-        s[2] = "/sdcard/sallemanger2.png";
-        s[3] = "/sdcard/salon1.png";
-        s[4] = "/sdcard/salon2.png";
-        s[5] = "/sdcard/bibliotheque1.png";
-        s[6] = "/sdcard/bibliotheque2.png";
-        s[7] = "/sdcard/bibliotheque3.png";
-        s[8] = "/sdcard/bureau.png";
-        s[9] = "/sdcard/clickcase.png";
-        s[10] = "/sdcard/cluedo.png";
-        s[11] = "/sdcard/deplacement.png";
-        s[12] = "/sdcard/fond.png";
-        s[13] = "/sdcard/hall.png";
-        s[14] = "/sdcard/pawn.png";
-        s[15] = "/sdcard/sallebal1.png";
-        s[16] = "/sdcard/sallebal2.png";
-        s[17] = "/sdcard/sallebillard.png";
-        s[18] = "/sdcard/veranda1.png";
-        s[19] = "/sdcard/veranda2.png";
-        //s[1] = "/sdcard/map/unText.txt";
-        ZipManager zipManager = new ZipManager();
-        zipManager.zip(s, "/sdcard/map/map");
+        System.out.println("Démarrage du thread de connexion");
 
-    }
+        // tant que le nobre de joueurs de la partie n'est pas atteint
+        while (playersReady < NB_PLAYERS) {
 
-    public static int getNbJoueur() {
-        return nbJoueur;
-    }
+            // attente de réception d'une commande d'un joueur
+            Server.semClient.P();
 
+            // obtention du numéro de joueur
+            msg = Server.queueCommands.poll();
+            player = msg.getIndex();
 
-    public void run() {
-        try {
-            socketEcoute = new ServerSocket(9090, 4);
+            // obtention des élements de la commande
+            items = msg.getCommandItems();
 
+            // examen de la commande
+            switch (msg.getCommand()) {
+                case CONNECT :
+                    response              = new String("OK");
+                    responseToAllPlayers  = new String("PLAYER " + player + " " + items[1]);
 
-            for (int i = 0; i < Server.getNbJoueur(); i++) {
-                Socket leSocket = socketEcoute.accept();
-                ajouterJoueur(leSocket);
-                envoieFichier(leSocket);
+                    Server.players[player].setPseudo(items[1]);
+                    Server.players[player].setState(Player.State.CONNECTED);
+
+                    // calcul des couleurs disponibles
+                    response += getAvalaibleColors();
+
+                    // envoi de la réponse au joueur
+                    Server.sendToPlayer(player, response);
+
+                    // envoi aux autres joueurs du pseudo
+                    Server.sendToAllPlayers(player, responseToAllPlayers);
+                    break;
+
+                case COLOR :
+                    int color = Integer.valueOf(items[1]);
+
+                    if (Server.colorsAvailable[color]) {
+                        response = new String("OK");
+                        responseToAllPlayers  = new String("COLORS " + " " + player + " " + color + " ");
+
+                        Server.players[player].setColor(color);
+                        Server.colorsAvailable[color] = false;
+                        Server.players[player].setState(Player.State.READY);
+
+                        // envoi de la réponse au joueur
+                        sendToPlayer(player, response);
+
+                        // calcul des couleurs disponibles
+                        responseToAllPlayers += getAvalaibleColors();
+
+                        // envoi aux autres joueurs des couleurs disponibles
+                        sendToAllPlayers(player, responseToAllPlayers);
+
+                        // un joueur supplémentaire est prêt à jouer
+                        playersReady++;
+                        System.out.println("Nombre de joueurs prêts " + playersReady);
+                    }
+                    else {
+                        response = new String("NOK");
+
+                        // calcul des couleurs disponibles
+                        response += getAvalaibleColors();
+
+                        // envoi de la réponse au joueur
+                        Server.sendToPlayer(player, response);
+                    }
+                    break;
+
+                default:
+                    response = new String("NOK");
+
+                    // envoi de la réponse au joueur
+                    Server.sendToPlayer(player, response);
             }
-            recupererJoueur();
-            socketEcoute.close();
+            // la partie peut démarrer
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+            // tri des joueurs selon l'ordre des couleurs
+            for (int i = 1; i < Server.nbPlayers; i++)
+                for (int k = 0; k < i; k++)
+                    if (Server.players[k].getColor() > Server.players[k + 1].getColor()) {
+                        int color = Server.players[k].getColor();
+                        Server.players[k].setColor(Server.players[k + 1].getColor());
+                        Server.players[k + 1].setColor(color);
+                    }
 
-    public void recupererJoueur() throws IOException {
-        String lesJoueurs = "";
-        for (Player unJoueur : players) {
-            in = new BufferedReader(new InputStreamReader(unJoueur.leSocket.getInputStream()));
-            out = new PrintWriter(unJoueur.leSocket.getOutputStream(), true);;
-            lesJoueurs = lesJoueurs + " " + in.readLine();
-            out.write(lesJoueurs);
-            in.close();
-            out.close();
-        }
-        Log.e("Joueurs ", lesJoueurs);
-    }
+            // dÃ©marrage de la partie
+            System.out.println("Le jeu peut démarrer");
 
-    public void ajouterJoueur(Socket socket) throws IOException {
-        addPlayers(new Player(socket));
-    }
+            // distribution des cartes
 
-    public static void addPlayers(Player unJoueur) {
-        players.add(unJoueur);
-    }
+            //cartesReponses[0] = JeuDeCartes.getIndex(5);
 
-    public void envoieFichier(Socket leSocket) throws IOException {
-        try {
-            fis = new DataInputStream(
-                    new BufferedInputStream(
-                            new FileInputStream(leFichier)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Pas de fichier !");
-            System.exit(-1);
-            System.out.println("Taille du fichier = " + leFichier.length());
-        }
+            // tant que le jeu n'est pas terminÃ©
+            while (! gameOver) {
+                for (int i = 0; i < Server.nbPlayers; i++) {
 
-        fos = new DataOutputStream(new BufferedOutputStream(leSocket.getOutputStream()));
+                    // pour chacun des joueurs
+                    // envoi des dés
+
+                    // attente de la rÃ©ponse du joueur (dÃ©placement + hypothÃ¨se)
+
+                    // attente de rÃ©ception d'une commande d'un joueur
+                    Server.semClient.P();
+
+                    // obtention du numÃ©ro de joueur
+                    msg = Server.queueCommands.poll();
+                    player = msg.getIndex();
+
+                    items = msg.getCommandItems();
+
+                    // examen de la commande
+                    /*switch (msg.getCommand()) {
+                        case ACS :
+                            *//*(items[0] == cartesReponses[0]) && (items[1] == cartesReponses[1]) && (items[2] == cartesReponses[1])*//*
+                            if ((items[0] == cartesReponses[0].getNom()) && (items[1] == cartesReponses[1].getNom()) && (items[2] == cartesReponses[1].getNom())) {
 
 
-        bytes = new byte[1024];
 
-        System.out.println("envoi des données - début");
-        try {
+                                for (int k = 0; k < Server.NB_PLAYERS; i++)
+                                    Server.thrPlayers[k].interrupt();
+                                gameOver = true; break;
+                            } else {
 
-            fos.writeLong(leFichier.length());
-            if(leFichier.length()>0) {
-                while ((count = fis.read(bytes)) > 0) {
-                    fos.write(bytes, 0, count);
+
+                                Server.thrPlayers[player].interrupt();
+                            }*/
+
+                    // si accusation
+                    // alors
+                    // si confirmation
+                    // alors
+                    // envoi GAMEOVER WON au joueur ayant formulÃ© l'hypothÃ¨se
+                    // envoi GAMEOVER Ã  tous les autres joueurs
+                    // arrÃªt des threads Player
+		/*
+								for (int k = 0; k < Server.NB_PLAYERS; i++)
+									Server.thrPlayers[k].interrupt();
+		*/
+                    // sinon
+                    // je ne sais pas ce que l'on fait
+                    // fsi
+                    //case HYP :
+
+                    // sinon
+                    // envoi Ã  tous les autres joueurs du dÃ©placement + de l'hypothÃ¨se
+                    // pour chacun des autres joueurs
+                    // demande d'une carte (personnage salle arme)
+                    // attente de la rÃ©ponse
+                    // envoi de la carte au joueur ayant formulÃ© l'hyptohÃ¨se
+                    // envoi aux autres joueurs d'une rÃ©ponse affirmative ou nÃ©gative
+                    // finpour
+                    // finsi
+                }
+                //}
+            }
+            // fintantque
+
+            // fermeture du socket d'Ã©coute
+            try {
+                socketEcoute.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // attente de terminaison des threads
+            try {
+                for (int i = 0; i < nbPlayers; i++) {
+                    thrPlayers[i].join();
+                    nbPlayers--;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            catch(InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Fermeture du serveur");
+        }
+    }
+
+    class ThreadConnection implements Runnable {
+        ServerSocket socketEcoute;
+
+        public ThreadConnection(ServerSocket socketEcoute) {
+            this.socketEcoute = socketEcoute;
         }
 
-        System.out.println("envoi des données - fin");
+        // exécution du thread
+        public void run() {
+            while (! Server.gameOver) {
+                try {
+                    int i;
+                    InetAddress IP;
 
-        try {
-            if(fis != null) fis.close();
+                    // attente de connection d'un joueur
+                    Log.e("ThredCo","Ok");
+                    Socket socket = this.socketEcoute.accept();
+                    Log.e("ThredCo","Ok");
+                    IP = socket.getInetAddress();
 
-            if (fos != null) fos.close();
-            if (leSocket != null) leSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+/* partie permettant de déterminer l'IP du joueur
+ * et de déterminer s'il s'agit d'une reconnexion
+				i = 0;
+				// recherche d'une perte de connexion
+				while ((i < Server.nbPlayers) && (! IP.equals(Server.players[i].getIP()))) i++;
+
+				if (i < Server.nbPlayers) {
+					// reconnexion d'un client
+					System.out.println("Reconnection du joueur " + i);
+
+					Server.players[i].setSocket(socket);
+
+					// création d'un thread de communication avec le joueur
+					Server.thrPlayers[i] = new Thread(new ThreadPlayer(i));
+
+					// démarrage du thread
+					Server.thrPlayers[i].start();
+
+					System.out.println("Lancement d'un thread client");
+				}
+				else {*/
+                    if (Server.nbPlayers == Server.NB_PLAYERS) {
+                        // le nombre maximum de joueurs est atteint
+                        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                        out.println("REJECTED");
+                        out.close();
+                        socket.close();
+                    }
+                    else {
+                        // création d'un joueur
+                        System.out.println("Connection du joueur " + Server.nbPlayers);
+
+                        Server.players[Server.nbPlayers] = new Player(socket);
+
+                        // création d'un thread de communication avec le joueur
+                        Server.thrPlayers[Server.nbPlayers] = new Thread(new ThreadPlayer(Server.nbPlayers));
+
+                        // démarrage du thread
+                        Server.thrPlayers[Server.nbPlayers].start();
+
+                        System.out.println("Lancement d'un thread client");
+
+                        // incrémentation du nombre de joueurs
+                        Server.nbPlayers++;
+                    }
+                }
+//			}
+                catch (IOException e) {
+                    if (Server.nbPlayers < Server.NB_PLAYERS) {
+                        System.out.println("Communication avec le client impossible !");
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    class ThreadPlayer implements Runnable {
+        private Player player;    // le joueur
+        private int numJoueur; // son numéro
+
+        private BufferedReader in;        // lecteur sur le socket
+
+        public ThreadPlayer(int numJoueur) {
+            this.player = Server.players[numJoueur];
+            this.numJoueur = numJoueur;
+            this.in = this.player.getReader();
+            System.out.println("Client #" + this.numJoueur + " " + Server.players[numJoueur].getSocket().getInetAddress().getHostAddress() + " " + Server.players[numJoueur].getSocket().getPort() + " connecté...");
         }
 
+        // exécution du thread
+        public void run() {
+            String command = null; // ligne de commande
+            Message message = null; // message reçu d'un joueur
 
+            try {
+                // attente de réception d'une commande
+                while ((command = in.readLine()) != null) {
+                    System.out.println("Joueur " + this.numJoueur + " Command = " + command);
+
+                    // construction d'un nouveau message
+                    message = new Message(this.numJoueur, command, Server.players[numJoueur].getState());
+
+                    // examen de la commande
+                    switch (message.getCommand()) {
+                        case READY:
+                            Server.players[numJoueur].setState(Player.State.READY);
+                            Server.sendToAllPlayers(this.numJoueur, "READY " + this.numJoueur);
+                            break;
+
+                        case NOTREADY:
+                            Server.players[numJoueur].setState(Player.State.NOTREADY);
+                            Server.sendToAllPlayers(this.numJoueur, "NOTREADY " + this.numJoueur);
+                            break;
+
+                        default:
+                            // ajout de la commande reçue à la file
+                            Server.queueCommands.add(message);
+
+                            // information du superviseur de la disponibilité d'une commande
+                            Server.semClient.V();
+                    }
+                }
+                if (command == null) {
+                    System.out.println("Déconnexion du joueur " + numJoueur);
+
+                    Server.players[this.numJoueur].setDisconnected();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

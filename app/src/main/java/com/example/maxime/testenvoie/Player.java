@@ -12,38 +12,101 @@ import java.net.Socket;
  */
 
 class Player {
-    Socket leSocket;
-    InetAddress ip;
-    String pseudo;
-    int couleur;
+    public enum State {DISCONNECTED, CONNECTED, READY, NOTREADY}; // état du joueur
 
-    public Player(Socket leSocket) throws IOException {
-        this.leSocket = leSocket;
-        this.ip = leSocket.getInetAddress();
-        this.couleur = -1;
+    private Socket         socket;               // socket de communication
+    private InetAddress    IP;                   // IP du joueur
+    private boolean        disconnected = false; // indicateur de déconnexion
+
+    private BufferedReader in;                   // lecture dans le socket
+    private PrintWriter    out;                  // ecriture dans le socket
+
+    private State          state;                // état du joueur
+    private boolean        gameLost = false;     // je joueur a perdu mais la partie continue
+    private String         pseudo = null;        // pseudo du joueur
+    private int            color;                // couleur du joueur
+    private int[]          weapons = null;       // cartes armes
+    private int[]          characters = null;    // cartes personnages
+    private int[]          rooms = null;         // cartes salles
+
+    public Player(Socket socket) {
+        setSocket(socket);
+
+        this.state = State.DISCONNECTED; // le joueur ne s'esy pas encore identifié
     }
 
-    public InetAddress getIp() {
-        return ip;
+    public Socket getSocket() {
+        return this.socket;
     }
 
-    public void setIp(InetAddress ip) {
-        this.ip = ip;
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+        this.IP     = socket.getInetAddress();
+
+        try {
+            this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            this.out = new PrintWriter(this.socket.getOutputStream(), true);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.disconnected = false;
+    }
+
+    public void setDisconnected() {
+        this.disconnected = true;
+    }
+
+    public boolean disconnected() {
+        return this.disconnected;
+    }
+
+    public InetAddress getIP() {
+        return this.IP;
+    }
+
+    public BufferedReader getReader() {
+        return this.in;
+    }
+
+    public PrintWriter getWriter() {
+        return this.out;
+    }
+
+    public void closeFlux() {
+        try {
+            this.in.close();
+            this.out.close();
+
+            this.socket.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getPseudo() {
-        return pseudo;
+        return this.pseudo;
     }
 
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
     }
 
-    public int getCouleur() {
-        return couleur;
+    public int getColor() {
+        return this.color;
     }
 
-    public void setCouleur(int couleur) {
-        this.couleur = couleur;
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }

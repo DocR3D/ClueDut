@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/creerPartie"
+        android:id="@+id/creerServer"
         android:layout_width="wrap_content"
         android:layout_height="47dp"
         android:layout_marginStart="8dp"
@@ -17,30 +17,27 @@
         android:layout_marginRight="8dp"
         android:text="CreerPartie"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectPseudo" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
-        android:id="@+id/rejoindrePartie"
+        android:id="@+id/creerClient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="RejoindrePartie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/creerPartie" />
+        app:layout_constraintTop_toBottomOf="@+id/creerServer" />
 
-    <EditText
-        android:id="@+id/connectIp"
+    <Button
+        android:id="@+id/commandeConnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="0.0.0.0"
+        android:text="Connect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ip" />
+        app:layout_constraintTop_toBottomOf="@+id/creerClient" />
 
     <EditText
         android:id="@+id/connectPseudo"
@@ -49,59 +46,9 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectIp" />
-
-    <TextView
-        android:id="@+id/ip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Ip"
+        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/IpTexte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Ip : "
-        app:layout_constraintBottom_toTopOf="@+id/connectPseudo"
-        app:layout_constraintEnd_toStartOf="@+id/connectIp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ip" />
-
-    <TextView
-        android:id="@+id/pseudoTexte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Pseudo"
-        app:layout_constraintBottom_toBottomOf="@+id/connectPseudo"
-        app:layout_constraintEnd_toStartOf="@+id/connectPseudo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/connectPseudo" />
-
-    <Button
-        android:id="@+id/jouer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Jouer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rejoindrePartie" />
+        app:layout_constraintTop_toBottomOf="@+id/commandeConnect" />
 
 </android.support.constraint.ConstraintLayout>
