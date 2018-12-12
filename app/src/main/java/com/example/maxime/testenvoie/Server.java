@@ -145,9 +145,9 @@ public class Server implements Runnable{
 
             // examen de la commande
             switch (msg.getCommand()) {
-                case CONNECT :
-                    response              = new String("OK");
-                    responseToAllPlayers  = new String("PLAYER " + player + " " + items[1]);
+                case CONNECT:
+                    response = new String("OK");
+                    responseToAllPlayers = new String("PLAYER " + player + " " + items[1]);
 
                     Server.players[player].setPseudo(items[1]);
                     Server.players[player].setState(Player.State.CONNECTED);
@@ -162,12 +162,12 @@ public class Server implements Runnable{
                     Server.sendToAllPlayers(player, responseToAllPlayers);
                     break;
 
-                case COLOR :
+                case COLOR:
                     int color = Integer.valueOf(items[1]);
 
                     if (Server.colorsAvailable[color]) {
                         response = new String("OK");
-                        responseToAllPlayers  = new String("COLORS " + " " + player + " " + color + " ");
+                        responseToAllPlayers = new String("COLORS " + " " + player + " " + color + " ");
 
                         Server.players[player].setColor(color);
                         Server.colorsAvailable[color] = false;
@@ -185,8 +185,7 @@ public class Server implements Runnable{
                         // un joueur supplémentaire est prêt à jouer
                         playersReady++;
                         System.out.println("Nombre de joueurs prêts " + playersReady);
-                    }
-                    else {
+                    } else {
                         response = new String("NOK");
 
                         // calcul des couleurs disponibles
@@ -203,6 +202,7 @@ public class Server implements Runnable{
                     // envoi de la réponse au joueur
                     Server.sendToPlayer(player, response);
             }
+        }
             // la partie peut démarrer
 
             // tri des joueurs selon l'ordre des couleurs
@@ -281,7 +281,6 @@ public class Server implements Runnable{
                     // envoi aux autres joueurs d'une rÃ©ponse affirmative ou nÃ©gative
                     // finpour
                     // finsi
-                }
                 //}
             }
             // fintantque
