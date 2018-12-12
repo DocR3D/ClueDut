@@ -16,18 +16,6 @@
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/lancerDe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp"
-            android:text="Lancer le Dé" />
-
-
         <ImageView
             android:id="@+id/de"
             android:layout_width="125dp"
