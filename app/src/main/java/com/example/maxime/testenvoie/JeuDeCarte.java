@@ -27,45 +27,23 @@ public class JeuDeCarte {
     }
 
     public ArrayList takeAllTypeCard() {
-        ArrayList<Carte> lesCartes = new ArrayList();
-        Carte uneCarte = new Carte("Qqchose", Carte.Type.ARME);
-        while (uneCarte.getType() != Carte.Type.SALLE) {
-            int i = 0;
-            if (jeuDeCartes.get(i).getType() == Carte.Type.SALLE) {
-                uneCarte = jeuDeCartes.get(i);
-                lesCartesImportantes.add(uneCarte);
-                lesCartes.add(uneCarte);
-            }
-            i++;
-        }
-
-        while (uneCarte.getType() != Carte.Type.ARME) {
-            int i = 0;
-            if(jeuDeCartes.get(i).getType() == Carte.Type.ARME) {
-                uneCarte = jeuDeCartes.get(i);
-                lesCartesImportantes.add(uneCarte);
-                lesCartes.add(uneCarte);
-            }
-            i++;
-        }
-
-        while (uneCarte.getType() != Carte.Type.PERSONNAGE) {
-            int i = 0;
-            if(jeuDeCartes.get(i).getType() == Carte.Type.PERSONNAGE) {
-                uneCarte = jeuDeCartes.get(i);
-                lesCartesImportantes.add(uneCarte);
-                lesCartes.add(uneCarte);
-            }
-            i++;
-        }
-        return lesCartes;
+        Carte uneCarte = new Carte(nomSalles[(int)(Math.random()* nomSalles.length)],Carte.Type.SALLE);
+        lesCartesImportantes.add(uneCarte);
+        jeuDeCartes.remove(uneCarte);
+        uneCarte = new Carte(nomArmes[(int)(Math.random()* nomArmes.length)],Carte.Type.ARME);
+        lesCartesImportantes.add(uneCarte);
+        jeuDeCartes.remove(uneCarte);
+        uneCarte = new Carte(nomPersonnage[(int)(Math.random()* nomPersonnage.length)],Carte.Type.PERSONNAGE);
+        lesCartesImportantes.add(uneCarte);
+        jeuDeCartes.remove(uneCarte);
+        return lesCartesImportantes;
     }
 
     public boolean compareCard(String NomUneCarte, String NomUneDeuxieme, String NomUneTroisieme){
         if(NomUneCarte == lesCartesImportantes.get(1).getNom() && NomUneDeuxieme == lesCartesImportantes.get(2).getNom() && NomUneTroisieme == lesCartesImportantes.get(2).getNom()){
             return true;
-        }
-        return false;
+        }else
+            return false;
     }
 
 
