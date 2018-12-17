@@ -61,13 +61,13 @@ class ZipManager {
                         taille = (int) ((file.length() * 100) / fileRar.length());
                     }
                     tailleGlabole += taille;
-                    SalonActivityClient.progressBar.setProgress(tailleGlabole);
+                    //SalonActivityClient.progressBar.setProgress(tailleGlabole);
                     zin.closeEntry();
                     fout.close();
                 }
             }
-            SalonActivityClient.progressBar.setProgress(100);
-            SalonActivityClient.ready.setEnabled(true);
+            //SalonActivityClient.progressBar.setProgress(100);
+            //SalonActivityClient.ready.setEnabled(true);
             System.out.println("Fin");
             zin.close();
         } catch (Exception e) {

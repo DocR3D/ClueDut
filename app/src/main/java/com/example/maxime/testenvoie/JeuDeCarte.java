@@ -8,7 +8,7 @@ public class JeuDeCarte {
     String[] nomSalles = {"Cuisine", "Salle de bal", "Veranda", "Salle de billard", "Bibiliothèque", "Bureau", "Hall", "Salon ", "Salle à manger"};
     String[] nomArmes = {"Corde", "Poignard", "Barre de fer", "Revolver","Chandelier", "Clé anglaise"};
     String[] nomPersonnage = {"Mr Moutard","Mlle Rose", "Mr Olive","Mme LeBlanc","Mme Pervenche", "Professeur Violet"};
-    ArrayList lesCartesImportantes = new ArrayList<Carte>();
+    ArrayList<Carte> lesCartesImportantes = new ArrayList<Carte>();
 
     public JeuDeCarte(){
         for(int i=0; i<9;i++) jeuDeCartes.add(new Carte(nomSalles[i], Carte.Type.SALLE));
@@ -60,12 +60,9 @@ public class JeuDeCarte {
     }
 
     public boolean compareCard(Carte uneCarte, Carte uneDeuxieme, Carte uneTroisieme){
-        if(uneCarte == lesCartesImportantes.get(1) || uneCarte == lesCartesImportantes.get(2) || uneCarte == lesCartesImportantes.get(3))
-            return false;
-        if(uneDeuxieme == lesCartesImportantes.get(1) || uneDeuxieme == lesCartesImportantes.get(2) || uneDeuxieme == lesCartesImportantes.get(3))
-            return false;
-        if(uneTroisieme == lesCartesImportantes.get(1) || uneTroisieme == lesCartesImportantes.get(2) || uneTroisieme == lesCartesImportantes.get(3))
-            return false;
+        if(uneCarte.getNom() == lesCartesImportantes.get(1).getNom()){
+
+        }
         return true;
     }
 

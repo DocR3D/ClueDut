@@ -84,7 +84,7 @@ public class Server implements Runnable{
 
     public void run(){
         ServerSocket      socketEcoute     = null;  // socket d'ecoute
-
+        ArrayList JeuDeCartes = new ArrayList<Carte>();
 
         int player;                         // numéro de joueur ayant envoyé une commande
         int playersReady            = 0;    // joueurs ayant fourni un pseudo et choisi une couleur

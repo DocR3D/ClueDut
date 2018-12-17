@@ -1,4 +1,4 @@
-package com.example.maxime.testenvoie;
+/*package com.example.maxime.testenvoie;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,4 +30,4 @@ public class SalonActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-}
+}*/

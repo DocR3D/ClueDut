@@ -90,9 +90,8 @@ public class Client implements Runnable{
                     out.println(command);
                 }
                 i = 1;
-                command = null;
 
-                //if (command.compareToIgnoreCase("END") == 0) break;
+                if (command.compareToIgnoreCase("END") == 0) break;
                 //}
             }
             if (disconnected)

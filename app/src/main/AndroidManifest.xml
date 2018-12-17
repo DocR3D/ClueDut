@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".JouerActivity"
+            android:name=".MainActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
             android:name=".SalonActivityClient"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".MainActivity"
+            android:name=".JouerActivity"
             android:screenOrientation="landscape"></activity>
         <activity
             android:name=".test"
