@@ -1,4 +1,4 @@
-package com.example.maxime.testenvoie;
+package com.example.maxime.testenvoie.classes;
 // c'est moi qui l'ai fait
 class Carte {
 

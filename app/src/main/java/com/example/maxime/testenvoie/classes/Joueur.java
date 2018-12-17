@@ -1,8 +1,10 @@
-package com.example.maxime.testenvoie;
+package com.example.maxime.testenvoie.classes;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageButton;
+
+import com.example.maxime.testenvoie.JouerActivity;
 
 import java.io.File;
 import java.util.Iterator;

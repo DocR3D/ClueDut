@@ -1,5 +1,5 @@
 
-package com.example.maxime.testenvoie;
+package com.example.maxime.testenvoie.classes;
 
 import android.util.Log;
 
