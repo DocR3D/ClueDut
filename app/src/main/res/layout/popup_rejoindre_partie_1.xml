@@ -8,7 +8,7 @@
     android:gravity="center">
 
     <LinearLayout
-        android:id="@+id/cadreCreationPartie"
+        android:id="@+id/cadreRejoindrePartie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -23,14 +23,14 @@
             android:layout_marginTop="20dp">
 
             <ImageView
-                android:id="@+id/textNomCreationpartie"
+                android:id="@+id/textNomRejoindrePartie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_textenom"
                 android:layout_marginLeft="40dp"/>
 
             <EditText
-                android:id="@+id/saisieNomCreationPartie"
+                android:id="@+id/saisieNomRejoindrePartie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="saisir nom"
@@ -52,46 +52,20 @@
             android:layout_marginBottom="20dp">
 
             <ImageView
-                android:id="@+id/textCouleurCreationpartie"
+                android:id="@+id/texteIPRejoindrePartie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_textecouleur"
+                android:background="@drawable/ic_texteiphote"
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="5dp"/>
 
-            <ImageButton
-                android:id="@+id/redCreationPartie"
+            <EditText
+                android:id="@+id/saisieIPRejoindrePartie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/red"
-                android:layout_marginRight="10dp"/>
-
-            <ImageButton
-                android:id="@+id/greenCreationPartie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/green"
-                android:layout_marginRight="10dp"/>
-
-            <ImageButton
-                android:id="@+id/blueCreationPartie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/blue"
-                android:layout_marginRight="10dp"/>
-
-            <ImageButton
-                android:id="@+id/purpleCreationPartie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/purple"
-                android:layout_marginRight="10dp"/>
-
-            <ImageButton
-                android:id="@+id/selectedColorCreationPartie"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/black"/>
+                android:hint="saisir adresse IP"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
@@ -105,7 +79,7 @@
         android:gravity="center">
 
         <ImageButton
-            android:id="@+id/backToPlayPopupCreationPartie"
+            android:id="@+id/backToPlayPopupRejoindrePartie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_retour_btn"
@@ -116,7 +90,7 @@
             android:layout_height="wrap_content"/>
 
         <ImageButton
-            android:id="@+id/goToSalonCreation"
+            android:id="@+id/goToSalonRejoindre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_valider_btn" />
