@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class JeuDeCarte {
-    ArrayList jeuDeCartes = new ArrayList<Carte>();
+    ArrayList<Carte> jeuDeCartes = new ArrayList();
     String[] nomSalles = {"Cuisine", "Salle de bal", "Veranda", "Salle de billard", "Bibiliothèque", "Bureau", "Hall", "Salon ", "Salle à manger"};
     String[] nomArmes = {"Corde", "Poignard", "Barre de fer", "Revolver","Chandelier", "Clé anglaise"};
     String[] nomPersonnage = {"Mr Moutard","Mlle Rose", "Mr Olive","Mme LeBlanc","Mme Pervenche", "Professeur Violet"};
@@ -21,18 +21,19 @@ public class JeuDeCarte {
     }
 
     public Carte takeCard(){
-        Carte uneCarte= (Carte) jeuDeCartes.get(jeuDeCartes.size());
+        Carte uneCarte= jeuDeCartes.get(jeuDeCartes.size());
         jeuDeCartes.remove(uneCarte);
         return uneCarte;
     }
 
     public ArrayList takeAllTypeCard() {
-        ArrayList<Carte> lesCartes = new ArrayList<Carte>();
+        ArrayList<Carte> lesCartes = new ArrayList();
         Carte uneCarte = new Carte("Qqchose", Carte.Type.ARME);
         while (uneCarte.getType() != Carte.Type.SALLE) {
             int i = 0;
-            if (((Carte) jeuDeCartes.get(i)).getType() == Carte.Type.SALLE) {
-                uneCarte = (Carte) jeuDeCartes.get(i);
+            if (jeuDeCartes.get(i).getType() == Carte.Type.SALLE) {
+                uneCarte = jeuDeCartes.get(i);
+                lesCartesImportantes.add(uneCarte);
                 lesCartes.add(uneCarte);
             }
             i++;
@@ -40,8 +41,9 @@ public class JeuDeCarte {
 
         while (uneCarte.getType() != Carte.Type.ARME) {
             int i = 0;
-            if (((Carte) jeuDeCartes.get(i)).getType() == Carte.Type.ARME) {
-                uneCarte = (Carte) jeuDeCartes.get(i);
+            if(jeuDeCartes.get(i).getType() == Carte.Type.ARME) {
+                uneCarte = jeuDeCartes.get(i);
+                lesCartesImportantes.add(uneCarte);
                 lesCartes.add(uneCarte);
             }
             i++;
@@ -49,13 +51,13 @@ public class JeuDeCarte {
 
         while (uneCarte.getType() != Carte.Type.PERSONNAGE) {
             int i = 0;
-            if (((Carte) jeuDeCartes.get(i)).getType() == Carte.Type.PERSONNAGE) {
-                uneCarte = (Carte) jeuDeCartes.get(i);
+            if(jeuDeCartes.get(i).getType() == Carte.Type.PERSONNAGE) {
+                uneCarte = jeuDeCartes.get(i);
+                lesCartesImportantes.add(uneCarte);
                 lesCartes.add(uneCarte);
             }
             i++;
         }
-        lesCartesImportantes.add(lesCartes);
         return lesCartes;
     }
 
