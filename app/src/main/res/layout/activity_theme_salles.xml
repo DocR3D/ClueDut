@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fenetrePrincipale_LL"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fond"
+    tools:context=".ThemeSallesActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choix des salles"
+        android:layout_gravity="center"
+        android:textSize="40dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="50dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/nomSalle_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="35dp"
+                android:text=""
+                android:textSize="20dp"/>
+
+            <ImageButton
+                android:id="@+id/changerNom_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="0dp"
+
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/pencil" />
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/cadreApercuPlateau_RL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+
+            android:background="@color/colorPrimaryDark">
+
+            <ImageButton
+                android:id="@+id/salle1_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle2_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle3_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle4_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle5_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle6_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle7_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle8_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/salle9_IB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background" />
+
+
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/gallerie_IB"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/gallery" />
+
+    </LinearLayout>
+
+
+
+    <ImageButton
+        android:id="@+id/goToPersonnages_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="@mipmap/suivant"/>
+        
+        
+
+        
+
+
+</LinearLayout>

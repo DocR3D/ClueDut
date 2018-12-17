@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.example.maxime.testenvoie.classes.Case;
+import com.example.maxime.testenvoie.classes.CaseJoueur;
+import com.example.maxime.testenvoie.classes.Joueur;
+import com.example.maxime.testenvoie.classes.Salle;
 
 import java.io.File;
 import java.util.ArrayList;

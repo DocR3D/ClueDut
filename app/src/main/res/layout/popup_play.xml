@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/playPopupWindow"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/fond"
+    android:gravity="center">
+
+    <ImageButton
+        android:id="@+id/creerPartie_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_creerpartie_btn"/>
+
+    <ImageButton
+        android:id="@+id/rejoindrePartie_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_rejoindrepartie_btn"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"/>
+
+    <ImageButton
+        android:id="@+id/retour_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_retour_btn"/>
+
+
+
+
+</LinearLayout>

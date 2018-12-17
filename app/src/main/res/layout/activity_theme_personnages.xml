@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/fenetrePrincipale_LL"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/colorRougeFond"
+tools:context=".ThemePersonnagesActivity">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Choix des personnages"
+    android:layout_gravity="center"
+    android:textSize="40dp"/>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_weight="1"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="50dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/nomSalle_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="35dp"
+            android:text=""
+            android:textSize="20dp"/>
+
+
+
+    </LinearLayout>
+
+
+
+
+        <ImageButton
+            android:id="@+id/salle1_IB"
+            android:layout_width="@dimen/taille_carte"
+            android:layout_height="@dimen/taille_carte"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher_background" />
+
+        <ImageButton
+            android:id="@+id/salle2_IB"
+            android:layout_width="@dimen/taille_carte"
+            android:layout_height="@dimen/taille_carte"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher_background" />
+
+        <ImageButton
+            android:id="@+id/salle3_IB"
+            android:layout_width="@dimen/taille_carte"
+            android:layout_height="@dimen/taille_carte"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher_background" />
+
+        <ImageButton
+            android:id="@+id/salle4_IB"
+            android:layout_width="@dimen/taille_carte"
+            android:layout_height="@dimen/taille_carte"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher_background" />
+
+        <ImageButton
+            android:id="@+id/salle5_IB"
+            android:layout_width="@dimen/taille_carte"
+            android:layout_height="@dimen/taille_carte"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher_background" />
+
+        <ImageButton
+            android:id="@+id/salle6_IB"
+            android:layout_width="@dimen/taille_carte"
+            android:layout_height="@dimen/taille_carte"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher_background" />
+
+
+
+
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center">
+        <ImageButton
+            android:id="@+id/changerNom_IB"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="0dp"
+
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pencil" />
+
+        <ImageButton
+            android:id="@+id/gallerie_IB"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/gallery" />
+
+    </LinearLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <Button
+
+        android:id="@+id/backToSalles_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:layout_marginRight="350dp"
+        android:text="Salles"/>
+
+
+
+
+    <Button
+        android:id="@+id/goToArmes_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_weight="1"
+        android:text="Armes"/>
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+</LinearLayout>

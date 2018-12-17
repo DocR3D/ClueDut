@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/playPopupWindow"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/fond"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/cadreCreationPartie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/ic_parcheminh">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/textNomCreationpartie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_textenom"
+                android:layout_marginLeft="40dp"/>
+
+            <EditText
+                android:id="@+id/saisieNomCreationPartie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="saisir nom"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:id="@+id/textCouleurCreationpartie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_textecouleur"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="5dp"/>
+
+            <ImageButton
+                android:id="@+id/redCreationPartie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/red"
+                android:layout_marginRight="10dp"/>
+
+            <ImageButton
+                android:id="@+id/greenCreationPartie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/green"
+                android:layout_marginRight="10dp"/>
+
+            <ImageButton
+                android:id="@+id/blueCreationPartie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue"
+                android:layout_marginRight="10dp"/>
+
+            <ImageButton
+                android:id="@+id/purpleCreationPartie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/purple"
+                android:layout_marginRight="10dp"/>
+
+            <ImageButton
+                android:id="@+id/selectedColorCreationPartie"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/black"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/backToPlayPopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_retour_btn" />
+
+        <ImageButton
+            android:id="@+id/goToSalonCreation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_valider_btn" />
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>
