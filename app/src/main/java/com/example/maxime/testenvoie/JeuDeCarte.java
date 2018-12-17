@@ -40,10 +40,11 @@ public class JeuDeCarte {
     }
 
     public boolean compareCard(String NomUneCarte, String NomUneDeuxieme, String NomUneTroisieme){
-        if(NomUneCarte == lesCartesImportantes.get(1).getNom() && NomUneDeuxieme == lesCartesImportantes.get(2).getNom() && NomUneTroisieme == lesCartesImportantes.get(2).getNom()){
-            return true;
-        }else
-            return false;
+        return NomUneCarte == lesCartesImportantes.get(1).getNom() && NomUneDeuxieme == lesCartesImportantes.get(2).getNom() && NomUneTroisieme == lesCartesImportantes.get(2).getNom();
+    }
+
+    public int getSizeJeuDeCarte() {
+        return jeuDeCartes.size();
     }
 
 

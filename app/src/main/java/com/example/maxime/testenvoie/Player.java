@@ -6,13 +6,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by i174085 on 29/11/2018.
  */
 
 class Player {
-    public enum State {DISCONNECTED, CONNECTED, READY, NOTREADY}; // état du joueur
+    private ArrayList<Carte> leJeuDeCarteDuJoueur = new ArrayList();       // cartes armes // état du joueur
 
     private Socket         socket;               // socket de communication
     private InetAddress    IP;                   // IP du joueur
@@ -25,9 +26,11 @@ class Player {
     private boolean        gameLost = false;     // je joueur a perdu mais la partie continue
     private String         pseudo = null;        // pseudo du joueur
     private int            color;                // couleur du joueur
-    private int[]          weapons = null;       // cartes armes
-    private int[]          characters = null;    // cartes personnages
-    private int[]          rooms = null;         // cartes salles
+
+    public Carte getLeJeuDeCarteDuJoueur(int numeroCarte) {
+        return leJeuDeCarteDuJoueur.get(numeroCarte);
+    }
+
 
     public Player(Socket socket) {
         setSocket(socket);
@@ -109,4 +112,10 @@ class Player {
     public void setState(State state) {
         this.state = state;
     }
+
+    public void addLeJeuDeCarteDuJoueur(Carte uneCarte) {
+        leJeuDeCarteDuJoueur.add(uneCarte);
+    }
+
+    public enum State {DISCONNECTED, CONNECTED, READY, NOTREADY}
 }

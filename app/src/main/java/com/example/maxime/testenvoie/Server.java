@@ -3,23 +3,12 @@ package com.example.maxime.testenvoie;
 
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -29,7 +18,7 @@ import java.util.LinkedList;
 
 public class Server implements Runnable{
 
-    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, NULL};
+    protected static ArrayList<Carte> cartesReponses = new ArrayList();
 
 
     protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
@@ -50,37 +39,7 @@ public class Server implements Runnable{
     public static Player[]            players          = null;  // joueurs
 
     protected static boolean[]           colorsAvailable  = null;  // couleurs disponibles
-
-    protected static Carte[]            cartesReponses = null;
-
-
-    private static String getAvalaibleColors() {
-        // calcul des couleurs disponibles
-        String colors = new String();
-
-        for (int i = 0; i < Server.colorsAvailable.length; i++)
-            if (Server.colorsAvailable[i])
-                colors += " " + i;
-
-        return colors;
-    }
-
-    protected static void sendToPlayer(int player, String response) {
-        // envoi d'un message à un joueur
-        Server.players[player].getWriter().println(response);
-    }
-
-    protected static void sendToAllPlayers(int excludedPlayer, String response) {
-        // envoi d'un message à l'ensemble des joueurs
-        for (int i = 0; i < Server.nbPlayers; i++)
-            if ((i != excludedPlayer) && (! Server.players[i].disconnected()))
-                Server.players[i].getWriter().println(response);
-    }
-
-    public Server(){
-        Thread thread = new Thread(this);
-        thread.start();
-    }
+    protected static JeuDeCarte unJeuDeCarte = new JeuDeCarte();
 
     public void run(){
         ServerSocket      socketEcoute     = null;  // socket d'ecoute
@@ -93,6 +52,7 @@ public class Server implements Runnable{
         Message msg                 = null; // message reçu d'un joueur
         String[] items              = null; // éléments de la commande reçue
 
+        unJeuDeCarte.melanger();
         // création du sémaphore
         semClient = new Semaphore(0);
 
@@ -102,7 +62,7 @@ public class Server implements Runnable{
         // initialisation du nombre de joueurs
         players = new Player[NB_PLAYERS];
         thrPlayers = new Thread[NB_PLAYERS];
-        cartesReponses = new Carte[3];
+        cartesReponses = unJeuDeCarte.takeAllTypeCard();
 
         // initialisation des couleurs disponibles
         colorsAvailable = new boolean[Server.MAX_COLORS];
@@ -216,11 +176,11 @@ public class Server implements Runnable{
 
             // dÃ©marrage de la partie
             System.out.println("Le jeu peut démarrer");
-
             // distribution des cartes
-
-            //cartesReponses[0] = JeuDeCartes.getIndex(5);
-
+        while (unJeuDeCarte.getSizeJeuDeCarte() != 0) {
+            for (int i = 0; i < Server.NB_PLAYERS; i++)
+                Server.players[i].addLeJeuDeCarteDuJoueur(unJeuDeCarte.takeCard());
+        }
             // tant que le jeu n'est pas terminÃ©
             while (! gameOver) {
                 for (int i = 0; i < Server.nbPlayers; i++) {
@@ -306,6 +266,37 @@ public class Server implements Runnable{
             System.out.println("Fermeture du serveur");
         }
     }
+
+
+    private static String getAvalaibleColors() {
+        // calcul des couleurs disponibles
+        String colors = new String();
+
+        for (int i = 0; i < Server.colorsAvailable.length; i++)
+            if (Server.colorsAvailable[i])
+                colors += " " + i;
+
+        return colors;
+    }
+
+    protected static void sendToPlayer(int player, String response) {
+        // envoi d'un message à un joueur
+        Server.players[player].getWriter().println(response);
+    }
+
+    protected static void sendToAllPlayers(int excludedPlayer, String response) {
+        // envoi d'un message à l'ensemble des joueurs
+        for (int i = 0; i < Server.nbPlayers; i++)
+            if ((i != excludedPlayer) && (!Server.players[i].disconnected()))
+                Server.players[i].getWriter().println(response);
+    }
+
+    public Server() {
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, NULL}
 
     class ThreadConnection implements Runnable {
         ServerSocket socketEcoute;
