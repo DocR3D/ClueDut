@@ -8,34 +8,29 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true">
+    <activity
+        android:name=".ThemeSallesActivity"
+        android:screenOrientation="landscape" />
+    <activity
+        android:name=".ThemePersonnagesActivity"
+        android:screenOrientation="landscape" />
+    <activity android:name=".ThemeArmesActivity" />
+    <activity
+        android:name=".Menu"
+        android:screenOrientation="landscape">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".SalonActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".SalonActivityClient"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".JouerActivity"
-            android:screenOrientation="landscape"></activity>
-        <activity
-            android:name=".test"
-            android:label="@string/title_activity_test"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-    </application>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".SalonCreerPartie"
+        android:screenOrientation="landscape"/>
+</application>
 
 </manifest>
