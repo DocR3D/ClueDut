@@ -61,8 +61,8 @@ public class JeuDeCarte {
         return lesCartes;
     }
 
-    public boolean compareCard(Carte uneCarte, Carte uneDeuxieme, Carte uneTroisieme){
-        if(uneCarte.getNom() == lesCartesImportantes.get(1).getNom() && uneDeuxieme.getNom() == lesCartesImportantes.get(2).getNom() && uneTroisieme.getNom() == lesCartesImportantes.get(2).getNom()){
+    public boolean compareCard(String NomUneCarte, String NomUneDeuxieme, String NomUneTroisieme){
+        if(NomUneCarte == lesCartesImportantes.get(1).getNom() && NomUneDeuxieme == lesCartesImportantes.get(2).getNom() && NomUneTroisieme == lesCartesImportantes.get(2).getNom()){
             return true;
         }
         return false;
