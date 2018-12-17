@@ -62,10 +62,10 @@ public class JeuDeCarte {
     }
 
     public boolean compareCard(Carte uneCarte, Carte uneDeuxieme, Carte uneTroisieme){
-        if(uneCarte.getNom() == lesCartesImportantes.get(1).getNom()){
-
+        if(uneCarte.getNom() == lesCartesImportantes.get(1).getNom() && uneDeuxieme.getNom() == lesCartesImportantes.get(2).getNom() && uneTroisieme.getNom() == lesCartesImportantes.get(2).getNom()){
+            return true;
         }
-        return true;
+        return false;
     }
 
 
