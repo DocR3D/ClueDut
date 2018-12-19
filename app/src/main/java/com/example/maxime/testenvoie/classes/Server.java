@@ -357,8 +357,8 @@ public class Server implements Runnable{
                     Log.e("ThredCo","Ok");
                     IP = socket.getInetAddress();
 
-/* partie permettant de déterminer l'IP du joueur
- * et de déterminer s'il s'agit d'une reconnexion
+                    /*partie permettant de déterminer l'IP du joueur
+ * et de déterminer s'il s'agit d'une reconnexion*/
 				i = 0;
 				// recherche d'une perte de connexion
 				while ((i < Server.nbPlayers) && (! IP.equals(Server.players[i].getIP()))) i++;
@@ -377,7 +377,7 @@ public class Server implements Runnable{
 
 					System.out.println("Lancement d'un thread client");
 				}
-				else {*/
+				else {
                     if (Server.nbPlayers == Server.NB_PLAYERS) {
                         // le nombre maximum de joueurs est atteint
                         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -403,7 +403,7 @@ public class Server implements Runnable{
                         Server.nbPlayers++;
                     }
                 }
-//			}
+			}
                 catch (IOException e) {
                     if (Server.nbPlayers < Server.NB_PLAYERS) {
                         System.out.println("Communication avec le client impossible !");
