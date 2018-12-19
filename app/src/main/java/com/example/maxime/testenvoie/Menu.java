@@ -227,7 +227,7 @@ public class Menu extends AppCompatActivity {
                                 if (nomChoisiRejoindrePartie.equals("") || IPChoisieRejoindrePartie.equals("")) {
                                     Toast.makeText(getBaseContext(), "Veuillez entrer un nom et une adresse IP", Toast.LENGTH_LONG).show();
                                 } else {
-                                    startActivity(new Intent(Menu.this, SalonCreerPartie.class));
+                                    startActivity(new Intent(Menu.this, SalonRejoindrePartie.class));
                                 }
                             }
                         });

@@ -8,19 +8,19 @@
     android:background="@drawable/fond">
 
     <ImageButton
-        android:id="@+id/commencerPartie"
+        android:id="@+id/pret"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_commencerpartie_btn"/>
+        android:background="@drawable/ic_pret_btn"/>
 
     <ImageButton
-        android:id="@+id/backToMenuSalonCreerPartie"
+        android:id="@+id/backToMenuSalonRejoindrePartie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_retour_btn"/>
 
     <LinearLayout
-        android:id="@+id/cadreJoueursCreerPartie"
+        android:id="@+id/cadreJoueursRejoindrePartie"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
