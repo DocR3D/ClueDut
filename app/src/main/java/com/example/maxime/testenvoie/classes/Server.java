@@ -29,7 +29,7 @@ public class Server implements Runnable{
     protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
 
     protected static final int           MAX_COLORS       = 6;     // nombre max de couleurs
-    protected static final int           NB_PLAYERS       = 2;     // nombre de joueurs de la partie
+    protected static final int           NB_PLAYERS       = 4;     // nombre de joueurs de la partie
 
     private static   Thread              thrConnexion     = null;  // thread de supervision du jeu
     protected static Thread[]            thrPlayers       = null;  // thread de réception pour chacun des joueurs
@@ -142,7 +142,7 @@ public class Server implements Runnable{
             // examen de la commande
             switch (msg.getCommand()) {
                 case CONNECT:
-                    response = new String("OK");
+                    response = new String("COLORS");
                     responseToAllPlayers = new String("PLAYER " + player + " " + items[1]);
 
                     Server.players[player].setPseudo(items[1]);
@@ -162,7 +162,7 @@ public class Server implements Runnable{
                     int color = Integer.valueOf(items[1]);
 
                     if (Server.colorsAvailable[color]) {
-                        response = new String("OK");
+                        response = new String("COLOR +" + color);
                         responseToAllPlayers = new String("COLORS " + " " + player + " " + color + " ");
 
                         Server.players[player].setColor(color);
@@ -182,7 +182,7 @@ public class Server implements Runnable{
                         playersReady++;
                         System.out.println("Nombre de joueurs prêts " + playersReady);
                     } else {
-                        response = new String("NOK");
+                        response = new String("COLORS ");
 
                         // calcul des couleurs disponibles
                         response += getAvalaibleColors();
@@ -359,7 +359,7 @@ public class Server implements Runnable{
 
                     /*partie permettant de déterminer l'IP du joueur
  * et de déterminer s'il s'agit d'une reconnexion*/
-				i = 0;
+				/*i = 0;
 				// recherche d'une perte de connexion
 				while ((i < Server.nbPlayers) && (! IP.equals(Server.players[i].getIP()))) i++;
 
@@ -377,7 +377,7 @@ public class Server implements Runnable{
 
 					System.out.println("Lancement d'un thread client");
 				}
-				else {
+				else {*/
                     if (Server.nbPlayers == Server.NB_PLAYERS) {
                         // le nombre maximum de joueurs est atteint
                         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -402,7 +402,7 @@ public class Server implements Runnable{
                         // incrémentation du nombre de joueurs
                         Server.nbPlayers++;
                     }
-                }
+                //}
 			}
                 catch (IOException e) {
                     if (Server.nbPlayers < Server.NB_PLAYERS) {

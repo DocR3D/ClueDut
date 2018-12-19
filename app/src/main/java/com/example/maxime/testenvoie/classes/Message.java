@@ -28,8 +28,6 @@ public class Message {
 			if (this.state == Player.State.DISCONNECTED)
 				if (items.length == 2)
 					return Server.Command.CONNECT;
-
-
 		
 		if (items[0].compareToIgnoreCase("COLOR") == 0)
 			if (this.state == Player.State.CONNECTED)
@@ -38,12 +36,12 @@ public class Message {
 
         if (items[0].compareToIgnoreCase("ACS") == 0)
             if (this.state == Player.State.CONNECTED)
-                if (items.length == 2)
+                if (items.length == 3)
                     return Server.Command.ACS;
 
         if (items[0].compareToIgnoreCase("HYP") == 0)
             if (this.state == Player.State.CONNECTED)
-                if (items.length == 2)
+                if (items.length == 3)
                     return Server.Command.HYP;
 
 

@@ -1,13 +1,21 @@
 package com.example.maxime.testenvoie;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.maxime.testenvoie.R;
+import com.example.maxime.testenvoie.classes.Couleur;
+
+import java.util.ArrayList;
 
 public class SalonRejoindrePartie extends AppCompatActivity {
 
@@ -18,6 +26,23 @@ public class SalonRejoindrePartie extends AppCompatActivity {
     public LinearLayout cadreJoueurs;
     public ImageButton backToMenuSalonRejoindrePartie_btn;
     public ImageButton pret_btn;
+    public TextView nomJoueur1;
+    public TextView nomJoueur2;
+    public TextView nomJoueur3;
+    public TextView nomJoueur4;
+
+    //Popup ChoisirCouleur
+    public Dialog creationPartiePopup;
+    public LinearLayout cadreCreationPartie;;
+    public ImageView texteCouleurCreationPartie;
+    public ImageButton backToPlayPopupCreationPartie_btn;
+    public ImageButton goToSalonCreation_btn;
+    public ImageButton redCreationPartie;
+    public ImageButton greenCreationPartie;
+    public ImageButton blueCreationPartie;
+    public ImageButton purpleCreationPartie;
+    public ImageButton selectedColorCreationPartie;
+    public String couleurChoisieCreationPartie = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +51,10 @@ public class SalonRejoindrePartie extends AppCompatActivity {
         cadreJoueurs = findViewById(R.id.cadreJoueursRejoindrePartie);
         backToMenuSalonRejoindrePartie_btn = findViewById(R.id.backToMenuSalonRejoindrePartie);
         pret_btn = findViewById(R.id.pret);
+        nomJoueur1 = findViewById(R.id.nomJoueur1);
+        nomJoueur2 = findViewById(R.id.nomJoueur2);
+        nomJoueur3 = findViewById(R.id.nomJoueur3);
+        nomJoueur4 = findViewById(R.id.nomJoueur4);
     }
 
     @Override
@@ -47,6 +76,94 @@ public class SalonRejoindrePartie extends AppCompatActivity {
     }
 
     private void setComponentsListeners() {
+
+        creationPartiePopup = new Dialog(SalonRejoindrePartie.this);
+        creationPartiePopup.setContentView(R.layout.popup_choisir_couleur);
+        cadreCreationPartie = creationPartiePopup.findViewById(R.id.cadreCreationPartie);
+        // cadreCouleursCreationPartie = creationPartiePopup.findViewById(R.id.cadreCouleursCreationPartie);
+        backToPlayPopupCreationPartie_btn = creationPartiePopup.findViewById(R.id.backToPlayPopupCreationPartie);
+        texteCouleurCreationPartie = creationPartiePopup.findViewById(R.id.textCouleurCreationpartie);
+        goToSalonCreation_btn = creationPartiePopup.findViewById(R.id.goToSalonCreation);
+        redCreationPartie = creationPartiePopup.findViewById(R.id.redCreationPartie);
+        greenCreationPartie = creationPartiePopup.findViewById(R.id.greenCreationPartie);
+        blueCreationPartie = creationPartiePopup.findViewById(R.id.blueCreationPartie);
+        purpleCreationPartie = creationPartiePopup.findViewById(R.id.purpleCreationPartie);
+        Couleur rouge = new Couleur( "rouge", redCreationPartie);
+        Couleur vert = new Couleur( "vert", greenCreationPartie);
+        Couleur bleu = new Couleur( "bleu", blueCreationPartie);
+        Couleur violet = new Couleur( "violet", purpleCreationPartie);
+        selectedColorCreationPartie = creationPartiePopup.findViewById(R.id.selectedColorCreationPartie);
+
+
+        final ArrayList<Couleur> couleurs= new ArrayList<Couleur>();
+            couleurs.add(rouge);
+            couleurs.add(vert);
+            couleurs.add(bleu);
+            couleurs.add(violet);
+
+
+        for (final Couleur c : couleurs) {
+            c.getImageView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    couleurChoisieCreationPartie = c.getNom();
+                    selectedColorCreationPartie.setX(c.getImageView().getX() + (c.getImageView().getLayoutParams().width / 4));
+                    selectedColorCreationPartie.setY(c.getImageView().getY() + (c.getImageView().getLayoutParams().height / 4));
+
+                }
+            });
+        }
+
+        backToPlayPopupCreationPartie_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creationPartiePopup.cancel();
+            }
+        });
+
+        goToSalonCreation_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (couleurChoisieCreationPartie.equals("")) {
+                    Toast.makeText(getBaseContext(), "Veuillez entrer un nom et choisir une couleur", Toast.LENGTH_LONG).show();
+                } else {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            switch (couleurChoisieCreationPartie){
+                                case "rouge":
+                                    Menu.client.color(0); break;
+                                case "vert":
+                                    Menu.client.color(1); break;
+                                case "bleu":
+                                    Menu.client.color(2); break;
+                                case "violet":
+                                    Menu.client.color(3); break;
+                            }
+                        }
+                    });
+                    thread.start();
+                    if (Menu.client.couleur > -1){
+                        creationPartiePopup.cancel();
+                        thread.interrupt();
+                    }
+                    thread.interrupt();
+                }
+            }
+        });
+
+        creationPartiePopup.getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        creationPartiePopup.show();
+        setCreationPartiePopupComponentsSize();
+
+
         backToMenuSalonRejoindrePartie_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,9 +174,65 @@ public class SalonRejoindrePartie extends AppCompatActivity {
         pret_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // FREDEU
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Menu.client.ready();
+                    }
+                });
+                thread.start();
+                thread.interrupt();
             }
         });
+    }
+
+    public void setCreationPartiePopupComponentsSize() {
+        Integer displayWidth = getWindowManager().getDefaultDisplay().getWidth();
+        Integer displayHeight = getWindowManager().getDefaultDisplay().getHeight();
+        Integer newWidth;
+        Integer newHeight;
+        Double coef;
+
+        cadreCreationPartie.getLayoutParams().width = (int) (displayWidth / 1.5);
+        cadreCreationPartie.getLayoutParams().height = (int)  (displayHeight / 2.3);
+
+        /*coef = (double) 291/72;
+        texteNomCreationPartie.getLayoutParams().height = (int)  ((displayHeight / 5) / 3);
+        newHeight = (int)  ((displayHeight / 5) / 3);
+        texteNomCreationPartie.getLayoutParams().width = (int) (newHeight * coef);*/
+
+        coef = (double) 462/72;
+        texteCouleurCreationPartie.getLayoutParams().height = (int)  ((displayHeight / 5) / 3);
+        newHeight = (int)  ((displayHeight / 5) / 3);
+        texteCouleurCreationPartie.getLayoutParams().width = (int) (newHeight * coef);
+
+        coef = (double) 628/415;
+        backToPlayPopupCreationPartie_btn.getLayoutParams().width = displayWidth / 6;
+        newWidth = displayWidth / 6;
+        backToPlayPopupCreationPartie_btn.getLayoutParams().height = (int)  (newWidth / coef);
+
+        coef = (double) 628/415;
+        goToSalonCreation_btn.getLayoutParams().width = displayWidth / 6;
+        newWidth = displayWidth / 6;
+        goToSalonCreation_btn.getLayoutParams().height = (int)  (newWidth / coef);
+
+        redCreationPartie.getLayoutParams().width = displayWidth / 16;
+        redCreationPartie.getLayoutParams().height = displayWidth / 16;
+        redCreationPartie.setEnabled(false);
+
+        greenCreationPartie.getLayoutParams().width = displayWidth / 16;
+        greenCreationPartie.getLayoutParams().height = displayWidth / 16;
+
+        blueCreationPartie.getLayoutParams().width = displayWidth / 16;
+        blueCreationPartie.getLayoutParams().height = displayWidth / 16;
+
+        purpleCreationPartie.getLayoutParams().width = displayWidth / 16;
+        purpleCreationPartie.getLayoutParams().height = displayWidth / 16;
+
+        selectedColorCreationPartie.getLayoutParams().width = displayWidth / 32;
+        selectedColorCreationPartie.getLayoutParams().height = displayWidth / 32;
+        selectedColorCreationPartie.setX(displayWidth * 2);
+
     }
 
     private void setComponentsSize() {

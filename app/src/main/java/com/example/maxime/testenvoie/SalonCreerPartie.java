@@ -1,11 +1,13 @@
 package com.example.maxime.testenvoie;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class SalonCreerPartie extends AppCompatActivity {
 
@@ -16,6 +18,10 @@ public class SalonCreerPartie extends AppCompatActivity {
     public LinearLayout cadreJoueurs;
     public ImageButton backToMenuSalonCreerPartie_btn;
     public ImageButton commencerPartie_btn;
+    public TextView nomJoueur1;
+    public TextView nomJoueur2;
+    public TextView nomJoueur3;
+    public TextView nomJoueur4;
 
 
     @Override
@@ -26,6 +32,22 @@ public class SalonCreerPartie extends AppCompatActivity {
         cadreJoueurs = findViewById(R.id.cadreJoueursCreerPartie);
         backToMenuSalonCreerPartie_btn = findViewById(R.id.backToMenuSalonCreerPartie);
         commencerPartie_btn = findViewById(R.id.commencerPartie);
+        nomJoueur1 = findViewById(R.id.nomJoueur1);
+        nomJoueur2 = findViewById(R.id.nomJoueur2);
+        nomJoueur3 = findViewById(R.id.nomJoueur3);
+        nomJoueur4 = findViewById(R.id.nomJoueur4);
+
+        nomJoueur1.setText("" + Menu.client.getPseudo());
+        switch(Menu.client.couleur){
+            case 0:
+                nomJoueur1.setTextColor(Color.RED); break;
+            case 1:
+                nomJoueur1.setTextColor(Color.GREEN); break;
+            case 2:
+                nomJoueur1.setTextColor(Color.BLUE); break;
+            case 3:
+                nomJoueur1.setTextColor(Color.BLACK); break;
+        }
     }
 
     @Override

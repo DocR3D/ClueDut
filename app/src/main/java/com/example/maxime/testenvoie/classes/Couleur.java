@@ -12,6 +12,10 @@ public class Couleur {
         this.image = image;
     }
 
+    public Couleur(String nom){
+        this.nom = nom;
+    }
+
     public ImageView getImageView() {
         return this.image;
     }

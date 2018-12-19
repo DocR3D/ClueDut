@@ -1,9 +1,16 @@
 package com.example.maxime.testenvoie;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -11,11 +18,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.maxime.testenvoie.classes.Client;
 import com.example.maxime.testenvoie.classes.Couleur;
+import com.example.maxime.testenvoie.classes.Server;
 
 import java.util.ArrayList;
 
 public class Menu extends AppCompatActivity {
+
+    //Client public pour l'application
+    public static Client client;
+    Server server = new Server();
+    //Pour le serveur
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     //Pour ne pas que le onFocusChange se refasse plein de fois
     public boolean firstFocus = true;
@@ -73,6 +88,31 @@ public class Menu extends AppCompatActivity {
         settings_btn = findViewById(R.id.settings_btn);
 
 
+        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
+
+        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE_ASK_PERMISSIONS);
+            }
+        } else {
+        }
+        int hasWriteContactsPermission2 = checkSelfPermission(Manifest.permission.INTERNET);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.INTERNET)) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},REQUEST_CODE_ASK_PERMISSIONS);
+            }
+        }
 
     }
 
@@ -121,6 +161,8 @@ public class Menu extends AppCompatActivity {
                 creerPartie_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Server server = new Server();
+                        client = new Client("0.0.0.0");
                         //startActivity(new Intent(Menu.this, SalonCreerPartie.class));
                         creationPartiePopup = new Dialog(Menu.this);
                         creationPartiePopup.setContentView(R.layout.popup_creation_partie);
@@ -171,10 +213,33 @@ public class Menu extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 nomChoisiCreationPartie = saisieNomCreationPartie.getText().toString();
-
+                                client.setPseudo(nomChoisiCreationPartie);
                                 if (nomChoisiCreationPartie.equals("") || couleurChoisieCreationPartie.equals("")) {
                                     Toast.makeText(getBaseContext(), "Veuillez entrer un nom et choisir une couleur", Toast.LENGTH_LONG).show();
                                 } else {
+                                    Thread thread = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            client.connect();
+                                            switch (couleurChoisieCreationPartie){
+                                                case "rouge":
+                                                    client.color(0);
+                                                    client.setCouleur(0);break;
+                                                case "vert":
+                                                    client.color(1);
+                                                    client.setCouleur(1);break;
+                                                case "bleu":
+                                                    client.color(2);
+                                                    client.setCouleur(2);break;
+                                                case "violet":
+                                                    client.color(3);
+                                                    client.setCouleur(3);break;
+                                            }
+
+                                        }
+                                    });
+                                    thread.start();
+                                    thread.interrupt();
                                     startActivity(new Intent(Menu.this, SalonCreerPartie.class));
                                 }
                             }
@@ -200,6 +265,7 @@ public class Menu extends AppCompatActivity {
                 rejoindrePartie_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        client = new Client();
                         rejoindrePartiePopup = new Dialog(Menu.this);
                         rejoindrePartiePopup.setContentView(R.layout.popup_rejoindre_partie_1);
                         cadreRejoindrePartie = rejoindrePartiePopup.findViewById(R.id.cadreRejoindrePartie);
@@ -224,9 +290,33 @@ public class Menu extends AppCompatActivity {
                                 nomChoisiRejoindrePartie = saisieNomRejoindrePartie.getText().toString();
                                 IPChoisieRejoindrePartie = saisieIPRejoindrePartie.getText().toString();
 
+                                client.setPseudo(nomChoisiRejoindrePartie);
+                                client.setIP(IPChoisieRejoindrePartie);
+
                                 if (nomChoisiRejoindrePartie.equals("") || IPChoisieRejoindrePartie.equals("")) {
                                     Toast.makeText(getBaseContext(), "Veuillez entrer un nom et une adresse IP", Toast.LENGTH_LONG).show();
                                 } else {
+                                    final Handler handler = new Handler();
+                                    Thread thread = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Thread thread2 = new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            client.connect();
+                                                        }
+                                                    });
+                                                    thread2.start();
+                                                    thread2.interrupt();
+                                                }
+                                            },2000);
+                                        }
+                                    });
+                                    thread.start();
+                                    thread.interrupt();
                                     startActivity(new Intent(Menu.this, SalonRejoindrePartie.class));
                                 }
                             }

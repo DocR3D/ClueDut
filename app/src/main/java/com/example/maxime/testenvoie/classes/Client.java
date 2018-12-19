@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable{
 
-    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE};
+    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR};
 
     private static final String SERVEUR_TCP_IP   = new String("0.0.0.0");
     private static final int    SERVEUR_TCP_PORT = 8001;
@@ -27,28 +27,51 @@ public class Client implements Runnable{
     protected PrintWriter       out              = null;
     protected String            command          = null;
 
+    public int                  couleurs[]       = new int[6];
+    public int                  couleur          = -1;
+
     private String ip;
     private String pseudo;
 
-    public Client(String pseudo, String ip) {
+    public Client() {
+    }
+
+    public Client(String ip) {
+        this.ip = ip;
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public void setPseudo(String pseudo){
         this.pseudo = pseudo;
+    }
+
+    public String getPseudo(){
+        return this.pseudo;
+    }
+
+    public void setCouleur(int couleur){
+        this.couleur = couleur;
+    }
+
+    public void setIP(String ip){
         this.ip = ip;
         Thread thread = new Thread(this);
         thread.start();
     }
 
     public void connect(){
-        this.command = "Connect " + pseudo;
-        this.out.println(command);
+        command = "CONNECT " + pseudo;
+        out.println(command);
     }
 
-    public void color(){
-        this.command = "Color " + 2;
+    public void color(int color){
+        this.command = "COLOR " + color;
         this.out.println(command);
     }
 
     public void ready(){
-        this.command = "Ready";
+        this.command = "READY";
         this.out.println(command);
     }
 
@@ -150,6 +173,10 @@ public class Client implements Runnable{
             if (items[0].compareToIgnoreCase("REJECTED") == 0)
                 return Client.Command.REJECTED;
 
+            if (items[0].compareToIgnoreCase("COLOR") == 0)
+                if (items.length == 2)
+                    return Client.Command.COLOR;
+
             return null;
         }
 
@@ -179,6 +206,16 @@ public class Client implements Runnable{
 
                     case DICE:
                         //Client.joueur.dice = items[1];
+                        break;
+
+                    case COLORS:
+                        for (int i = 1; i < items.length; i++)
+                            couleurs[(i-1)] = Integer.valueOf(items[i]);
+                        break;
+
+                    case COLOR:
+                        setCouleur(Integer.valueOf(items[1]));
+                        break;
 
                     default:
                         break;

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         creerClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Client client = new Client(""+connectPseudo.getText(), "" + connectIp.getText());
+                //Client client = new Client(""+connectPseudo.getText(), "" + connectIp.getText());
             }
         });
 
