@@ -42,6 +42,16 @@ public class Client implements Runnable{
         this.out.println(command);
     }
 
+    public void color(){
+        this.command = "Color " + 2;
+        this.out.println(command);
+    }
+
+    public void ready(){
+        this.command = "Ready";
+        this.out.println(command);
+    }
+
     public void run(){
         Thread     thrReceiver       = null;
 
