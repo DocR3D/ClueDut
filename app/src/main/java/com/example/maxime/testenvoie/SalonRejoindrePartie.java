@@ -1,31 +1,31 @@
 package com.example.maxime.testenvoie;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-public class SalonCreerPartie extends AppCompatActivity {
+import com.example.maxime.testenvoie.R;
+
+public class SalonRejoindrePartie extends AppCompatActivity {
 
     //Pour ne pas que le onFocusChange se refasse plein de fois
     public boolean firstFocus = true;
 
     //Interface Salon
     public LinearLayout cadreJoueurs;
-    public ImageButton backToMenuSalonCreerPartie_btn;
-    public ImageButton commencerPartie_btn;
-
+    public ImageButton backToMenuSalonRejoindrePartie_btn;
+    public ImageButton pret_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_salon_creer_partie);
-
-        cadreJoueurs = findViewById(R.id.cadreJoueursCreerPartie);
-        backToMenuSalonCreerPartie_btn = findViewById(R.id.backToMenuSalonCreerPartie);
-        commencerPartie_btn = findViewById(R.id.commencerPartie);
+        setContentView(R.layout.activity_salon_rejoindre_partie);
+        cadreJoueurs = findViewById(R.id.cadreJoueursRejoindrePartie);
+        backToMenuSalonRejoindrePartie_btn = findViewById(R.id.backToMenuSalonRejoindrePartie);
+        pret_btn = findViewById(R.id.pret);
     }
 
     @Override
@@ -47,14 +47,14 @@ public class SalonCreerPartie extends AppCompatActivity {
     }
 
     private void setComponentsListeners() {
-        backToMenuSalonCreerPartie_btn.setOnClickListener(new View.OnClickListener() {
+        backToMenuSalonRejoindrePartie_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SalonCreerPartie.this, Menu.class));
+                startActivity(new Intent(SalonRejoindrePartie.this, Menu.class));
             }
         });
 
-        commencerPartie_btn.setOnClickListener(new View.OnClickListener() {
+        pret_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // FREDEU
@@ -71,18 +71,18 @@ public class SalonCreerPartie extends AppCompatActivity {
 
 
         coef = (double) 628/415;
-        backToMenuSalonCreerPartie_btn.getLayoutParams().width = displayWidth / 6;
+        backToMenuSalonRejoindrePartie_btn.getLayoutParams().width = displayWidth / 6;
         newWidth = displayWidth / 6;
-        backToMenuSalonCreerPartie_btn.getLayoutParams().height = (int)  (newWidth / coef);
-        backToMenuSalonCreerPartie_btn.setX(percentWidth(10, backToMenuSalonCreerPartie_btn));
-        backToMenuSalonCreerPartie_btn.setY(percentHeight(15, backToMenuSalonCreerPartie_btn));
+        backToMenuSalonRejoindrePartie_btn.getLayoutParams().height = (int)  (newWidth / coef);
+        backToMenuSalonRejoindrePartie_btn.setX(percentWidth(10, backToMenuSalonRejoindrePartie_btn));
+        backToMenuSalonRejoindrePartie_btn.setY(percentHeight(15, backToMenuSalonRejoindrePartie_btn));
 
-        coef = (double) 950/180;
-        commencerPartie_btn.getLayoutParams().width = displayWidth / 2;
+        coef = (double) 700/180;
+        pret_btn.getLayoutParams().width = displayWidth / 2;
         newWidth = displayWidth / 2;
-        commencerPartie_btn.getLayoutParams().height = (int)  (newWidth / coef);
-        commencerPartie_btn.setX(percentWidth(40, commencerPartie_btn));
-        commencerPartie_btn.setY(percentHeight(85, commencerPartie_btn));
+        pret_btn.getLayoutParams().height = (int)  ((newWidth / coef) / 1.3);
+        pret_btn.setX(percentWidth(40, pret_btn));
+        pret_btn.setY(percentHeight(85,pret_btn));
 
         coef = (double)  cadreJoueurs.getHeight() / cadreJoueurs.getWidth();
         cadreJoueurs.getLayoutParams().height = (int) (displayHeight / 1.1);
