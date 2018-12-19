@@ -33,7 +33,9 @@
         <activity
             android:name=".SalonCreerPartie"
             android:screenOrientation="landscape" />
-        <activity android:name=".SalonRejoindrePartie"></activity>
+        <activity android:name=".SalonRejoindrePartie"
+            android:screenOrientation="landscape"
+            ></activity>
     </application>
 
 </manifest>
