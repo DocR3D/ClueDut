@@ -36,6 +36,16 @@ public class Message {
 				if (items.length == 2)
 					return Server.Command.COLOR;
 
+        if (items[0].compareToIgnoreCase("ACS") == 0)
+            if (this.state == Player.State.CONNECTED)
+                if (items.length == 2)
+                    return Server.Command.ACS;
+
+        if (items[0].compareToIgnoreCase("HYP") == 0)
+            if (this.state == Player.State.CONNECTED)
+                if (items.length == 2)
+                    return Server.Command.HYP;
+
 
 		if (items[0].compareToIgnoreCase("READY") == 0)
 			if (this.state == Player.State.CONNECTED)

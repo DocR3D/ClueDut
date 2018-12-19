@@ -17,13 +17,15 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable{
 
-    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED};
+    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE};
 
     private static final String SERVEUR_TCP_IP   = new String("0.0.0.0");
     private static final int    SERVEUR_TCP_PORT = 8001;
 
     protected static boolean    gameOver         = false;
     protected static boolean    disconnected     = false;
+    protected PrintWriter       out              = null;
+    protected String            command          = null;
 
     private String ip;
     private String pseudo;
@@ -35,15 +37,18 @@ public class Client implements Runnable{
         thread.start();
     }
 
+    public void connect(){
+        this.command = "Connect " + pseudo;
+        this.out.println(command);
+    }
+
     public void run(){
         Thread     thrReceiver       = null;
 
         InetSocketAddress sa = null;
 
         Socket            sCom = null;
-        PrintWriter       out = null;
         BufferedReader    in  = null;
-        String            command = null;
         int i = 0;
 
         try {
@@ -71,20 +76,10 @@ public class Client implements Runnable{
             thrReceiver.start();
 
             //Scanner scanner = new Scanner(socketEcoute.getInputStream());
-
             while ((! disconnected) && (! gameOver)) {
-                //while (scanner.hasNextLine()){
-                //System.out.print("Commande : ");
-                // command = scanner.nextLine();
-                if (i == 0){
-                    command = "Connect " + this.pseudo;
-                    out.println(command);
-                }
-                i = 1;
 
-                if (command.compareToIgnoreCase("END") == 0) break;
-                //}
             }
+
             if (disconnected)
                 System.out.println("Connexion refusée !");
             else
@@ -171,6 +166,9 @@ public class Client implements Runnable{
                     case REJECTED:
                         Client.disconnected = true;
                         break;
+
+                    case DICE:
+                        //Client.joueur.dice = items[1];
 
                     default:
                         break;

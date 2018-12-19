@@ -12,11 +12,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import static com.example.maxime.testenvoie.classes.Server.Command.ANSWER;
+
+
 /**
  * Created by Maxime  on 29/11/2018.
  */
 
 public class Server implements Runnable{
+
+    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, ANSWER, MOVE, NULL}
 
     protected static ArrayList<Carte> cartesReponses = new ArrayList();
 
@@ -41,16 +46,48 @@ public class Server implements Runnable{
     protected static boolean[]           colorsAvailable  = null;  // couleurs disponibles
     protected static JeuDeCarte unJeuDeCarte = new JeuDeCarte();
 
-    public void run(){
-        ServerSocket      socketEcoute     = null;  // socket d'ecoute
+    private static String getAvalaibleColors() {
+        // calcul des couleurs disponibles
+        String colors = new String();
+
+        for (int i = 0; i < Server.colorsAvailable.length; i++)
+            if (Server.colorsAvailable[i])
+                colors += " " + i;
+
+        return colors;
+    }
+
+    private static boolean compareCard(String cartePersonnage, String carteArme, String carteSalle){
+        return cartesReponses.get(0).getNom() == cartePersonnage && cartesReponses.get(1).getNom() == carteArme && cartesReponses.get(2).getNom() == carteSalle;
+    }
+
+    protected static void sendToPlayer(int player, String response) {
+        // envoi d'un message à un joueur
+        Server.players[player].getWriter().println(response);
+    }
+
+    protected static void sendToAllPlayers(int excludedPlayer, String response) {
+        // envoi d'un message à l'ensemble des joueurs
+        for (int i = 0; i < Server.nbPlayers; i++)
+            if ((i != excludedPlayer) && (!Server.players[i].disconnected()))
+                Server.players[i].getWriter().println(response);
+    }
+
+    public Server() {
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public void run() {
+        ServerSocket socketEcoute = null;  // socket d'ecoute
         ArrayList JeuDeCartes = new ArrayList<Carte>();
 
         int player;                         // numéro de joueur ayant envoyé une commande
-        int playersReady            = 0;    // joueurs ayant fourni un pseudo et choisi une couleur
-        String response             = null; // réponse envoyée au joueur
+        int playersReady = 0;    // joueurs ayant fourni un pseudo et choisi une couleur
+        String response = null; // réponse envoyée au joueur
         String responseToAllPlayers = null; // réponse envoyée à l'ensemble des joueurs
-        Message msg                 = null; // message reçu d'un joueur
-        String[] items              = null; // éléments de la commande reçue
+        Message msg = null; // message reçu d'un joueur
+        String[] items = null; // éléments de la commande reçue
 
         unJeuDeCarte.melanger();
         // création du sémaphore
@@ -71,8 +108,7 @@ public class Server implements Runnable{
         // Création du socket d'écoute
         try {
             socketEcoute = new ServerSocket(SERVEUR_TCP_PORT, NB_PLAYERS);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Démarrage du serveur impossible !");
             e.printStackTrace();
             return;
@@ -163,59 +199,53 @@ public class Server implements Runnable{
                     Server.sendToPlayer(player, response);
             }
         }
-            // la partie peut démarrer
+        // la partie peut démarrer
 
-            // tri des joueurs selon l'ordre des couleurs
-            for (int i = 1; i < Server.nbPlayers; i++)
-                for (int k = 0; k < i; k++)
-                    if (Server.players[k].getColor() > Server.players[k + 1].getColor()) {
-                        int color = Server.players[k].getColor();
-                        Server.players[k].setColor(Server.players[k + 1].getColor());
-                        Server.players[k + 1].setColor(color);
-                    }
+        // tri des joueurs selon l'ordre des couleurs
+        for (int i = 1; i < Server.nbPlayers; i++)
+            for (int k = 0; k < i; k++)
+                if (Server.players[k].getColor() > Server.players[k + 1].getColor()) {
+                    int color = Server.players[k].getColor();
+                    Server.players[k].setColor(Server.players[k + 1].getColor());
+                    Server.players[k + 1].setColor(color);
+                }
 
-            // dÃ©marrage de la partie
-            System.out.println("Le jeu peut démarrer");
-            // distribution des cartes
+        // dÃ©marrage de la partie
+        System.out.println("Le jeu peut démarrer");
+        // distribution des cartes
         while (unJeuDeCarte.getSizeJeuDeCarte() != 0) {
             for (int i = 0; i < Server.NB_PLAYERS; i++)
                 Server.players[i].addLeJeuDeCarteDuJoueur(unJeuDeCarte.takeCard());
         }
-            // tant que le jeu n'est pas terminÃ©
-            while (! gameOver) {
-                for (int i = 0; i < Server.nbPlayers; i++) {
+        // tant que le jeu n'est pas terminÃ©
+        while (!gameOver) {
+            for (int i = 0; i < Server.nbPlayers; i++) {
+                // pour chacun des joueurs
+                int dice = (int) (Math.random() * 5) + 1;
+                // envoi des dés
 
-                    // pour chacun des joueurs
-                    // envoi des dés
+                Server.players[i].getWriter().println("DICE " + dice);
 
-                    // attente de la rÃ©ponse du joueur (dÃ©placement + hypothÃ¨se)
+                // attente de la rÃ©ponse du joueur (dÃ©placement + hypothÃ¨se)
 
-                    // attente de rÃ©ception d'une commande d'un joueur
-                    Server.semClient.P();
+                // attente de rÃ©ception d'une commande d'un joueur
+                Server.semClient.P();
 
-                    // obtention du numÃ©ro de joueur
-                    msg = Server.queueCommands.poll();
-                    player = msg.getIndex();
+                // obtention du numÃ©ro de joueur
+                msg = Server.queueCommands.poll();
+                player = msg.getIndex();
 
-                    items = msg.getCommandItems();
+                items = msg.getCommandItems();
 
-                    // examen de la commande
-                    /*switch (msg.getCommand()) {
-                        case ACS :
-                            *//*(items[0] == cartesReponses[0]) && (items[1] == cartesReponses[1]) && (items[2] == cartesReponses[1])*//*
-                            if ((items[0] == cartesReponses[0].getNom()) && (items[1] == cartesReponses[1].getNom()) && (items[2] == cartesReponses[1].getNom())) {
+                // examen de la commande
+                switch (msg.getCommand()) {
 
-
-
-                                for (int k = 0; k < Server.NB_PLAYERS; i++)
-                                    Server.thrPlayers[k].interrupt();
-                                gameOver = true; break;
-                            } else {
-
-
-                                Server.thrPlayers[player].interrupt();
-                            }*/
-
+                    case MOVE:
+                        for (int j = 0; j < Server.nbPlayers; j++){
+                            if (j != player){
+                                Server.players[j].getWriter().println("MOVE " + player + items[0]);
+                            }
+                        }
                     // si accusation
                     // alors
                     // si confirmation
@@ -227,76 +257,85 @@ public class Server implements Runnable{
 								for (int k = 0; k < Server.NB_PLAYERS; i++)
 									Server.thrPlayers[k].interrupt();
 		*/
-                    // sinon
-                    // je ne sais pas ce que l'on fait
-                    // fsi
-                    //case HYP :
+                    case ACS:
+                        if (Server.compareCard(items[0], items[1], items[2])) {
+                            Server.players[player].getWriter().println("WON");
+                            for (int j = 0; j < Server.nbPlayers; j++ ){
+                                if (j != player)
+                                    Server.players[j].getWriter().println("GAMEOVER");
+                            }
+                            for (int k = 0; k < Server.NB_PLAYERS; k++)
+                                Server.thrPlayers[k].interrupt();
+                            gameOver = true;
+                            break;
+                        } else {
+                            Server.players[player].getWriter().println("GAMEOVER");
+                            Server.thrPlayers[player].interrupt();
+                        }
 
-                    // sinon
-                    // envoi Ã  tous les autres joueurs du dÃ©placement + de l'hypothÃ¨se
-                    // pour chacun des autres joueurs
-                    // demande d'une carte (personnage salle arme)
-                    // attente de la rÃ©ponse
-                    // envoi de la carte au joueur ayant formulÃ© l'hyptohÃ¨se
-                    // envoi aux autres joueurs d'une rÃ©ponse affirmative ou nÃ©gative
-                    // finpour
-                    // finsi
-                //}
-            }
-            // fintantque
+                        // sinon
+                        // je ne sais pas ce que l'on fait
+                        // fsi
+                    case HYP :
+                            for (int j = 0; j < Server.nbPlayers; j++){
+                                if (j != player){
+                                    Server.players[j].getWriter().println("HYP : P A L");
+                                    Server.semClient.P();
+                                    msg = Server.queueCommands.poll();
+                                    int player1 = msg.getIndex();
+                                    items = msg.getCommandItems();
+                                    if(msg.getCommand() == ANSWER){
+                                        Server.players[player].getWriter().println("ANSWER " + items[0]);
+                                        if (items[0] != null){
+                                            for (int k = 0; k < Server.nbPlayers; k++){
+                                                if (k != player && k != player1)
+                                                    Server.players[k].getWriter().println("REPPLY " + player1 + " affirmative");
+                                            }
+                                        } else {
+                                            for (int k = 0; k < Server.nbPlayers; k++){
+                                                if (k != player && k != player1)
+                                                    Server.players[k].getWriter().println("REPPLY " + player1 + " negative");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-            // fermeture du socket d'Ã©coute
-            try {
-                socketEcoute.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // attente de terminaison des threads
-            try {
-                for (int i = 0; i < nbPlayers; i++) {
-                    thrPlayers[i].join();
-                    nbPlayers--;
+                        // sinon
+                        // envoi Ã  tous les autres joueurs du dÃ©placement + de l'hypothÃ¨se
+                        // pour chacun des autres joueurs
+                        // demande d'une carte (personnage salle arme)
+                        // attente de la rÃ©ponse
+                        // envoi de la carte au joueur ayant formulÃ© l'hyptohÃ¨se
+                        // envoi aux autres joueurs d'une rÃ©ponse affirmative ou nÃ©gative
+                        // finpour
+                        // finsi
+                        //}
                 }
             }
-            catch(InterruptedException e) {
-                e.printStackTrace();
+                // fintantque
+
+                // fermeture du socket d'Ã©coute
+                try {
+                    socketEcoute.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // attente de terminaison des threads
+                try {
+                    for (int i = 0; i < nbPlayers; i++) {
+                        thrPlayers[i].join();
+                        nbPlayers--;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Fermeture du serveur");
             }
-
-            System.out.println("Fermeture du serveur");
         }
-    }
 
-
-    private static String getAvalaibleColors() {
-        // calcul des couleurs disponibles
-        String colors = new String();
-
-        for (int i = 0; i < Server.colorsAvailable.length; i++)
-            if (Server.colorsAvailable[i])
-                colors += " " + i;
-
-        return colors;
-    }
-
-    protected static void sendToPlayer(int player, String response) {
-        // envoi d'un message à un joueur
-        Server.players[player].getWriter().println(response);
-    }
-
-    protected static void sendToAllPlayers(int excludedPlayer, String response) {
-        // envoi d'un message à l'ensemble des joueurs
-        for (int i = 0; i < Server.nbPlayers; i++)
-            if ((i != excludedPlayer) && (!Server.players[i].disconnected()))
-                Server.players[i].getWriter().println(response);
-    }
-
-    public Server() {
-        Thread thread = new Thread(this);
-        thread.start();
-    }
-
-    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, NULL}
 
     class ThreadConnection implements Runnable {
         ServerSocket socketEcoute;

@@ -27,13 +27,13 @@ public class JeuDeCarte {
     }
 
     public ArrayList takeAllTypeCard() {
-        Carte uneCarte = new Carte(nomSalles[(int)(Math.random()* nomSalles.length)],Carte.Type.SALLE);
+        Carte uneCarte = new Carte(nomPersonnage[(int)(Math.random()* nomPersonnage.length)],Carte.Type.PERSONNAGE);
         lesCartesImportantes.add(uneCarte);
         jeuDeCartes.remove(uneCarte);
         uneCarte = new Carte(nomArmes[(int)(Math.random()* nomArmes.length)],Carte.Type.ARME);
         lesCartesImportantes.add(uneCarte);
         jeuDeCartes.remove(uneCarte);
-        uneCarte = new Carte(nomPersonnage[(int)(Math.random()* nomPersonnage.length)],Carte.Type.PERSONNAGE);
+        uneCarte = new Carte(nomSalles[(int)(Math.random()* nomSalles.length)],Carte.Type.SALLE);
         lesCartesImportantes.add(uneCarte);
         jeuDeCartes.remove(uneCarte);
         return lesCartesImportantes;
