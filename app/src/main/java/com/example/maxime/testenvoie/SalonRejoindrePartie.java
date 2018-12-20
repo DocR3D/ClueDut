@@ -2,6 +2,7 @@ package com.example.maxime.testenvoie;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.maxime.testenvoie.R;
 import com.example.maxime.testenvoie.classes.Couleur;
+import com.example.maxime.testenvoie.classes.Server;
 
 import java.util.ArrayList;
 
@@ -27,9 +29,9 @@ public class SalonRejoindrePartie extends AppCompatActivity {
     public ImageButton backToMenuSalonRejoindrePartie_btn;
     public ImageButton pret_btn;
     public TextView nomJoueur1;
-    public TextView nomJoueur2;
-    public TextView nomJoueur3;
-    public TextView nomJoueur4;
+    public static TextView nomJoueur2;
+    public static TextView nomJoueur3;
+    public static TextView nomJoueur4;
 
     //Popup ChoisirCouleur
     public Dialog creationPartiePopup;
@@ -218,7 +220,6 @@ public class SalonRejoindrePartie extends AppCompatActivity {
 
         redCreationPartie.getLayoutParams().width = displayWidth / 16;
         redCreationPartie.getLayoutParams().height = displayWidth / 16;
-        redCreationPartie.setEnabled(false);
 
         greenCreationPartie.getLayoutParams().width = displayWidth / 16;
         greenCreationPartie.getLayoutParams().height = displayWidth / 16;
@@ -228,6 +229,21 @@ public class SalonRejoindrePartie extends AppCompatActivity {
 
         purpleCreationPartie.getLayoutParams().width = displayWidth / 16;
         purpleCreationPartie.getLayoutParams().height = displayWidth / 16;
+
+        /*for (int i =0; i < Server.colorsAvailable.length; i++)
+            if (!Server.colorsAvailable[i])
+                switch (i){
+                    case 0:
+                        redCreationPartie.setEnabled(false); break;
+                    case 1:
+                        redCreationPartie.setEnabled(false); break;
+                    case 2:
+                        redCreationPartie.setEnabled(false); break;
+                    case 3:
+                        redCreationPartie.setEnabled(false); break;
+                    default:
+                        break;
+                }*/
 
         selectedColorCreationPartie.getLayoutParams().width = displayWidth / 32;
         selectedColorCreationPartie.getLayoutParams().height = displayWidth / 32;
@@ -291,5 +307,37 @@ public class SalonRejoindrePartie extends AppCompatActivity {
         }
         return (((getWindowManager().getDefaultDisplay().getHeight() ) * percent) / 100)  - (v.getLayoutParams().height / 2);
 
+    }
+
+    public static void afficherJoueur(String pseudo, int player, int color){
+        int c = -1;
+        switch(color){
+            case 0:
+                c = Color.RED; break;
+            case 1:
+                c = Color.GREEN; break;
+            case 2:
+                c = Color.BLUE; break;
+            case 3:
+                c = Color.BLACK; break;
+        }
+
+        /*if (c != -1) {
+
+            switch (player) {
+                case 1:
+                    nomJoueur2.setTextColor(c);
+                    nomJoueur2.setText("" + pseudo);
+                    break;
+                case 2:
+                    nomJoueur3.setTextColor(c);
+                    nomJoueur3.setText("" + pseudo);
+                    break;
+                case 3:
+                    nomJoueur4.setTextColor(c);
+                    nomJoueur4.setText("" + pseudo);
+                    break;
+            }
+        }*/
     }
 }

@@ -2,6 +2,9 @@ package com.example.maxime.testenvoie.classes;
 
 import android.util.Log;
 
+import com.example.maxime.testenvoie.SalonCreerPartie;
+import com.example.maxime.testenvoie.SalonRejoindrePartie;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -209,8 +212,15 @@ public class Client implements Runnable{
                         break;
 
                     case COLORS:
-                        for (int i = 1; i < items.length; i++)
-                            couleurs[(i-1)] = Integer.valueOf(items[i]);
+                        if (couleur == -1)
+                            for (int i = 1; i < items.length; i++)
+                                couleurs[(i-1)] = Integer.valueOf(items[i]);
+                        else {
+                            SalonRejoindrePartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
+                                    Integer.valueOf(items[1]), Integer.valueOf(items[2]));
+                            SalonCreerPartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
+                                    Integer.valueOf(items[1]), Integer.valueOf(items[2]));
+                        }
                         break;
 
                     case COLOR:

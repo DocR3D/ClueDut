@@ -19,9 +19,9 @@ public class SalonCreerPartie extends AppCompatActivity {
     public ImageButton backToMenuSalonCreerPartie_btn;
     public ImageButton commencerPartie_btn;
     public TextView nomJoueur1;
-    public TextView nomJoueur2;
-    public TextView nomJoueur3;
-    public TextView nomJoueur4;
+    public static TextView nomJoueur2;
+    public static TextView nomJoueur3;
+    public static TextView nomJoueur4;
 
 
     @Override
@@ -140,5 +140,31 @@ public class SalonCreerPartie extends AppCompatActivity {
         }
         return (((getWindowManager().getDefaultDisplay().getHeight() ) * percent) / 100)  - (v.getLayoutParams().height / 2);
 
+    }
+
+    public static void afficherJoueur(String pseudo, int player, int color){
+        int c = -1;
+        switch(color){
+            case 0:
+                c = Color.RED; break;
+            case 1:
+                c = Color.GREEN; break;
+            case 2:
+                c = Color.BLUE; break;
+            case 3:
+                c = Color.BLACK; break;
+        }
+
+        switch(player){
+            case 1:
+                nomJoueur2.setTextColor(c);
+                nomJoueur2.setText("" + pseudo);break;
+            case 2:
+                nomJoueur3.setTextColor(c);
+                nomJoueur3.setText("" + pseudo);break;
+            case 3:
+                nomJoueur4.setTextColor(c);
+                nomJoueur4.setText("" + pseudo);break;
+        }
     }
 }

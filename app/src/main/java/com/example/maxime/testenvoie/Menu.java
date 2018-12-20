@@ -28,7 +28,6 @@ public class Menu extends AppCompatActivity {
 
     //Client public pour l'application
     public static Client client;
-    Server server = new Server();
     //Pour le serveur
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -312,7 +311,7 @@ public class Menu extends AppCompatActivity {
                                                     thread2.start();
                                                     thread2.interrupt();
                                                 }
-                                            },2000);
+                                            },5000);
                                         }
                                     });
                                     thread.start();
