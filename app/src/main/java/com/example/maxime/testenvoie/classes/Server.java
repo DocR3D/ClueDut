@@ -41,9 +41,9 @@ public class Server implements Runnable{
     protected static LinkedList<Message> queueCommands    = null;  // file des commandes reçues
 
     protected static int                 nbPlayers        = 0;     // nombre de joueurs prêts à jouer
-    public static Player[]            players          = null;  // joueurs
+    public static Player[]               players          = null;  // joueurs
 
-    protected static boolean[]           colorsAvailable  = null;  // couleurs disponibles
+    public static boolean[]           colorsAvailable  = null;  // couleurs disponibles
     protected static JeuDeCarte unJeuDeCarte = new JeuDeCarte();
 
     private static String getAvalaibleColors() {
@@ -142,7 +142,7 @@ public class Server implements Runnable{
             // examen de la commande
             switch (msg.getCommand()) {
                 case CONNECT:
-                    response = new String("COLORS");
+                    response = new String("OK");
                     responseToAllPlayers = new String("PLAYER " + player + " " + items[1]);
 
                     Server.players[player].setPseudo(items[1]);
@@ -162,7 +162,7 @@ public class Server implements Runnable{
                     int color = Integer.valueOf(items[1]);
 
                     if (Server.colorsAvailable[color]) {
-                        response = new String("COLOR +" + color);
+                        response = new String("COLOR " + color);
                         responseToAllPlayers = new String("COLORS " + " " + player + " " + color + " ");
 
                         Server.players[player].setColor(color);
