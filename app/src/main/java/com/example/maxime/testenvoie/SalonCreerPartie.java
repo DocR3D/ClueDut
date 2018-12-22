@@ -18,10 +18,10 @@ public class SalonCreerPartie extends AppCompatActivity {
     public LinearLayout cadreJoueurs;
     public ImageButton backToMenuSalonCreerPartie_btn;
     public ImageButton commencerPartie_btn;
-    public TextView nomJoueur1;
-    public static TextView nomJoueur2;
-    public static TextView nomJoueur3;
-    public static TextView nomJoueur4;
+    private TextView nomJoueur1;
+    private static TextView nomJoueur2;
+    private static TextView nomJoueur3;
+    private static TextView nomJoueur4;
 
 
     @Override

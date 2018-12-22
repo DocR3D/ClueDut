@@ -28,7 +28,7 @@ public class SalonRejoindrePartie extends AppCompatActivity {
     public LinearLayout cadreJoueurs;
     public ImageButton backToMenuSalonRejoindrePartie_btn;
     public ImageButton pret_btn;
-    public TextView nomJoueur1;
+    public static TextView nomJoueur1;
     public static TextView nomJoueur2;
     public static TextView nomJoueur3;
     public static TextView nomJoueur4;
@@ -126,6 +126,9 @@ public class SalonRejoindrePartie extends AppCompatActivity {
         goToSalonCreation_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Menu.client.couleur > -1){
+                    creationPartiePopup.cancel();
+                }
                 if (couleurChoisieCreationPartie.equals("")) {
                     Toast.makeText(getBaseContext(), "Veuillez entrer un nom et choisir une couleur", Toast.LENGTH_LONG).show();
                 } else {
@@ -145,10 +148,6 @@ public class SalonRejoindrePartie extends AppCompatActivity {
                         }
                     });
                     thread.start();
-                    if (Menu.client.couleur > -1){
-                        creationPartiePopup.cancel();
-                        thread.interrupt();
-                    }
                     thread.interrupt();
                 }
             }
@@ -322,22 +321,21 @@ public class SalonRejoindrePartie extends AppCompatActivity {
                 c = Color.BLACK; break;
         }
 
-        /*if (c != -1) {
-
+        if (c != -1) {
             switch (player) {
                 case 1:
-                    nomJoueur2.setTextColor(c);
                     nomJoueur2.setText("" + pseudo);
+                    nomJoueur2.setTextColor(c);
                     break;
                 case 2:
-                    nomJoueur3.setTextColor(c);
                     nomJoueur3.setText("" + pseudo);
+                    nomJoueur3.setTextColor(c);
                     break;
                 case 3:
-                    nomJoueur4.setTextColor(c);
                     nomJoueur4.setText("" + pseudo);
+                    nomJoueur4.setTextColor(c);
                     break;
             }
-        }*/
+        }
     }
 }

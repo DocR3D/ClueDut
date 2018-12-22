@@ -143,7 +143,7 @@ public class Server implements Runnable{
             switch (msg.getCommand()) {
                 case CONNECT:
                     response = new String("OK");
-                    responseToAllPlayers = new String("PLAYER " + player + " " + items[1]);
+                    //responseToAllPlayers = new String(" " + player + " " + items[1]);
 
                     Server.players[player].setPseudo(items[1]);
                     Server.players[player].setState(Player.State.CONNECTED);
@@ -155,15 +155,15 @@ public class Server implements Runnable{
                     Server.sendToPlayer(player, response);
 
                     // envoi aux autres joueurs du pseudo
-                    Server.sendToAllPlayers(player, responseToAllPlayers);
+                    //Server.sendToAllPlayers(player, responseToAllPlayers);
                     break;
 
                 case COLOR:
                     int color = Integer.valueOf(items[1]);
 
                     if (Server.colorsAvailable[color]) {
-                        response = new String("COLOR " + color);
-                        responseToAllPlayers = new String("COLORS " + " " + player + " " + color + " ");
+                        response = new String("COLOR " + color + " " + player);
+                        responseToAllPlayers = new String("PLAYER " + " " + player + " " + color);
 
                         Server.players[player].setColor(color);
                         Server.colorsAvailable[color] = false;
@@ -173,7 +173,7 @@ public class Server implements Runnable{
                         sendToPlayer(player, response);
 
                         // calcul des couleurs disponibles
-                        responseToAllPlayers += getAvalaibleColors();
+                        //responseToAllPlayers += getAvalaibleColors();
 
                         // envoi aux autres joueurs des couleurs disponibles
                         sendToAllPlayers(player, responseToAllPlayers);
@@ -182,7 +182,7 @@ public class Server implements Runnable{
                         playersReady++;
                         System.out.println("Nombre de joueurs prêts " + playersReady);
                     } else {
-                        response = new String("COLORS ");
+                        response = new String("COLORS");
 
                         // calcul des couleurs disponibles
                         response += getAvalaibleColors();

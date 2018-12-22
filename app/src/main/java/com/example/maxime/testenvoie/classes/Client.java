@@ -1,7 +1,9 @@
 package com.example.maxime.testenvoie.classes;
 
+import android.graphics.Color;
 import android.util.Log;
 
+import com.example.maxime.testenvoie.Menu;
 import com.example.maxime.testenvoie.SalonCreerPartie;
 import com.example.maxime.testenvoie.SalonRejoindrePartie;
 
@@ -177,7 +179,7 @@ public class Client implements Runnable{
                 return Client.Command.REJECTED;
 
             if (items[0].compareToIgnoreCase("COLOR") == 0)
-                if (items.length == 2)
+                if (items.length == 3)
                     return Client.Command.COLOR;
 
             return null;
@@ -211,20 +213,29 @@ public class Client implements Runnable{
                         //Client.joueur.dice = items[1];
                         break;
 
-                    case COLORS:
-                        if (couleur == -1)
-                            for (int i = 1; i < items.length; i++)
-                                couleurs[(i-1)] = Integer.valueOf(items[i]);
-                        else {
-                            SalonRejoindrePartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
-                                    Integer.valueOf(items[1]), Integer.valueOf(items[2]));
+                    case PLAYER:
+                        if (Menu.client.getPseudo().equalsIgnoreCase(Server.players[0].getPseudo())) {
                             SalonCreerPartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
                                     Integer.valueOf(items[1]), Integer.valueOf(items[2]));
                         }
-                        break;
+                        else {
+                            SalonRejoindrePartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
+                                    Integer.valueOf(items[1]), Integer.valueOf(items[2]));
+                        }
+                    break;
 
                     case COLOR:
                         setCouleur(Integer.valueOf(items[1]));
+                        SalonRejoindrePartie.afficherJoueur(getPseudo(),Integer.valueOf(items[2]), couleur);
+                        break;
+
+                    case COLORS:
+                        int j =0;
+                        for (int i = 0; i < Server.colorsAvailable.length; i++)
+                            if (Server.colorsAvailable[i]){
+                                couleurs[j] = Integer.valueOf(items[(i+1)]);
+                                j++;
+                            }
                         break;
 
                     default:
