@@ -3,6 +3,7 @@ package com.example.maxime.testenvoie;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -17,7 +18,7 @@ public class SalonCreerPartie extends AppCompatActivity {
     //Interface Salon
     public LinearLayout cadreJoueurs;
     public ImageButton backToMenuSalonCreerPartie_btn;
-    public ImageButton commencerPartie_btn;
+    public static ImageButton commencerPartie_btn;
     private TextView nomJoueur1;
     private static TextView nomJoueur2;
     private static TextView nomJoueur3;
@@ -32,6 +33,7 @@ public class SalonCreerPartie extends AppCompatActivity {
         cadreJoueurs = findViewById(R.id.cadreJoueursCreerPartie);
         backToMenuSalonCreerPartie_btn = findViewById(R.id.backToMenuSalonCreerPartie);
         commencerPartie_btn = findViewById(R.id.commencerPartie);
+        commencerPartie_btn.setEnabled(false);
         nomJoueur1 = findViewById(R.id.nomJoueur1);
         nomJoueur2 = findViewById(R.id.nomJoueur2);
         nomJoueur3 = findViewById(R.id.nomJoueur3);
@@ -79,7 +81,29 @@ public class SalonCreerPartie extends AppCompatActivity {
         commencerPartie_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // FREDEU
+                final Handler handler = new Handler();
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Menu.client.ready();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Thread thread2 = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Menu.client.start();
+                                    }
+                                });
+                                thread2.start();
+                                thread2.interrupt();
+                            }
+                        },1000);
+                    }
+                });
+                thread.start();
+                thread.interrupt();
+                startActivity(new Intent(SalonCreerPartie.this, JouerActivity.class));
             }
         });
     }

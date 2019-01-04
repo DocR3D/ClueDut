@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".SalonCreerPartie"
     android:background="@drawable/fond">
-<!--
+
     <ImageButton
         android:id="@+id/pret"
         android:layout_width="wrap_content"
@@ -24,8 +24,38 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_parchemin"/>
--->
+        android:background="@drawable/ic_parchemin">
+        <TextView
+            android:id="@+id/nomJoueur1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:layout_marginTop="80dp"/>
 
+        <TextView
+            android:id="@+id/nomJoueur2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/nomJoueur3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/nomJoueur4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -24,6 +24,8 @@ public class SalonRejoindrePartie extends AppCompatActivity {
     //Pour ne pas que le onFocusChange se refasse plein de fois
     public boolean firstFocus = true;
 
+    public static SalonRejoindrePartie context;
+
     //Interface Salon
     public LinearLayout cadreJoueurs;
     public ImageButton backToMenuSalonRejoindrePartie_btn;
@@ -57,6 +59,7 @@ public class SalonRejoindrePartie extends AppCompatActivity {
         nomJoueur2 = findViewById(R.id.nomJoueur2);
         nomJoueur3 = findViewById(R.id.nomJoueur3);
         nomJoueur4 = findViewById(R.id.nomJoueur4);
+        context = this;
     }
 
     @Override
@@ -308,6 +311,22 @@ public class SalonRejoindrePartie extends AppCompatActivity {
 
     }
 
+    public static void afficherJoueurHote(String pseudo, int color){
+        int c = -1;
+        switch(color){
+            case 0:
+                c = Color.RED; break;
+            case 1:
+                c = Color.GREEN; break;
+            case 2:
+                c = Color.BLUE; break;
+            case 3:
+                c = Color.BLACK; break;
+        }
+        nomJoueur1.setText("" + pseudo);
+        nomJoueur1.setTextColor(c);
+    }
+
     public static void afficherJoueur(String pseudo, int player, int color){
         int c = -1;
         switch(color){
@@ -337,5 +356,10 @@ public class SalonRejoindrePartie extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    public static void lancerJeu() {
+       Intent intent = new Intent(context, JouerActivity.class);
+       context.startActivity(intent);
     }
 }

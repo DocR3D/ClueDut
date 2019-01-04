@@ -21,7 +21,7 @@ import static com.example.maxime.testenvoie.classes.Server.Command.ANSWER;
 
 public class Server implements Runnable{
 
-    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, ANSWER, MOVE, NULL}
+    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, ANSWER, MOVE, START, NULL}
 
     protected static ArrayList<Carte> cartesReponses = new ArrayList();
 
@@ -29,7 +29,7 @@ public class Server implements Runnable{
     protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
 
     protected static final int           MAX_COLORS       = 6;     // nombre max de couleurs
-    protected static final int           NB_PLAYERS       = 4;     // nombre de joueurs de la partie
+    protected static final int           NB_PLAYERS       = 2;     // nombre de joueurs de la partie
 
     private static   Thread              thrConnexion     = null;  // thread de supervision du jeu
     protected static Thread[]            thrPlayers       = null;  // thread de réception pour chacun des joueurs
@@ -162,12 +162,11 @@ public class Server implements Runnable{
                     int color = Integer.valueOf(items[1]);
 
                     if (Server.colorsAvailable[color]) {
-                        response = new String("COLOR " + color + " " + player);
+                        response = new String("COLOR " + color + " " + player + " " + Server.players[0].getPseudo() + " " + Server.players[0].getColor());
                         responseToAllPlayers = new String("PLAYER " + " " + player + " " + color);
 
                         Server.players[player].setColor(color);
                         Server.colorsAvailable[color] = false;
-                        Server.players[player].setState(Player.State.READY);
 
                         // envoi de la réponse au joueur
                         sendToPlayer(player, response);
@@ -178,9 +177,6 @@ public class Server implements Runnable{
                         // envoi aux autres joueurs des couleurs disponibles
                         sendToAllPlayers(player, responseToAllPlayers);
 
-                        // un joueur supplémentaire est prêt à jouer
-                        playersReady++;
-                        System.out.println("Nombre de joueurs prêts " + playersReady);
                     } else {
                         response = new String("COLORS");
 
@@ -190,6 +186,19 @@ public class Server implements Runnable{
                         // envoi de la réponse au joueur
                         Server.sendToPlayer(player, response);
                     }
+                    break;
+
+                case READY:
+                    Server.players[player].setState(Player.State.READY);
+                    playersReady ++;
+                    if (player != 0)
+                        Server.sendToAllPlayers(player, "READY");
+                    break;
+
+                case NOTREADY:
+                    Server.players[player].setState(Player.State.NOTREADY);
+                    playersReady --;
+                    Server.sendToAllPlayers(player, "NOTREADY");
                     break;
 
                 default:
@@ -213,18 +222,18 @@ public class Server implements Runnable{
         // dÃ©marrage de la partie
         System.out.println("Le jeu peut démarrer");
         // distribution des cartes
-        while (unJeuDeCarte.getSizeJeuDeCarte() != 0) {
+        /*while (unJeuDeCarte.getSizeJeuDeCarte() != 0) {
             for (int i = 0; i < Server.NB_PLAYERS; i++)
                 Server.players[i].addLeJeuDeCarteDuJoueur(unJeuDeCarte.takeCard());
-        }
+        }*/
         // tant que le jeu n'est pas terminÃ©
         while (!gameOver) {
             for (int i = 0; i < Server.nbPlayers; i++) {
                 // pour chacun des joueurs
-                int dice = (int) (Math.random() * 5) + 1;
+                //int dice = (int) (Math.random() * 5) + 1;
                 // envoi des dés
 
-                Server.players[i].getWriter().println("DICE " + dice);
+                //Server.players[i].getWriter().println("DICE " + dice);
 
                 // attente de la rÃ©ponse du joueur (dÃ©placement + hypothÃ¨se)
 
@@ -443,15 +452,9 @@ public class Server implements Runnable{
 
                     // examen de la commande
                     switch (message.getCommand()) {
-                        case READY:
-                            Server.players[numJoueur].setState(Player.State.READY);
-                            Server.sendToAllPlayers(this.numJoueur, "READY " + this.numJoueur);
-                            break;
-
-                        case NOTREADY:
-                            Server.players[numJoueur].setState(Player.State.NOTREADY);
-                            Server.sendToAllPlayers(this.numJoueur, "NOTREADY " + this.numJoueur);
-                            break;
+                        case START:
+                            if (this.numJoueur == 0)
+                                Server.sendToAllPlayers(this.numJoueur, "START");
 
                         default:
                             // ajout de la commande reçue à la file

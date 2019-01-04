@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable{
 
-    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR};
+    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR, START};
 
     private static final String SERVEUR_TCP_IP   = new String("0.0.0.0");
     private static final int    SERVEUR_TCP_PORT = 8001;
@@ -34,6 +34,7 @@ public class Client implements Runnable{
 
     public int                  couleurs[]       = new int[6];
     public int                  couleur          = -1;
+    public int                  nbPlayerReady    = 0;
 
     private String ip;
     private String pseudo;
@@ -67,6 +68,11 @@ public class Client implements Runnable{
 
     public void connect(){
         command = "CONNECT " + pseudo;
+        out.println(command);
+    }
+
+    public void start(){
+        command = "START";
         out.println(command);
     }
 
@@ -164,7 +170,7 @@ public class Client implements Runnable{
                     return Client.Command.COLORS;
 
             if (items[0].compareToIgnoreCase("READY") == 0)
-                if (items.length == 2)
+                if (items.length == 1)
                     return Client.Command.READY;
 
             if (items[0].compareToIgnoreCase("NOTREADY") == 0)
@@ -179,8 +185,12 @@ public class Client implements Runnable{
                 return Client.Command.REJECTED;
 
             if (items[0].compareToIgnoreCase("COLOR") == 0)
-                if (items.length == 3)
+                if (items.length == 5)
                     return Client.Command.COLOR;
+
+            if (items[0].compareToIgnoreCase("START") == 0)
+                if (items.length == 1)
+                    return Client.Command.START;
 
             return null;
         }
@@ -227,6 +237,11 @@ public class Client implements Runnable{
                     case COLOR:
                         setCouleur(Integer.valueOf(items[1]));
                         SalonRejoindrePartie.afficherJoueur(getPseudo(),Integer.valueOf(items[2]), couleur);
+                        if (Menu.client.getPseudo().equalsIgnoreCase(items[3])){
+                        } else {
+                            SalonRejoindrePartie.afficherJoueurHote(items[3],Integer.valueOf(items[4]));
+                        }
+
                         break;
 
                     case COLORS:
@@ -236,6 +251,24 @@ public class Client implements Runnable{
                                 couleurs[j] = Integer.valueOf(items[(i+1)]);
                                 j++;
                             }
+                        break;
+
+                    case READY:
+                        if (Menu.client.getPseudo().equalsIgnoreCase(Server.players[0].getPseudo())) {
+                            nbPlayerReady += 1;
+                            if (nbPlayerReady == Server.NB_PLAYERS - 1)
+                                SalonCreerPartie.commencerPartie_btn.setEnabled(true);
+                        }
+                        break;
+
+                    case NOTREADY:
+                        if (Menu.client.getPseudo().equalsIgnoreCase(Server.players[0].getPseudo()))
+                            nbPlayerReady -= 1;
+                        SalonCreerPartie.commencerPartie_btn.setEnabled(false);
+                        break;
+
+                    case START:
+                        SalonRejoindrePartie.lancerJeu();
                         break;
 
                     default:

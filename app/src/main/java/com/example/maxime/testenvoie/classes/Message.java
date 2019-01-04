@@ -44,10 +44,14 @@ public class Message {
                 if (items.length == 3)
                     return Server.Command.HYP;
 
+		if (items[0].compareToIgnoreCase("START") == 0)
+			if (this.state == Player.State.READY)
+				if (items.length == 1)
+					return Server.Command.START;
 
 		if (items[0].compareToIgnoreCase("READY") == 0)
 			if (this.state == Player.State.CONNECTED)
-				if (items.length == 2)
+				if (items.length == 1)
 					return Server.Command.READY;
 				else
 
