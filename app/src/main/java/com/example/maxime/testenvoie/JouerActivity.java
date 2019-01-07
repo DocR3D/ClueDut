@@ -2,9 +2,16 @@ package com.example.maxime.testenvoie;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -21,7 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JouerActivity extends AppCompatActivity {
+public class JouerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static Case[][] plateau;
     public static RelativeLayout fenetreSecondaire;
@@ -39,11 +46,24 @@ public class JouerActivity extends AppCompatActivity {
     //private Button boutonDe;
     private ImageView de;
     Bitmap myBitmap;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jouer);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
+                R.string.navigation_drawer_open , R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         linearLayout = (LinearLayout) findViewById(R.id.fenetrePrincipale);
         fenetreSecondaire = (RelativeLayout) findViewById(R.id.fenetreSecondaire);
@@ -86,6 +106,15 @@ public class JouerActivity extends AppCompatActivity {
         dim = (metrics.heightPixels / (plateau.length - 1));
 
         creationPlateau(metrics);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -446,5 +475,11 @@ public class JouerActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

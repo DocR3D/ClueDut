@@ -22,7 +22,8 @@
             android:screenOrientation="landscape" />
         <activity android:name=".ThemeArmesActivity" />
         <activity
-            android:name=".Menu"
+            android:name=".JouerActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
