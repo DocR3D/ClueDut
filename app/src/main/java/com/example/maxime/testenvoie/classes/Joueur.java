@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageButton;
 
 import com.example.maxime.testenvoie.JouerActivity;
+import com.example.maxime.testenvoie.R;
 
 import java.io.File;
 import java.util.Iterator;
@@ -29,12 +30,7 @@ public class Joueur {
         for (int i = 0; i < JouerActivity.plateau.length; i++) {
             for (int j = 0; j < JouerActivity.plateau.length; j++) {
                 if (JouerActivity.plateau[i][j] != this.getCaseJ()){
-                    File imgFile = new  File("sdcard/map/fond.png");
-                    if(imgFile.exists()){
-                        myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        JouerActivity.plateau[i][j].getImage().setImageBitmap(myBitmap);
-                    }
-                    //JouerActivity.plateau[i][j].getImage().setBackgroundResource(R.drawable.fond);
+                    JouerActivity.plateau[i][j].getImage().setBackgroundResource(R.drawable.fondcase);
                     JouerActivity.plateau[i][j].caseNonClickable();
                 }
             }
@@ -94,12 +90,7 @@ public class Joueur {
     }
 
     public void afficherCaseDeplacement(Case pCase, ImageButton pImage){
-        File imgFile = new  File("sdcard/map/deplacement.png");
-        if(imgFile.exists()){
-            myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            pImage.setImageBitmap(myBitmap);
-        }
-        //pImage.setBackgroundResource(R.drawable.deplacement);
+        pImage.setBackgroundResource(R.drawable.deplacement);
         pCase.caseClickable();
     }
 
@@ -108,38 +99,18 @@ public class Joueur {
         while (iter.hasNext()) {
             Salle element = iter.next();
             if (element.getCase() == pCase){
-                File imgFile = new  File("sdcard/map/fond.png");
-                if(imgFile.exists()){
-                    myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    this.getCaseJ().getImage().setImageBitmap(myBitmap);
-                }
-                //this.getCaseJ().getImage().setBackgroundResource(R.drawable.fond);
+                this.getCaseJ().getImage().setBackgroundResource(R.drawable.fondcase);
                 this.getCaseJ().caseClickable();
                 this.setCaseJ(JouerActivity.plateau[i][j]);
-                imgFile = new  File("sdcard/map/pawn.png");
-                if(imgFile.exists()){
-                    myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    this.getCaseJ().getImage().setImageBitmap(myBitmap);
-                }
-                //this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawn);
+                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawn);
                 this.getCaseJ().caseNonClickable();
                 JouerActivity.deplacement = 0;
                 this.deplacementJoueur();
             } else {
-                File imgFile = new  File("sdcard/map/fond.png");
-                if(imgFile.exists()){
-                    myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    this.getCaseJ().getImage().setImageBitmap(myBitmap);
-                }
-                //this.getCaseJ().getImage().setBackgroundResource(R.drawable.fond);
+                this.getCaseJ().getImage().setBackgroundResource(R.drawable.fondcase);
                 this.getCaseJ().caseClickable();
                 this.setCaseJ(pCase);
-                imgFile = new  File("sdcard/map/pawn.png");
-                if(imgFile.exists()){
-                    myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    this.getCaseJ().getImage().setImageBitmap(myBitmap);
-                }
-                //this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawn);
+                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawn);
                 this.getCaseJ().caseNonClickable();
                 JouerActivity.deplacement = 0;
                 this.deplacementJoueur();

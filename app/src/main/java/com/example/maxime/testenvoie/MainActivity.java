@@ -29,11 +29,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        creerServer = (Button) findViewById(R.id.creerServer);
-        creerClient = (Button) findViewById(R.id.creerClient);
-        connectPseudo = (EditText) findViewById(R.id.connectPseudo);
-        commandeConnect = (Button) findViewById(R.id.commandeConnect);
-        connectIp = (EditText) findViewById(R.id.ip);
 
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
 
@@ -45,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE_ASK_PERMISSIONS);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSIONS);
             }
         } else {
         }
@@ -57,29 +52,8 @@ public class MainActivity extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.INTERNET)) {
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},REQUEST_CODE_ASK_PERMISSIONS);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, REQUEST_CODE_ASK_PERMISSIONS);
             }
         }
-
-        creerServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Server server = new Server();
-            }
-        });
-
-        creerClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Client client = new Client(""+connectPseudo.getText(), "" + connectIp.getText());
-            }
-        });
-
-        commandeConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 }

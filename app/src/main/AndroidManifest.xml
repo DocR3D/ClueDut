@@ -22,7 +22,7 @@
             android:screenOrientation="landscape" />
         <activity android:name=".ThemeArmesActivity" />
         <activity
-            android:name=".JouerActivity"
+            android:name=".Menu"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="landscape">
             <intent-filter>
@@ -31,6 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".JouerActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".SalonCreerPartie"
             android:screenOrientation="landscape" />

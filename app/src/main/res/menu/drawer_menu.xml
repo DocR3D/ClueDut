@@ -8,10 +8,5 @@
             android:id="@+id/seeCard"
             android:icon="@drawable/fiche_enquete"
             android:title="Fiche d'enquête" />
-        <item
-            android:id="@+id/leave"
-            android:icon="@drawable/exit"
-            android:title="Quitter la partie" />
     </group>
-
 </menu>

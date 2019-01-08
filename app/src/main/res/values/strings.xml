@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PTS3_Perso</string>
+    <string name="app_name">ClueDut</string>
 
     <string name="title_activity_salon_creer_partie">SalonCreerPartie</string>
     <string name="dummy_button">Dummy Button</string>

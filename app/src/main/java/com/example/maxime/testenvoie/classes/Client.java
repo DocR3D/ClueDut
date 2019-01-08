@@ -241,7 +241,6 @@ public class Client implements Runnable{
                         } else {
                             SalonRejoindrePartie.afficherJoueurHote(items[3],Integer.valueOf(items[4]));
                         }
-
                         break;
 
                     case COLORS:
