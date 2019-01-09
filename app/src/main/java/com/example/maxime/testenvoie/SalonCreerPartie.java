@@ -5,10 +5,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 public class SalonCreerPartie extends AppCompatActivity {
 
@@ -31,6 +38,55 @@ public class SalonCreerPartie extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salon_creer_partie);
+
+        /*try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();)
+            {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();)
+                {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress())
+                    {
+                        String Ip= inetAddress.getHostAddress().toString();
+                        Log.e("ip","" + Ip);
+                    }
+                }
+            }
+
+        }
+        catch (SocketException obj)
+        {
+            Log.e("Error occurred during IP fetching: ", obj.toString());
+        }*/
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                    int i = 1;
+
+                    while (interfaces.hasMoreElements()) {
+                        NetworkInterface currentInterface = interfaces.nextElement();
+                        Log.v("Interface "+i," " + currentInterface);
+                        i++;
+                        Enumeration<InetAddress> addresses = currentInterface.getInetAddresses();
+                        int n= 1;
+                        while (addresses.hasMoreElements()) {
+
+                            InetAddress currentAddress = addresses.nextElement();
+                            Log.v("IP "+n," "+currentAddress.getHostAddress());
+                            n++;
+                        }
+                    }
+
+                } catch (Exception ex) { } // for now eat exceptions
+            }
+        });
+
+        thread.start();
+        thread.interrupt();
+
 
         cadreJoueurs = findViewById(R.id.cadreJoueursCreerPartie);
         backToMenuSalonCreerPartie_btn = findViewById(R.id.backToMenuSalonCreerPartie);
