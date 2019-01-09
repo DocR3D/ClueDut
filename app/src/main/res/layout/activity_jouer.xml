@@ -21,6 +21,12 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp" />
 
+        <Button
+            android:id="@+id/ficheEnquete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fiche Enquête" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -33,157 +39,9 @@
         <RelativeLayout
             android:id="@+id/fenetreSecondaire"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></RelativeLayout>
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/suspect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Suspect"/>
-            <CheckBox
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Colonel Moutarde" />
-
-            <CheckBox
-                android:id="@+id/checkBox5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Professeur Violet" />
-
-            <CheckBox
-                android:id="@+id/checkBox2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Docteur Olive" />
-
-            <CheckBox
-                android:id="@+id/checkBox4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Madame Pervenche" />
-
-            <CheckBox
-                android:id="@+id/checkBox3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mademoiselle Rose" />
-
-            <CheckBox
-                android:id="@+id/checkBox7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Madame Leblanc" />
-        </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-            <TextView
-                android:id="@+id/armes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Armes"/>
-
-            <CheckBox
-                android:id="@+id/poignard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Poignard" />
-            <CheckBox
-                android:id="@+id/chandelier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chandelier" />
-            <CheckBox
-                android:id="@+id/Revolver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Revolver" />
-            <CheckBox
-                android:id="@+id/corde"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Corde" />
-            <CheckBox
-                android:id="@+id/matraque"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Matraque" />
-            <CheckBox
-                android:id="@+id/clefAnglaise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Clef Anglaise" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/piece"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pièce"/>
-
-            <CheckBox
-                android:id="@+id/verenda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vérenda" />
-            <CheckBox
-                android:id="@+id/petitSalon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Petit Salon" />
-            <CheckBox
-                android:id="@+id/salle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salle à Manger" />
-            <CheckBox
-                android:id="@+id/bibliotheque"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bibliothèque" />
-            <CheckBox
-                android:id="@+id/salon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Grand sallon" />
-            <CheckBox
-                android:id="@+id/bureau"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bureau" />
-
-            <CheckBox
-                android:id="@+id/hall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hall" />
-            <CheckBox
-                android:id="@+id/Cuisine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cuisine" />
-            <CheckBox
-                android:id="@+id/billard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salle de Billard" />
-        </LinearLayout>
-    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

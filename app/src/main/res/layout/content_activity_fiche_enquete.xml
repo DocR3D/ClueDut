@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity_fiche_enquete"
+
+    tools:showIn="@layout/activity_fiche_enquete">
+
+
+    <LinearLayout
+
+        android:layout_width="390dp"
+        android:layout_height="307dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/suspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Suspect" />
+
+            <CheckBox
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Colonel Moutarde" />
+
+            <CheckBox
+                android:id="@+id/checkBox5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Professeur Violet" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Docteur Olive" />
+
+            <CheckBox
+                android:id="@+id/checkBox4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Madame Pervenche" />
+
+            <CheckBox
+                android:id="@+id/checkBox3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mademoiselle Rose" />
+
+            <CheckBox
+                android:id="@+id/checkBox7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Madame Leblanc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/armes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Armes" />
+
+            <CheckBox
+                android:id="@+id/poignard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poignard" />
+
+            <CheckBox
+                android:id="@+id/chandelier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chandelier" />
+
+            <CheckBox
+                android:id="@+id/Revolver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Revolver" />
+
+            <CheckBox
+                android:id="@+id/corde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Corde" />
+
+            <CheckBox
+                android:id="@+id/matraque"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Matraque" />
+
+            <CheckBox
+                android:id="@+id/clefAnglaise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clef Anglaise" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/piece"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pièce" />
+
+            <CheckBox
+                android:id="@+id/verenda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vérenda" />
+
+            <CheckBox
+                android:id="@+id/petitSalon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Petit Salon" />
+
+            <CheckBox
+                android:id="@+id/salle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Salle à Manger" />
+
+            <CheckBox
+                android:id="@+id/bibliotheque"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bibliothèque" />
+
+            <CheckBox
+                android:id="@+id/salon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grand sallon" />
+
+            <CheckBox
+                android:id="@+id/bureau"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bureau" />
+
+            <CheckBox
+                android:id="@+id/hall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hall" />
+
+            <CheckBox
+                android:id="@+id/Cuisine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cuisine" />
+
+            <CheckBox
+                android:id="@+id/billard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Salle de Billard" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/retour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="8dp"
+        android:text="Retour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

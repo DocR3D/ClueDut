@@ -23,8 +23,8 @@
         <activity android:name=".ThemeArmesActivity" />
         <activity
             android:name=".Menu"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,14 +33,18 @@
         </activity>
         <activity
             android:name=".JouerActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SalonCreerPartie"
             android:screenOrientation="landscape" />
-        <activity android:name=".SalonRejoindrePartie"
-            android:screenOrientation="landscape"
-            ></activity>
+        <activity
+            android:name=".SalonRejoindrePartie"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activity_fiche_enquete"
+            android:label="@string/title_activity_fiche_enquete"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
