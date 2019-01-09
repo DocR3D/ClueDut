@@ -83,7 +83,7 @@ public class SalonCreerPartie extends AppCompatActivity {
                 } catch (Exception ex) { } // for now eat exceptions
             }
         });
-        
+
         thread.start();
         thread.interrupt();
 
