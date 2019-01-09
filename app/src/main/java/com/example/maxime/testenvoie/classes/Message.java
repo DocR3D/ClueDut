@@ -49,6 +49,11 @@ public class Message {
 				if (items.length == 1)
 					return Server.Command.START;
 
+		if (items[0].compareToIgnoreCase("DICE") == 0)
+			if (this.state == Player.State.READY)
+				if (items.length == 1)
+					return Server.Command.DICE;
+
 		if (items[0].compareToIgnoreCase("READY") == 0)
 			if (this.state == Player.State.CONNECTED)
 				if (items.length == 1)

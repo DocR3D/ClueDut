@@ -15,6 +15,8 @@ public class SalonCreerPartie extends AppCompatActivity {
     //Pour ne pas que le onFocusChange se refasse plein de fois
     public boolean firstFocus = true;
 
+    public static SalonCreerPartie context;
+
     //Interface Salon
     public LinearLayout cadreJoueurs;
     public ImageButton backToMenuSalonCreerPartie_btn;
@@ -38,6 +40,8 @@ public class SalonCreerPartie extends AppCompatActivity {
         nomJoueur2 = findViewById(R.id.nomJoueur2);
         nomJoueur3 = findViewById(R.id.nomJoueur3);
         nomJoueur4 = findViewById(R.id.nomJoueur4);
+
+        context = this;
 
         nomJoueur1.setText("" + Menu.client.getPseudo());
         switch(Menu.client.couleur){
@@ -103,9 +107,13 @@ public class SalonCreerPartie extends AppCompatActivity {
                 });
                 thread.start();
                 thread.interrupt();
-                startActivity(new Intent(SalonCreerPartie.this, JouerActivity.class));
             }
         });
+    }
+
+    public static void lancerJeu() {
+        Intent intent = new Intent(context, JouerActivity.class);
+        context.startActivity(intent);
     }
 
     private void setComponentsSize() {

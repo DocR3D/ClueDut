@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,7 +44,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
     private Joueur j3;
     private Joueur j4;
     public static List<Salle> listSalles;
-    private ImageView de;
+    private Button de;
     private DrawerLayout drawer;
 
     @Override
@@ -65,7 +66,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
 
         linearLayout = (LinearLayout) findViewById(R.id.fenetrePrincipale);
         fenetreSecondaire = (RelativeLayout) findViewById(R.id.fenetreSecondaire);
-        de = (ImageView) findViewById(R.id.de);
+        de = (Button) findViewById(R.id.de);
 
         listImCase = new ArrayList<>();
         listCase = new ArrayList<>();
@@ -114,11 +115,25 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
 
     public void creationPlateau(DisplayMetrics metrics) {
 
+        de.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Menu.client.dice();
+                    }
+                });
+                thread.start();
+                thread.interrupt();
+            }
+        });
+
         x = ((metrics.widthPixels - plateau.length * dim) / 2) - 100;
 
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau.length; j++) {
-                if ((i == 9 && j == 0) || (i == 0 && j == 9) || (i == 8 && j == 24) || (i == 24 && j ==7)) {
+                if ((i == 9 && j == 0) || (i == 0 && j == 8) || (i == 7 && j == 23) || (i == 24 && j ==7)) {
                     creerCaseJoueur(dim, x, y, i, j);
                     y += dim;
                 } else {
@@ -286,6 +301,14 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 if (salle.getCase().getClickable()) {
                     j1.changerCaseJoueur(salle.getCase(), posX, posY);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Menu.client.hyp();
+                        }
+                    });
+                    thread.start();
+                    thread.interrupt();
                 }
             }
         });
@@ -310,18 +333,22 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
             case "90":
                 pJ = j1;
                 numJoueur = 0;
+                System.out.println(numJoueur);
                 break;
-            case "09":
+            case "08":
                 pJ = j2;
                 numJoueur = 1;
+                System.out.println(numJoueur);
                 break;
-            case "824":
+            case "723":
                 pJ = j3;
                 numJoueur = 2;
+                System.out.println(numJoueur);
                 break;
             case "247":
                 pJ = j4;
                 numJoueur = 3;
+                System.out.println(numJoueur);
                 break;
         }
 
@@ -332,8 +359,8 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         plateau[i][j] = pCase;
 
         pJ.setCaseJ(pCase);
-
-        switch (Menu.client.couleurs[numJoueur]) {
+        System.out.println(Menu.client.couleurs[numJoueur]);
+        switch (Menu.client.getCouleur(numJoueur)) {
             case 0:
                 imCase.setBackgroundResource(R.drawable.pawnrouge);
                 break;

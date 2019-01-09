@@ -22,7 +22,7 @@ import static com.example.maxime.testenvoie.classes.Server.Command.ANSWER;
 
 public class Server implements Runnable{
 
-    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, ANSWER, MOVE, START, NULL}
+    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, ANSWER, MOVE, START,DICE, NULL}
 
     protected static ArrayList<Carte> cartesReponses = new ArrayList();
 
@@ -30,7 +30,7 @@ public class Server implements Runnable{
     protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
 
     protected static final int           MAX_COLORS       = 4;     // nombre max de couleurs
-    protected static final int           NB_PLAYERS       = 2;     // nombre de joueurs de la partie
+    protected static final int           NB_PLAYERS       = 1;     // nombre de joueurs de la partie
 
     private static   Thread              thrConnexion     = null;  // thread de supervision du jeu
     protected static Thread[]            thrPlayers       = null;  // thread de réception pour chacun des joueurs
@@ -90,7 +90,7 @@ public class Server implements Runnable{
         Message msg = null; // message reçu d'un joueur
         String[] items = null; // éléments de la commande reçue
 
-        unJeuDeCarte.melanger();
+
         // création du sémaphore
         semClient = new Semaphore(0);
 
@@ -101,6 +101,7 @@ public class Server implements Runnable{
         players = new Player[NB_PLAYERS];
         thrPlayers = new Thread[NB_PLAYERS];
         cartesReponses = unJeuDeCarte.takeAllTypeCard();
+        unJeuDeCarte.melanger();
 
         // initialisation des couleurs disponibles
         colorsAvailable = new boolean[Server.MAX_COLORS];
@@ -172,6 +173,8 @@ public class Server implements Runnable{
                         // envoi de la réponse au joueur
                         sendToPlayer(player, response);
 
+                        response = new String("PLAYER " + " " + player + " " + color);
+                        sendToPlayer(player, response);
                         // calcul des couleurs disponibles
                         //responseToAllPlayers += getAvalaibleColors();
 
@@ -212,33 +215,26 @@ public class Server implements Runnable{
         // la partie peut démarrer
 
         // tri des joueurs selon l'ordre des couleurs
-        for (int i = 1; i < Server.nbPlayers; i++)
+        /*for (int i = 1; i < Server.nbPlayers; i++)
             for (int k = 0; k < i; k++)
                 if (Server.players[k].getColor() > Server.players[k + 1].getColor()) {
                     int color = Server.players[k].getColor();
                     Server.players[k].setColor(Server.players[k + 1].getColor());
                     Server.players[k + 1].setColor(color);
-                }
-
-                for(int i = 0; i < Server.nbPlayers; i++){
-                    response = new String("NUMJOUEUR " + " " + Server.players[i].getColor());
-                    sendToPlayer(i, response);
-                }
+                }*/
         // démarrage de la partie
         System.out.println("Le jeu peut démarrer");
         // distribution des cartes
-        while (unJeuDeCarte.getSizeJeuDeCarte() + 1 > 0) {
+        /*while (unJeuDeCarte.getSizeJeuDeCarte() + 1 > 0) {
             for (int i = 0; i < Server.NB_PLAYERS; i++) {
                 if (unJeuDeCarte.getSizeJeuDeCarte() != 0)
                     Server.players[i].addLeJeuDeCarteDuJoueur(unJeuDeCarte.takeCard());
             }
-        }
+        }*/
+
         // tant que le jeu n'est pas terminÃ©
         while (!gameOver) {
             for (int i = 0; i < Server.nbPlayers; i++) {
-                System.out.println(i);
-                // attente de la rÃ©ponse du joueur (dÃ©placement + hypothÃ¨se)
-
                 // attente de rÃ©ception d'une commande d'un joueur
                 Server.semClient.P();
 
@@ -257,6 +253,7 @@ public class Server implements Runnable{
                                 Server.players[j].getWriter().println("MOVE " + player + items[0]);
                             }
                         }
+                        break;
                     // si accusation
                     // alors
                     // si confirmation
@@ -283,6 +280,7 @@ public class Server implements Runnable{
                             Server.players[player].getWriter().println("GAMEOVER");
                             Server.thrPlayers[player].interrupt();
                         }
+                        break;
 
                         // sinon
                         // je ne sais pas ce que l'on fait
@@ -290,8 +288,8 @@ public class Server implements Runnable{
                     case HYP :
                             for (int j = 0; j < Server.nbPlayers; j++){
                                 if (j != player){
-                                    Server.players[j].getWriter().println("HYP : P A L");
-                                    Server.semClient.P();
+                                    Server.players[j].getWriter().println("HYP" + " ");
+                                    /*Server.semClient.P();
                                     msg = Server.queueCommands.poll();
                                     int player1 = msg.getIndex();
                                     items = msg.getCommandItems();
@@ -308,9 +306,10 @@ public class Server implements Runnable{
                                                     Server.players[k].getWriter().println("REPPLY " + player1 + " negative");
                                             }
                                         }
-                                    }
+                                    }*/
                                 }
                             }
+                            break;
 
                         // sinon
                         // envoi Ã  tous les autres joueurs du dÃ©placement + de l'hypothÃ¨se
@@ -363,9 +362,7 @@ public class Server implements Runnable{
                     InetAddress IP;
 
                     // attente de connection d'un joueur
-                    Log.e("ThredCo","Ok");
                     Socket socket = this.socketEcoute.accept();
-                    Log.e("ThredCo","Ok");
                     IP = socket.getInetAddress();
 
                     /*partie permettant de déterminer l'IP du joueur
@@ -455,8 +452,21 @@ public class Server implements Runnable{
                     // examen de la commande
                     switch (message.getCommand()) {
                         case START:
-                            if (this.numJoueur == 0)
+                                for (int i = 0; i < Server.nbPlayers; i++) {
+                                    String response = new String("NUMCOLOR " + " " + i + " " + Server.players[i].getColor());
+                                    sendToPlayer(i, response);
+                                    response = new String("NUMCOLOR " + " " + i + " " + Server.players[i].getColor());
+                                    sendToAllPlayers(i, response);
+                                }
                                 Server.sendToAllPlayers(this.numJoueur, "START");
+                                Server.sendToPlayer(this.numJoueur, "START");
+                            break;
+
+                        case DICE:
+                            int dice = (int) (Math.random() * 5) + 1;
+                            String response = new String("DICE" + " " + dice);
+                            Server.sendToPlayer(this.numJoueur, response);
+                            break;
 
                         default:
                             // ajout de la commande reçue à la file
