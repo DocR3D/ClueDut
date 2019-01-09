@@ -39,6 +39,9 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
     private List<Case> listCase;
     private Case pCase;
     private Joueur j1;
+    private Joueur j2;
+    private Joueur j3;
+    private Joueur j4;
     public static List<Salle> listSalles;
     private ImageView de;
     private DrawerLayout drawer;
@@ -48,7 +51,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jouer);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        /*Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -58,7 +61,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
                 R.string.navigation_drawer_open , R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
 
         linearLayout = (LinearLayout) findViewById(R.id.fenetrePrincipale);
         fenetreSecondaire = (RelativeLayout) findViewById(R.id.fenetreSecondaire);
@@ -68,6 +71,25 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         listCase = new ArrayList<>();
         listSalles = new ArrayList<>();
         plateau = new Case[25][25];
+        j1 = new Joueur();
+        j2 = new Joueur();
+        j3 = new Joueur();
+        j4 = new Joueur();
+
+        switch (Menu.client.getNumJoueur()) {
+            case 0:
+                Menu.client.setJoueur(j1);
+                break;
+            case 1:
+                Menu.client.setJoueur(j2);
+                break;
+            case 2:
+                Menu.client.setJoueur(j3);
+                break;
+            case 3:
+                Menu.client.setJoueur(j4);
+                break;
+        }
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -75,15 +97,6 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         dim = (metrics.heightPixels / (plateau.length - 1));
 
         creationPlateau(metrics);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(drawer.isDrawerOpen(GravityCompat.START)){
-            drawer.closeDrawer(GravityCompat.START);
-        }else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -101,14 +114,12 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
 
     public void creationPlateau(DisplayMetrics metrics) {
 
-        j1 = new Joueur();
-
         x = ((metrics.widthPixels - plateau.length * dim) / 2) - 100;
 
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau.length; j++) {
-                if (i == 9 && j == 0) {
-                    creerCaseJoueur(dim, x, y, i, j, j1);
+                if ((i == 9 && j == 0) || (i == 0 && j == 9) || (i == 8 && j == 24) || (i == 24 && j ==7)) {
+                    creerCaseJoueur(dim, x, y, i, j);
                     y += dim;
                 } else {
                     creerCase(dim, x, y, i, j);
@@ -291,7 +302,30 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         fenetreSecondaire.addView(image);
     }
 
-    public void creerCaseJoueur(int pDim, float pX, float pY, int i, int j, final Joueur pJ) {
+    public void creerCaseJoueur(int pDim, float pX, float pY, int i, int j) {
+        Joueur pJ = null;
+        int numJoueur = -1;
+        String temp = "" + i + j;
+        switch (temp) {
+            case "90":
+                pJ = j1;
+                numJoueur = 0;
+                break;
+            case "09":
+                pJ = j2;
+                numJoueur = 1;
+                break;
+            case "824":
+                pJ = j3;
+                numJoueur = 2;
+                break;
+            case "247":
+                pJ = j4;
+                numJoueur = 3;
+                break;
+        }
+
+
         imCase = new ImageButton(this);
         pCase = new CaseJoueur(imCase, pJ);
 
@@ -299,7 +333,20 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
 
         pJ.setCaseJ(pCase);
 
-        imCase.setBackgroundResource(R.drawable.pawn);
+        switch (Menu.client.couleurs[numJoueur]) {
+            case 0:
+                imCase.setBackgroundResource(R.drawable.pawnrouge);
+                break;
+            case 1:
+                imCase.setBackgroundResource(R.drawable.pawnvert);
+                break;
+            case 2:
+                imCase.setBackgroundResource(R.drawable.pawnbleu);
+                break;
+            case 3:
+                imCase.setBackgroundResource(R.drawable.pawnviolet);
+                break;
+        }
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(pDim, pDim);
         imCase.setLayoutParams(params);
@@ -335,7 +382,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 if (pCase.getClickable()) {
-                    imCase.setBackgroundResource(R.drawable.pawn);
+                    imCase.setBackgroundResource(R.drawable.pawnrouge);
                     j1.changerCaseJoueur(pCase, 0, 0);
                 }
             }
@@ -345,7 +392,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        drawer.closeDrawer(GravityCompat.START);
+        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

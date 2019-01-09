@@ -26,7 +26,7 @@ public class Joueur {
         return caseJ;
     }
 
-    public void deplacementJoueur(){
+    public void deplacementJoueur(int deplacement){
         for (int i = 0; i < JouerActivity.plateau.length; i++) {
             for (int j = 0; j < JouerActivity.plateau.length; j++) {
                 if (JouerActivity.plateau[i][j] != this.getCaseJ()){
@@ -53,35 +53,35 @@ public class Joueur {
             }
         }
 
-        if (posIJoueur + JouerActivity.deplacement >= JouerActivity.plateau.length){
+        if (posIJoueur + deplacement >= JouerActivity.plateau.length){
             posIMaxJoueur = JouerActivity.plateau.length - 1;
         }else {
-            posIMaxJoueur = posIJoueur + JouerActivity.deplacement;
+            posIMaxJoueur = posIJoueur + deplacement;
         }
 
-        if (posJJoueur + JouerActivity.deplacement >= JouerActivity.plateau.length){
+        if (posJJoueur + deplacement >= JouerActivity.plateau.length){
             posJMaxJoueur = JouerActivity.plateau.length - 1;
         }else {
-            posJMaxJoueur = posJJoueur + JouerActivity.deplacement;
+            posJMaxJoueur = posJJoueur + deplacement;
         }
 
-        if (posIJoueur - JouerActivity.deplacement <= 0){
+        if (posIJoueur - deplacement <= 0){
             posIMinJoueur = 0;
         }else {
-            posIMinJoueur = posIJoueur - JouerActivity.deplacement;
+            posIMinJoueur = posIJoueur - deplacement;
         }
 
-        if (posJJoueur - JouerActivity.deplacement <= 0){
+        if (posJJoueur - deplacement <= 0){
             posJMinJoueur = 0;
         }else {
-            posJMinJoueur = posJJoueur - JouerActivity.deplacement;
+            posJMinJoueur = posJJoueur - deplacement;
         }
 
         for (int i = posIMinJoueur; i <= posIMaxJoueur; i++){
             for (int j = posJMinJoueur; j <= posJMaxJoueur; j++){
                 if (JouerActivity.plateau[i][j] != this.getCaseJ()){
                     totalDepla = Math.abs(i - posIJoueur) + Math.abs(j - posJJoueur);
-                    if (totalDepla <= JouerActivity.deplacement){
+                    if (totalDepla <= deplacement){
                         afficherCaseDeplacement(JouerActivity.plateau[i][j], JouerActivity.plateau[i][j].getImage());
                     }
                 }
@@ -102,18 +102,18 @@ public class Joueur {
                 this.getCaseJ().getImage().setBackgroundResource(R.drawable.fondcase);
                 this.getCaseJ().caseClickable();
                 this.setCaseJ(JouerActivity.plateau[i][j]);
-                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawn);
+                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
                 this.getCaseJ().caseNonClickable();
                 JouerActivity.deplacement = 0;
-                this.deplacementJoueur();
+                this.deplacementJoueur(0);
             } else {
                 this.getCaseJ().getImage().setBackgroundResource(R.drawable.fondcase);
                 this.getCaseJ().caseClickable();
                 this.setCaseJ(pCase);
-                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawn);
+                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
                 this.getCaseJ().caseNonClickable();
                 JouerActivity.deplacement = 0;
-                this.deplacementJoueur();
+                this.deplacementJoueur(0);
             }
         }
     }

@@ -21,7 +21,8 @@ public class JeuDeCarte {
     }
 
     public Carte takeCard(){
-        Carte uneCarte= jeuDeCartes.get(jeuDeCartes.size());
+        int index = jeuDeCartes.size() -1;
+        Carte uneCarte= jeuDeCartes.get(index);
         jeuDeCartes.remove(uneCarte);
         return uneCarte;
     }

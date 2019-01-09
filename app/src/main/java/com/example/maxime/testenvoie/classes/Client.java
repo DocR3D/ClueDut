@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable{
 
-    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR, START};
+    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR, START, NUMJOUEUR};
 
     private static final String SERVEUR_TCP_IP   = new String("0.0.0.0");
     private static final int    SERVEUR_TCP_PORT = 8001;
@@ -32,12 +32,14 @@ public class Client implements Runnable{
     protected PrintWriter       out              = null;
     protected String            command          = null;
 
-    public int                  couleurs[]       = new int[6];
+    public int                  couleurs[]       = new int[4];
     public int                  couleur          = -1;
     public int                  nbPlayerReady    = 0;
 
     private String ip;
     private String pseudo;
+    private Joueur joueur;
+    private int numJoueur;
 
     public Client() {
     }
@@ -58,6 +60,22 @@ public class Client implements Runnable{
 
     public void setCouleur(int couleur){
         this.couleur = couleur;
+    }
+
+    public void setJoueur(Joueur joueur) {
+        this.joueur = joueur;
+    }
+
+    public Joueur getJoueur(){
+        return this.joueur;
+    }
+
+    public void setNumJoueur(int num){
+        this.numJoueur = num;
+    }
+
+    public int getNumJoueur(){
+        return this.numJoueur;
     }
 
     public void setIP(String ip){
@@ -191,6 +209,12 @@ public class Client implements Runnable{
             if (items[0].compareToIgnoreCase("START") == 0)
                 if (items.length == 1)
                     return Client.Command.START;
+            if (items[0].compareToIgnoreCase("DICE") == 0)
+                if (items.length == 2)
+                    return Client.Command.DICE;
+            if (items[0].compareToIgnoreCase("NUMJOUEUR") == 0)
+                if (items.length == 2)
+                    return Client.Command.NUMJOUEUR;
 
             return null;
         }
@@ -220,7 +244,7 @@ public class Client implements Runnable{
                         break;
 
                     case DICE:
-                        //Client.joueur.dice = items[1];
+                        Menu.client.getJoueur().deplacementJoueur(Integer.valueOf(items[1]));
                         break;
 
                     case PLAYER:
@@ -232,6 +256,7 @@ public class Client implements Runnable{
                             SalonRejoindrePartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
                                     Integer.valueOf(items[1]), Integer.valueOf(items[2]));
                         }
+                        couleurs[Integer.valueOf(items[1])] = Integer.valueOf(items[2]);
                     break;
 
                     case COLOR:
@@ -268,6 +293,11 @@ public class Client implements Runnable{
 
                     case START:
                         SalonRejoindrePartie.lancerJeu();
+
+                        break;
+
+                    case NUMJOUEUR:
+                        Menu.client.setNumJoueur(Integer.valueOf(items[1]));
                         break;
 
                     default:

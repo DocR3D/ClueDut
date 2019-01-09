@@ -132,9 +132,6 @@ public class SalonRejoindrePartie extends AppCompatActivity {
                 if (Menu.client.couleur > -1){
                     creationPartiePopup.cancel();
                 }
-                if (couleurChoisieCreationPartie.equals("")) {
-                    Toast.makeText(getBaseContext(), "Veuillez entrer un nom et choisir une couleur", Toast.LENGTH_LONG).show();
-                } else {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -152,7 +149,6 @@ public class SalonRejoindrePartie extends AppCompatActivity {
                     });
                     thread.start();
                     thread.interrupt();
-                }
             }
         });
 

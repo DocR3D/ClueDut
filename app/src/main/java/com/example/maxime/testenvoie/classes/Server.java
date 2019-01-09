@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.logging.Handler;
 
 import static com.example.maxime.testenvoie.classes.Server.Command.ANSWER;
 
@@ -28,7 +29,7 @@ public class Server implements Runnable{
 
     protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
 
-    protected static final int           MAX_COLORS       = 6;     // nombre max de couleurs
+    protected static final int           MAX_COLORS       = 4;     // nombre max de couleurs
     protected static final int           NB_PLAYERS       = 2;     // nombre de joueurs de la partie
 
     private static   Thread              thrConnexion     = null;  // thread de supervision du jeu
@@ -178,7 +179,7 @@ public class Server implements Runnable{
                         sendToAllPlayers(player, responseToAllPlayers);
 
                     } else {
-                        response = new String("COLORS");
+                        response = new String("NOK");
 
                         // calcul des couleurs disponibles
                         response += getAvalaibleColors();
@@ -219,22 +220,23 @@ public class Server implements Runnable{
                     Server.players[k + 1].setColor(color);
                 }
 
-        // dÃ©marrage de la partie
+                for(int i = 0; i < Server.nbPlayers; i++){
+                    response = new String("NUMJOUEUR " + " " + Server.players[i].getColor());
+                    sendToPlayer(i, response);
+                }
+        // démarrage de la partie
         System.out.println("Le jeu peut démarrer");
         // distribution des cartes
-        /*while (unJeuDeCarte.getSizeJeuDeCarte() != 0) {
-            for (int i = 0; i < Server.NB_PLAYERS; i++)
-                Server.players[i].addLeJeuDeCarteDuJoueur(unJeuDeCarte.takeCard());
-        }*/
+        while (unJeuDeCarte.getSizeJeuDeCarte() + 1 > 0) {
+            for (int i = 0; i < Server.NB_PLAYERS; i++) {
+                if (unJeuDeCarte.getSizeJeuDeCarte() != 0)
+                    Server.players[i].addLeJeuDeCarteDuJoueur(unJeuDeCarte.takeCard());
+            }
+        }
         // tant que le jeu n'est pas terminÃ©
         while (!gameOver) {
             for (int i = 0; i < Server.nbPlayers; i++) {
-                // pour chacun des joueurs
-                //int dice = (int) (Math.random() * 5) + 1;
-                // envoi des dés
-
-                //Server.players[i].getWriter().println("DICE " + dice);
-
+                System.out.println(i);
                 // attente de la rÃ©ponse du joueur (dÃ©placement + hypothÃ¨se)
 
                 // attente de rÃ©ception d'une commande d'un joueur
