@@ -1,8 +1,14 @@
 package com.example.maxime.testenvoie.classes;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 
+import com.example.maxime.testenvoie.EnqueteActivity;
+import com.example.maxime.testenvoie.JouerActivity;
 import com.example.maxime.testenvoie.Menu;
 import com.example.maxime.testenvoie.SalonCreerPartie;
 import com.example.maxime.testenvoie.SalonRejoindrePartie;
@@ -15,6 +21,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by i174085 on 29/11/2018.
@@ -22,7 +30,7 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable{
 
-    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR, START, NUMCOLOR};
+    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR, CARTE, START, NUMCOLOR, INITFICHE, WON};
 
     private static final String SERVEUR_TCP_IP   = new String("0.0.0.0");
     private static final int    SERVEUR_TCP_PORT = 8001;
@@ -40,6 +48,7 @@ public class Client implements Runnable{
     private String pseudo;
     private Joueur joueur;
     private int numJoueur;
+    private List<Carte> jeuDeCarte = new ArrayList<>();
 
     public Client() {
     }
@@ -93,8 +102,14 @@ public class Client implements Runnable{
         out.println(command);
     }
 
-    public void hyp(){
+    public void hyp(String personnage, String arme, String lieu){
+        System.out.println(personnage + " " + arme + " " + lieu);
         command = "HYP";
+        out.println(command);
+    }
+
+    public void acs(String personnage, String arme, String lieu){
+         command = "ACS " + personnage + " " + arme + " " + lieu;
         out.println(command);
     }
 
@@ -105,6 +120,11 @@ public class Client implements Runnable{
 
     public void start(){
         command = "START";
+        out.println(command);
+    }
+
+    public void initjeu(){
+        command = "INITJEU";
         out.println(command);
     }
 
@@ -229,6 +249,15 @@ public class Client implements Runnable{
             if (items[0].compareToIgnoreCase("NUMCOLOR") == 0)
                 if (items.length == 3)
                     return Client.Command.NUMCOLOR;
+            if (items[0].compareToIgnoreCase("INITFICHE") == 0)
+                if (items.length == 1)
+                    return Client.Command.INITFICHE;
+            if (items[0].compareToIgnoreCase("WON") == 0)
+                if (items.length == 1)
+                    return Client.Command.WON;
+            if (items[0].compareToIgnoreCase("CARTE") == 0)
+                if (items.length == 3)
+                    return Client.Command.CARTE;
 
             return null;
         }
@@ -250,6 +279,12 @@ public class Client implements Runnable{
 
                 switch (checkCommand(items)) {
                     case GAMEOVER:
+                        System.out.println("LOOOOOOOSE");
+                        Client.gameOver = true;
+                        break;
+
+                    case WON:
+                        System.out.println("WOOOOOOOOON");
                         Client.gameOver = true;
                         break;
 
@@ -262,7 +297,7 @@ public class Client implements Runnable{
                         break;
 
                     case PLAYER:
-                        if (Menu.client.getPseudo().equalsIgnoreCase(Server.players[0].getPseudo())) {
+                        if (Menu.client.getPseudo().equals(Server.players[0].getPseudo())) {
                             SalonCreerPartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
                                     Integer.valueOf(items[1]), Integer.valueOf(items[2]));
                         }
@@ -274,7 +309,7 @@ public class Client implements Runnable{
 
                     case COLOR:
                         setCouleur(Integer.valueOf(items[1]));
-                        SalonRejoindrePartie.afficherJoueur(getPseudo(),Integer.valueOf(items[2]), couleur);
+                        //SalonRejoindrePartie.afficherJoueur(getPseudo(),Integer.valueOf(items[2]), couleur);
                         if (Menu.client.getPseudo().equalsIgnoreCase(items[3])){
                         } else {
                             SalonRejoindrePartie.afficherJoueurHote(items[3],Integer.valueOf(items[4]));
@@ -305,15 +340,43 @@ public class Client implements Runnable{
                         break;
 
                     case START:
-                        if (Menu.client.getPseudo().equalsIgnoreCase(Server.players[0].getPseudo()))
+                        /*if (Menu.client.getPseudo().equalsIgnoreCase(Server.players[0].getPseudo()))
                             SalonCreerPartie.lancerJeu();
-                         else
+                         else*/
                             SalonRejoindrePartie.lancerJeu();
                         break;
 
                     case NUMCOLOR:
                         System.out.println(Integer.valueOf(items[1]) + " + " + Integer.valueOf(items[2]));
                         Menu.client.couleurs[Integer.valueOf(items[1])] = Integer.valueOf(items[2]);
+                        break;
+
+                    case INITFICHE:
+                            for (int i = 0; i < jeuDeCarte.size(); i++){
+                                for (int k = 0; k < EnqueteActivity.checkBoxs.length; k++){
+                                    if (jeuDeCarte.get(i).getNom().equals(EnqueteActivity.checkBoxs[k].getText())){
+                                        EnqueteActivity.checkBoxs[k].setChecked(true);
+                                    }
+                                }
+                            }
+                        break;
+
+                    case CARTE:
+                        Carte carte = null;
+                        switch(items[2]){
+                            case "PERSONNAGE":
+                                carte = new Carte(items[1],Carte.Type.PERSONNAGE);
+                                jeuDeCarte.add(carte);
+                                break;
+                            case "SALLE":
+                                carte = new Carte(items[1],Carte.Type.PERSONNAGE);
+                                jeuDeCarte.add(carte);
+                                break;
+                            case "ARME":
+                                carte = new Carte(items[1],Carte.Type.PERSONNAGE);
+                                jeuDeCarte.add(carte);
+                                break;
+                        }
                         break;
 
                     default:

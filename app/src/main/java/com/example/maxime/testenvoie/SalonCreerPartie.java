@@ -39,7 +39,10 @@ public class SalonCreerPartie extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salon_creer_partie);
 
-        /*try {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();)
             {
                 NetworkInterface intf = en.nextElement();
@@ -48,8 +51,10 @@ public class SalonCreerPartie extends AppCompatActivity {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress())
                     {
-                        String Ip= inetAddress.getHostAddress().toString();
-                        Log.e("ip","" + Ip);
+                        if (inetAddress.getHostAddress().contains("192.168")) {
+                            String Ip = inetAddress.getHostAddress().toString();
+                            Log.e("ip", "" + Ip);
+                        }
                     }
                 }
             }
@@ -58,32 +63,10 @@ public class SalonCreerPartie extends AppCompatActivity {
         catch (SocketException obj)
         {
             Log.e("Error occurred during IP fetching: ", obj.toString());
-        }*/
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-                    int i = 1;
-
-                    while (interfaces.hasMoreElements()) {
-                        NetworkInterface currentInterface = interfaces.nextElement();
-                        Log.v("Interface "+i," " + currentInterface);
-                        i++;
-                        Enumeration<InetAddress> addresses = currentInterface.getInetAddresses();
-                        int n= 1;
-                        while (addresses.hasMoreElements()) {
-
-                            InetAddress currentAddress = addresses.nextElement();
-                            Log.v("IP "+n," "+currentAddress.getHostAddress());
-                            n++;
-                        }
-                    }
-
-                } catch (Exception ex) { } // for now eat exceptions
+        }
             }
-        });
 
+        });
         thread.start();
         thread.interrupt();
 
@@ -91,7 +74,7 @@ public class SalonCreerPartie extends AppCompatActivity {
         cadreJoueurs = findViewById(R.id.cadreJoueursCreerPartie);
         backToMenuSalonCreerPartie_btn = findViewById(R.id.backToMenuSalonCreerPartie);
         commencerPartie_btn = findViewById(R.id.commencerPartie);
-        //commencerPartie_btn.setEnabled(false);
+        commencerPartie_btn.setEnabled(false);
         nomJoueur1 = findViewById(R.id.nomJoueur1);
         nomJoueur2 = findViewById(R.id.nomJoueur2);
         nomJoueur3 = findViewById(R.id.nomJoueur3);
@@ -158,18 +141,13 @@ public class SalonCreerPartie extends AppCompatActivity {
                                 thread2.start();
                                 thread2.interrupt();
                             }
-                        },1000);
+                        }, 1000);
                     }
                 });
                 thread.start();
                 thread.interrupt();
             }
         });
-    }
-
-    public static void lancerJeu() {
-        Intent intent = new Intent(context, JouerActivity.class);
-        context.startActivity(intent);
     }
 
     private void setComponentsSize() {
@@ -254,5 +232,10 @@ public class SalonCreerPartie extends AppCompatActivity {
                 nomJoueur4.setTextColor(c);
                 nomJoueur4.setText("" + pseudo);break;
         }
+    }
+
+    public static void lancerJeu() {
+        Intent intent = new Intent(context, EnqueteActivity.class);
+        context.startActivity(intent);
     }
 }

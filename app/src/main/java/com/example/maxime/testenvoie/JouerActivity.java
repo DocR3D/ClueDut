@@ -1,18 +1,18 @@
 package com.example.maxime.testenvoie;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,18 +39,62 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
     private List<ImageButton> listImCase;
     private List<Case> listCase;
     private Case pCase;
-    private Joueur j1;
-    private Joueur j2;
-    private Joueur j3;
-    private Joueur j4;
+    public static Joueur j1;
+    public static Joueur j2;
+    public static Joueur j3;
+    public static Joueur j4;
     public static List<Salle> listSalles;
     private Button de;
+    private Button ficheEnquete;
     private DrawerLayout drawer;
+    public static JouerActivity context;
+    public Dialog choixAction;
+    public Dialog action;
+    public Dialog fichepopup;
+    public Button hypothèse;
+    public Button accusation;
+    public static CheckBox colonnelMoutarde;
+    public static CheckBox reverandOlive;
+    public static CheckBox professeurViolet;
+    public static CheckBox madamePervenche;
+    public static CheckBox mademoiselleRose;
+    public static CheckBox madameLeBlanc;
+
+    public static CheckBox poignard;
+    public static CheckBox revolver;
+    public static CheckBox corde;
+    public static CheckBox chandelier;
+    public static CheckBox matraque;
+    public static CheckBox cleAnglaise;
+
+    public static CheckBox salleDeBillard;
+    public static CheckBox salleDeBal;
+    public static CheckBox cuisine;
+    public static CheckBox veranda;
+    public static CheckBox hall;
+    public static CheckBox salleAManger;
+    public static CheckBox bibliotheque;
+    public static CheckBox salon;
+    public static CheckBox bureau;
+
+    public Joueur joueur;
+
+    public static CheckBox[] checkBoxs = new CheckBox[21];
+
+    public Button valider;
+
+    public boolean firstFocus = true;
+
+    public DisplayMetrics metrics;
+
+    public Button retour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jouer);
+
+        context = this;
 
         /*Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,6 +111,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         linearLayout = (LinearLayout) findViewById(R.id.fenetrePrincipale);
         fenetreSecondaire = (RelativeLayout) findViewById(R.id.fenetreSecondaire);
         de = (Button) findViewById(R.id.de);
+        ficheEnquete = (Button) findViewById(R.id.ficheEnquete);
 
         listImCase = new ArrayList<>();
         listCase = new ArrayList<>();
@@ -80,24 +125,27 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         switch (Menu.client.getNumJoueur()) {
             case 0:
                 Menu.client.setJoueur(j1);
+                joueur = j1;
                 break;
             case 1:
                 Menu.client.setJoueur(j2);
+                joueur = j2;
                 break;
             case 2:
                 Menu.client.setJoueur(j3);
+                joueur = j3;
                 break;
             case 3:
                 Menu.client.setJoueur(j4);
+                joueur = j4;
                 break;
         }
 
-        DisplayMetrics metrics = new DisplayMetrics();
+        metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         dim = (metrics.heightPixels / (plateau.length - 1));
 
-        creationPlateau(metrics);
     }
 
     @Override
@@ -111,6 +159,11 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        if (firstFocus) {
+            creationPlateau(metrics);
+            firstFocus = false;
+        }
     }
 
     public void creationPlateau(DisplayMetrics metrics) {
@@ -126,6 +179,91 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
                 });
                 thread.start();
                 thread.interrupt();
+            }
+        });
+
+        ficheEnquete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fichepopup = new Dialog(JouerActivity.this);
+                fichepopup.setContentView(R.layout.activity_fiche_enquete);
+                retour = fichepopup.findViewById(R.id.retour);
+                CheckBox[] tempCheckBoxs = new CheckBox[21];
+                colonnelMoutarde = (CheckBox) fichepopup.findViewById(R.id.ColonelMoutarde);
+                reverandOlive = (CheckBox) fichepopup.findViewById(R.id.ReverandOlive);
+                professeurViolet = (CheckBox) fichepopup.findViewById(R.id.ProfesseurViolet);
+                madameLeBlanc = (CheckBox) fichepopup.findViewById(R.id.MadameLeblanc);
+                madamePervenche = (CheckBox) fichepopup.findViewById(R.id.MadamePervenche);
+                mademoiselleRose = (CheckBox) fichepopup.findViewById(R.id.MademoiselleRose);
+
+                poignard = (CheckBox) fichepopup.findViewById(R.id.poignard);
+                chandelier = (CheckBox) fichepopup.findViewById(R.id.chandelier);
+                corde = (CheckBox) fichepopup.findViewById(R.id.corde);
+                cleAnglaise = (CheckBox) fichepopup.findViewById(R.id.cleAnglaise);
+                revolver = (CheckBox) fichepopup.findViewById(R.id.Revolver);
+                matraque = (CheckBox) fichepopup.findViewById(R.id.matraque);
+
+                salleAManger = (CheckBox) fichepopup.findViewById(R.id.salleAManger);
+                salleDeBal = (CheckBox) fichepopup.findViewById(R.id.salleDeBal);
+                salleDeBillard = (CheckBox) fichepopup.findViewById(R.id.billard);
+                salon = (CheckBox) fichepopup.findViewById(R.id.salon);
+                hall = (CheckBox) fichepopup.findViewById(R.id.hall);
+                bureau = (CheckBox) fichepopup.findViewById(R.id.bureau);
+                bibliotheque = (CheckBox) fichepopup.findViewById(R.id.bibliotheque);
+                veranda = (CheckBox) fichepopup.findViewById(R.id.verenda);
+                cuisine = (CheckBox) fichepopup.findViewById(R.id.Cuisine);
+
+                tempCheckBoxs[0] = colonnelMoutarde;
+                tempCheckBoxs[1] = professeurViolet;
+                tempCheckBoxs[2] = reverandOlive;
+                tempCheckBoxs[3] = mademoiselleRose;
+                tempCheckBoxs[4] = madamePervenche;
+                tempCheckBoxs[5] = madameLeBlanc;
+
+                tempCheckBoxs[6] = poignard;
+                tempCheckBoxs[7] = cleAnglaise;
+                tempCheckBoxs[8] = corde;
+                tempCheckBoxs[9] = chandelier;
+                tempCheckBoxs[10] = revolver;
+                tempCheckBoxs[11] = matraque;
+
+                tempCheckBoxs[12] = salleDeBillard;
+                tempCheckBoxs[13] = salleAManger;
+                tempCheckBoxs[14] = salleDeBal;
+                tempCheckBoxs[15] = salon;
+                tempCheckBoxs[16] = bureau;
+                tempCheckBoxs[17] = bibliotheque;
+                tempCheckBoxs[18] = hall;
+                tempCheckBoxs[19] = cuisine;
+                tempCheckBoxs[20] = veranda;
+
+                for (int i = 0; i < EnqueteActivity.checkBoxs.length; i++){
+                    for (int j = 0; j < tempCheckBoxs.length; j++){
+                        if (EnqueteActivity.checkBoxs[i].getText().equals(tempCheckBoxs[j].getText())){
+                            if (EnqueteActivity.checkBoxs[i].isChecked()){
+                                tempCheckBoxs[j].setChecked(true);
+                            }
+                        }
+                    }
+                }
+
+
+                fichepopup.getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+                fichepopup.show();
+
+                retour.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fichepopup.cancel();
+                    }
+                });
             }
         });
 
@@ -300,15 +438,238 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 if (salle.getCase().getClickable()) {
-                    j1.changerCaseJoueur(salle.getCase(), posX, posY);
-                    Thread thread = new Thread(new Runnable() {
+                    joueur.changerCaseJoueur(salle.getCase(), posX, posY, Menu.client.getNumJoueur());
+                    choixAction = new Dialog(JouerActivity.this);
+                    choixAction.setContentView(R.layout.popup_choix_action);
+                    hypothèse = choixAction.findViewById(R.id.Hypothèse);
+                    accusation = choixAction.findViewById(R.id.Accusation);
+
+                    choixAction.getWindow().getDecorView().setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+                    choixAction.show();
+
+                    hypothèse.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void run() {
-                            Menu.client.hyp();
+                        public void onClick(View v) {
+                            final String[] personnage = {null};
+                            final String[] arme = {null};
+                            final String lieu = salle.getNom();
+                            action = new Dialog(JouerActivity.this);
+                            action.setContentView(R.layout.popup_action1);
+                            valider = action.findViewById(R.id.valider);
+                            colonnelMoutarde = (CheckBox) action.findViewById(R.id.ColonelMoutarde);
+                            reverandOlive = (CheckBox) action.findViewById(R.id.ReverandOlive);
+                            professeurViolet = (CheckBox) action.findViewById(R.id.ProfesseurViolet);
+                            madameLeBlanc = (CheckBox) action.findViewById(R.id.MadameLeblanc);
+                            madamePervenche = (CheckBox) action.findViewById(R.id.MadamePervenche);
+                            mademoiselleRose = (CheckBox) action.findViewById(R.id.MademoiselleRose);
+
+                            poignard = (CheckBox) action.findViewById(R.id.poignard);
+                            chandelier = (CheckBox) action.findViewById(R.id.chandelier);
+                            corde = (CheckBox) action.findViewById(R.id.corde);
+                            cleAnglaise = (CheckBox) action.findViewById(R.id.cleAnglaise);
+                            revolver = (CheckBox) action.findViewById(R.id.Revolver);
+                            matraque = (CheckBox) action.findViewById(R.id.matraque);
+
+                            checkBoxs[0] = colonnelMoutarde;
+                            checkBoxs[1] = professeurViolet;
+                            checkBoxs[2] = reverandOlive;
+                            checkBoxs[3] = mademoiselleRose;
+                            checkBoxs[4] = madamePervenche;
+                            checkBoxs[5] = madameLeBlanc;
+
+                            checkBoxs[6] = poignard;
+                            checkBoxs[7] = cleAnglaise;
+                            checkBoxs[8] = corde;
+                            checkBoxs[9] = chandelier;
+                            checkBoxs[10] = revolver;
+                            checkBoxs[11] = matraque;
+
+                            action.getWindow().getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+                            action.show();
+
+                            for (int i = 0; i < 6; i++){
+                                final int finalI = i;
+                                checkBoxs[i].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (checkBoxs[finalI].isChecked()) {
+                                            personnage[0] = (String) checkBoxs[finalI].getText();
+                                            System.out.println(personnage[0]);
+                                            checkBoxs[finalI].setChecked(true);
+                                            dechecker((String)checkBoxs[finalI].getText(), 0, 5);
+                                        }
+                                        else {
+                                            personnage[0] = null;
+                                            System.out.println(personnage[0]);
+                                            checker((String) checkBoxs[finalI].getText(), 0, 5);
+                                            checkBoxs[finalI].setChecked(false);
+                                        }
+                                    }
+                                });
+                            }
+
+                            for (int i = 6; i < 12; i++){
+                                final int finalI = i;
+                                checkBoxs[i].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (checkBoxs[finalI].isChecked()) {
+                                            arme[0] = (String) checkBoxs[finalI].getText();
+                                            System.out.println(arme[0]);
+                                            checkBoxs[finalI].setChecked(true);
+                                            dechecker((String) checkBoxs[finalI].getText(), 6, 11);
+                                        }
+                                        else {
+                                            arme[0] = null;
+                                            System.out.println(arme[0]);
+                                            checker((String) checkBoxs[finalI].getText(), 6, 11);
+                                            checkBoxs[finalI].setChecked(false);
+                                        }
+                                    }
+                                });
+                            }
+
+                            valider.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (personnage[0] != null && arme[0] != null){
+                                        Thread thread = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Menu.client.hyp(personnage[0], arme[0], lieu);
+                                                action.cancel();
+                                            }
+                                        });
+                                        thread.start();
+                                        thread.interrupt();
+                                    }
+                                }
+                            });
+
                         }
                     });
-                    thread.start();
-                    thread.interrupt();
+
+                    accusation.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final String[] personnage = {null};
+                            final String[] arme = {null};
+                            final String lieu = salle.getNom();
+                            action = new Dialog(JouerActivity.this);
+                            action.setContentView(R.layout.popup_action1);
+                            valider = action.findViewById(R.id.valider);
+                            colonnelMoutarde = (CheckBox) action.findViewById(R.id.ColonelMoutarde);
+                            reverandOlive = (CheckBox) action.findViewById(R.id.ReverandOlive);
+                            professeurViolet = (CheckBox) action.findViewById(R.id.ProfesseurViolet);
+                            madameLeBlanc = (CheckBox) action.findViewById(R.id.MadameLeblanc);
+                            madamePervenche = (CheckBox) action.findViewById(R.id.MadamePervenche);
+                            mademoiselleRose = (CheckBox) action.findViewById(R.id.MademoiselleRose);
+
+                            poignard = (CheckBox) action.findViewById(R.id.poignard);
+                            chandelier = (CheckBox) action.findViewById(R.id.chandelier);
+                            corde = (CheckBox) action.findViewById(R.id.corde);
+                            cleAnglaise = (CheckBox) action.findViewById(R.id.cleAnglaise);
+                            revolver = (CheckBox) action.findViewById(R.id.Revolver);
+                            matraque = (CheckBox) action.findViewById(R.id.matraque);
+
+                            checkBoxs[0] = colonnelMoutarde;
+                            checkBoxs[1] = professeurViolet;
+                            checkBoxs[2] = reverandOlive;
+                            checkBoxs[3] = mademoiselleRose;
+                            checkBoxs[4] = madamePervenche;
+                            checkBoxs[5] = madameLeBlanc;
+
+                            checkBoxs[6] = poignard;
+                            checkBoxs[7] = cleAnglaise;
+                            checkBoxs[8] = corde;
+                            checkBoxs[9] = chandelier;
+                            checkBoxs[10] = revolver;
+                            checkBoxs[11] = matraque;
+
+                            action.getWindow().getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+                            action.show();
+
+                            for (int i = 0; i < 6; i++){
+                                final int finalI = i;
+                                checkBoxs[i].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (checkBoxs[finalI].isChecked()) {
+                                            personnage[0] = (String) checkBoxs[finalI].getText();
+                                            System.out.println(personnage[0]);
+                                            checkBoxs[finalI].setChecked(true);
+                                            dechecker((String)checkBoxs[finalI].getText(), 0, 5);
+                                        }
+                                        else {
+                                            personnage[0] = null;
+                                            System.out.println(personnage[0]);
+                                            checker((String) checkBoxs[finalI].getText(), 0, 5);
+                                            checkBoxs[finalI].setChecked(false);
+                                        }
+                                    }
+                                });
+                            }
+
+                            for (int i = 6; i < 12; i++){
+                                final int finalI = i;
+                                checkBoxs[i].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (checkBoxs[finalI].isChecked()) {
+                                            arme[0] = (String) checkBoxs[finalI].getText();
+                                            System.out.println(arme[0]);
+                                            checkBoxs[finalI].setChecked(true);
+                                            dechecker((String) checkBoxs[finalI].getText(), 6, 11);
+                                        }
+                                        else {
+                                            arme[0] = null;
+                                            System.out.println(arme[0]);
+                                            checker((String) checkBoxs[finalI].getText(), 6, 11);
+                                            checkBoxs[finalI].setChecked(false);
+                                        }
+                                    }
+                                });
+                            }
+
+                            valider.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (personnage[0] != null && arme[0] != null){
+                                        Thread thread = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Menu.client.acs(personnage[0], arme[0], lieu);
+                                            }
+                                        });
+                                        thread.start();
+                                        thread.interrupt();
+                                        action.cancel();
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
@@ -333,22 +694,18 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
             case "90":
                 pJ = j1;
                 numJoueur = 0;
-                System.out.println(numJoueur);
                 break;
             case "08":
                 pJ = j2;
                 numJoueur = 1;
-                System.out.println(numJoueur);
                 break;
             case "723":
                 pJ = j3;
                 numJoueur = 2;
-                System.out.println(numJoueur);
                 break;
             case "247":
                 pJ = j4;
                 numJoueur = 3;
-                System.out.println(numJoueur);
                 break;
         }
 
@@ -359,7 +716,6 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         plateau[i][j] = pCase;
 
         pJ.setCaseJ(pCase);
-        System.out.println(Menu.client.couleurs[numJoueur]);
         switch (Menu.client.getCouleur(numJoueur)) {
             case 0:
                 imCase.setBackgroundResource(R.drawable.pawnrouge);
@@ -410,7 +766,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 if (pCase.getClickable()) {
                     imCase.setBackgroundResource(R.drawable.pawnrouge);
-                    j1.changerCaseJoueur(pCase, 0, 0);
+                    joueur.changerCaseJoueur(pCase, 0, 0, Menu.client.getNumJoueur());
                 }
             }
         });
@@ -421,5 +777,21 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         //drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void dechecker(String nomBox, int borneInf, int borneSup){
+        for (int i = borneInf; i <= borneSup; i++){
+            if (!checkBoxs[i].getText().equals(nomBox)){
+                checkBoxs[i].setEnabled(false);
+            }
+        }
+    }
+
+    private void checker(String nomBox, int borneInf, int borneSup){
+        for (int i = borneInf; i <= borneSup; i++){
+            if (!checkBoxs[i].getText().equals(nomBox)){
+                checkBoxs[i].setEnabled(true);
+            }
+        }
     }
 }

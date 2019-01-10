@@ -42,9 +42,10 @@
             android:name=".SalonRejoindrePartie"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity_fiche_enquete"
+            android:name=".EnqueteActivity"
             android:label="@string/title_activity_fiche_enquete"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

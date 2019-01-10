@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by i174085 on 29/11/2018.
@@ -27,8 +28,12 @@ class Player {
     private String         pseudo = null;        // pseudo du joueur
     private int            color;                // couleur du joueur
 
-    public Carte getLeJeuDeCarteDuJoueur(int numeroCarte) {
+    public Carte getUneLeJeuDeCarteDuJoueur(int numeroCarte) {
         return leJeuDeCarteDuJoueur.get(numeroCarte);
+    }
+
+    public List<Carte> getJeuDeCarte(){
+        return leJeuDeCarteDuJoueur;
     }
 
 
@@ -115,6 +120,10 @@ class Player {
 
     public void addLeJeuDeCarteDuJoueur(Carte uneCarte) {
         leJeuDeCarteDuJoueur.add(uneCarte);
+    }
+
+    public int getSizeLeJeuDeCarteDuJoueur(){
+        return leJeuDeCarteDuJoueur.size();
     }
 
     public enum State {DISCONNECTED, CONNECTED, READY, NOTREADY}

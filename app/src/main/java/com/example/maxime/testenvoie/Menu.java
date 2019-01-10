@@ -166,7 +166,7 @@ public class Menu extends AppCompatActivity {
                         creationPartiePopup = new Dialog(Menu.this);
                         creationPartiePopup.setContentView(R.layout.popup_creation_partie);
                         cadreCreationPartie = creationPartiePopup.findViewById(R.id.cadreCreationPartie);
-                       // cadreCouleursCreationPartie = creationPartiePopup.findViewById(R.id.cadreCouleursCreationPartie);
+                       // cadreCouleursCreationPartie = choixAction.findViewById(R.id.cadreCouleursCreationPartie);
                         backToPlayPopupCreationPartie_btn = creationPartiePopup.findViewById(R.id.backToPlayPopupCreationPartie);
                         texteNomCreationPartie = creationPartiePopup.findViewById(R.id.textNomCreationpartie);
                         texteCouleurCreationPartie = creationPartiePopup.findViewById(R.id.textCouleurCreationpartie);
@@ -507,5 +507,14 @@ public class Menu extends AppCompatActivity {
         }
         return (((getWindowManager().getDefaultDisplay().getHeight()) * percent) / 100)  - (v.getLayoutParams().height / 2);
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (playPopup != null) {
+            playPopup.dismiss();
+            playPopup = null;
+        }
     }
 }

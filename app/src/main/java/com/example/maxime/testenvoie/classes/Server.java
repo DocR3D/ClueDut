@@ -3,6 +3,10 @@ package com.example.maxime.testenvoie.classes;
 
 import android.util.Log;
 
+import com.example.maxime.testenvoie.EnqueteActivity;
+import com.example.maxime.testenvoie.Menu;
+import com.example.maxime.testenvoie.SalonCreerPartie;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +26,7 @@ import static com.example.maxime.testenvoie.classes.Server.Command.ANSWER;
 
 public class Server implements Runnable{
 
-    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, ANSWER, MOVE, START,DICE, NULL}
+    public enum Command {CONNECT, DISCONNECT, COLOR, READY, NOTREADY, HYP, ACS, ANSWER, MOVE, START, DICE, INITJEU, NULL}
 
     protected static ArrayList<Carte> cartesReponses = new ArrayList();
 
@@ -30,7 +34,7 @@ public class Server implements Runnable{
     protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
 
     protected static final int           MAX_COLORS       = 4;     // nombre max de couleurs
-    protected static final int           NB_PLAYERS       = 1;     // nombre de joueurs de la partie
+    public static final int              NB_PLAYERS       = 3;     // nombre de joueurs de la partie
 
     private static   Thread              thrConnexion     = null;  // thread de supervision du jeu
     protected static Thread[]            thrPlayers       = null;  // thread de réception pour chacun des joueurs
@@ -59,7 +63,7 @@ public class Server implements Runnable{
     }
 
     private static boolean compareCard(String cartePersonnage, String carteArme, String carteSalle){
-        return cartesReponses.get(0).getNom() == cartePersonnage && cartesReponses.get(1).getNom() == carteArme && cartesReponses.get(2).getNom() == carteSalle;
+        return cartesReponses.get(0).getNom().equals(cartePersonnage) && cartesReponses.get(1).getNom().equals(carteArme) && cartesReponses.get(2).getNom().equals(carteSalle);
     }
 
     protected static void sendToPlayer(int player, String response) {
@@ -173,8 +177,11 @@ public class Server implements Runnable{
                         // envoi de la réponse au joueur
                         sendToPlayer(player, response);
 
-                        response = new String("PLAYER " + " " + player + " " + color);
-                        sendToPlayer(player, response);
+                        if (player == 0){
+                            response = new String("PLAYER " + " " + player + " " + color);
+                            sendToPlayer(player, response);
+                        }
+
                         // calcul des couleurs disponibles
                         //responseToAllPlayers += getAvalaibleColors();
 
@@ -225,12 +232,16 @@ public class Server implements Runnable{
         // démarrage de la partie
         System.out.println("Le jeu peut démarrer");
         // distribution des cartes
-        /*while (unJeuDeCarte.getSizeJeuDeCarte() + 1 > 0) {
+        while (unJeuDeCarte.getSizeJeuDeCarte() + 1 > 0) {
             for (int i = 0; i < Server.NB_PLAYERS; i++) {
-                if (unJeuDeCarte.getSizeJeuDeCarte() != 0)
-                    Server.players[i].addLeJeuDeCarteDuJoueur(unJeuDeCarte.takeCard());
+                if (unJeuDeCarte.getSizeJeuDeCarte() != 0) {
+                    Carte uneCarte = unJeuDeCarte.takeCard();
+                    Server.players[i].addLeJeuDeCarteDuJoueur(uneCarte);
+                    response = new String("CARTE " + " " + uneCarte.getNom() + " " + uneCarte.getType());
+                    Server.sendToPlayer(i,response);
+                }
             }
-        }*/
+        }
 
         // tant que le jeu n'est pas terminÃ©
         while (!gameOver) {
@@ -254,6 +265,23 @@ public class Server implements Runnable{
                             }
                         }
                         break;
+
+                    /*case ACS:
+                        System.out.println("uisdfbgsudjbvujsdbvudb gfuikjs");
+                        *//*if (Server.compareCard(items[1], items[2], items[3])) {
+                            Server.sendToPlayer(player, "WON");
+                            Server.sendToAllPlayers(player, "GAMEOVER");
+                            for (int k = 0; k < Server.NB_PLAYERS; k++)
+                                Server.thrPlayers[k].interrupt();
+                            gameOver = true;
+                            break;
+                        } else {
+                            Server.sendToPlayer(player, "GAMEOVER");
+                            Server.nbPlayers --;
+                            Server.thrPlayers[player].interrupt();
+                        }*//*
+                        break;*/
+
                     // si accusation
                     // alors
                     // si confirmation
@@ -265,26 +293,11 @@ public class Server implements Runnable{
 								for (int k = 0; k < Server.NB_PLAYERS; i++)
 									Server.thrPlayers[k].interrupt();
 		*/
-                    case ACS:
-                        if (Server.compareCard(items[0], items[1], items[2])) {
-                            Server.players[player].getWriter().println("WON");
-                            for (int j = 0; j < Server.nbPlayers; j++ ){
-                                if (j != player)
-                                    Server.players[j].getWriter().println("GAMEOVER");
-                            }
-                            for (int k = 0; k < Server.NB_PLAYERS; k++)
-                                Server.thrPlayers[k].interrupt();
-                            gameOver = true;
-                            break;
-                        } else {
-                            Server.players[player].getWriter().println("GAMEOVER");
-                            Server.thrPlayers[player].interrupt();
-                        }
-                        break;
 
                         // sinon
                         // je ne sais pas ce que l'on fait
                         // fsi
+
                     case HYP :
                             for (int j = 0; j < Server.nbPlayers; j++){
                                 if (j != player){
@@ -323,6 +336,8 @@ public class Server implements Runnable{
                         //}
                 }
             }
+
+            Server.gameOver = true;
                 // fintantque
 
                 // fermeture du socket d'Ã©coute
@@ -443,11 +458,13 @@ public class Server implements Runnable{
 
             try {
                 // attente de réception d'une commande
-                while ((command = in.readLine()) != null) {
+                        while ((command = in.readLine()) != null) {
                     System.out.println("Joueur " + this.numJoueur + " Command = " + command);
 
                     // construction d'un nouveau message
                     message = new Message(this.numJoueur, command, Server.players[numJoueur].getState());
+
+                    String [] items = message.getCommandItems();
 
                     // examen de la commande
                     switch (message.getCommand()) {
@@ -459,7 +476,7 @@ public class Server implements Runnable{
                                     sendToAllPlayers(i, response);
                                 }
                                 Server.sendToAllPlayers(this.numJoueur, "START");
-                                Server.sendToPlayer(this.numJoueur, "START");
+                            SalonCreerPartie.lancerJeu();
                             break;
 
                         case DICE:
@@ -468,12 +485,33 @@ public class Server implements Runnable{
                             Server.sendToPlayer(this.numJoueur, response);
                             break;
 
+                        case INITJEU:
+                            response = new String("INITFICHE");
+                            Server.sendToPlayer(this.numJoueur, response);
+                            break;
+
+                        case ACS:
+                            if (Server.compareCard("" + items[1], items[3], items[4])) {
+                                Server.sendToPlayer(this.numJoueur, "WON");
+                                Server.sendToAllPlayers(this.numJoueur, "GAMEOVER");
+                                for (int k = 0; k < Server.NB_PLAYERS; k++)
+                                    Server.thrPlayers[k].interrupt();
+                                gameOver = true;
+                                break;
+                            } else {
+                                Server.sendToPlayer(this.numJoueur, "GAMEOVER");
+                                Server.nbPlayers --;
+                                Server.thrPlayers[this.numJoueur].interrupt();
+                            }
+                            break;
+
                         default:
                             // ajout de la commande reçue à la file
                             Server.queueCommands.add(message);
 
                             // information du superviseur de la disponibilité d'une commande
                             Server.semClient.V();
+                            break;
                     }
                 }
                 if (command == null) {

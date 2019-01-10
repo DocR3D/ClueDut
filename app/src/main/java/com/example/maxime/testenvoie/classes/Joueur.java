@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageButton;
 
 import com.example.maxime.testenvoie.JouerActivity;
+import com.example.maxime.testenvoie.Menu;
 import com.example.maxime.testenvoie.R;
 
 import java.io.File;
@@ -94,7 +95,7 @@ public class Joueur {
         pCase.caseClickable();
     }
 
-    public void changerCaseJoueur(Case pCase, int i, int j){
+    public void changerCaseJoueur(Case pCase, int i, int j, int numJoueur){
         Iterator<Salle> iter = JouerActivity.listSalles.iterator();
         while (iter.hasNext()) {
             Salle element = iter.next();
@@ -102,7 +103,20 @@ public class Joueur {
                 this.getCaseJ().getImage().setBackgroundResource(R.drawable.fondcase);
                 this.getCaseJ().caseClickable();
                 this.setCaseJ(JouerActivity.plateau[i][j]);
-                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                switch (Menu.client.couleurs[numJoueur]){
+                    case 0:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                        break;
+                    case 1:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnvert);
+                        break;
+                    case 2:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnbleu);
+                        break;
+                    case 3:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnviolet);
+                        break;
+                }
                 this.getCaseJ().caseNonClickable();
                 JouerActivity.deplacement = 0;
                 this.deplacementJoueur(0);
@@ -110,10 +124,99 @@ public class Joueur {
                 this.getCaseJ().getImage().setBackgroundResource(R.drawable.fondcase);
                 this.getCaseJ().caseClickable();
                 this.setCaseJ(pCase);
-                this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                switch (Menu.client.couleurs[numJoueur]){
+                    case 0:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                        break;
+                    case 1:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnvert);
+                        break;
+                    case 2:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnbleu);
+                        break;
+                    case 3:
+                        this.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnviolet);
+                        break;
+                }
                 this.getCaseJ().caseNonClickable();
                 JouerActivity.deplacement = 0;
                 this.deplacementJoueur(0);
+            }
+        }
+
+        afficherAutreJoueur(numJoueur);
+    }
+
+    public void afficherAutreJoueur(int numJoueur) {
+        for (int i = 0; i < 4; i++){
+            if (i != numJoueur){
+                if (i == 1){
+                    switch (Menu.client.couleurs[i]){
+                        case 0:
+                            JouerActivity.j2.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                            break;
+                        case 1:
+                            JouerActivity.j2.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnvert);
+                            break;
+                        case 2:
+                            JouerActivity.j2.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnbleu);
+                            break;
+                        case 3:
+                            JouerActivity.j2.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnviolet);
+                            break;
+                    }
+                }
+
+                if (i == 2){
+                    switch (Menu.client.couleurs[i]){
+                        case 0:
+                            JouerActivity.j3.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                            break;
+                        case 1:
+                            JouerActivity.j3.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnvert);
+                            break;
+                        case 2:
+                            JouerActivity.j3.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnbleu);
+                            break;
+                        case 3:
+                            JouerActivity.j3.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnviolet);
+                            break;
+                    }
+                }
+
+                if (i == 3){
+                    switch (Menu.client.couleurs[i]){
+                        case 0:
+                            JouerActivity.j4.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                            break;
+                        case 1:
+                            JouerActivity.j4.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnvert);
+                            break;
+                        case 2:
+                            JouerActivity.j4.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnbleu);
+                            break;
+                        case 3:
+                            JouerActivity.j4.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnviolet);
+                            break;
+                    }
+                }
+
+                if (i == 0){
+                    switch (Menu.client.couleurs[i]){
+                        case 0:
+                            JouerActivity.j1.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnrouge);
+                            break;
+                        case 1:
+                            JouerActivity.j1.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnvert);
+                            break;
+                        case 2:
+                            JouerActivity.j1.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnbleu);
+                            break;
+                        case 3:
+                            JouerActivity.j1.getCaseJ().getImage().setBackgroundResource(R.drawable.pawnviolet);
+                            break;
+                    }
+                }
             }
         }
     }

@@ -85,7 +85,7 @@ public class SalonRejoindrePartie extends AppCompatActivity {
         creationPartiePopup = new Dialog(SalonRejoindrePartie.this);
         creationPartiePopup.setContentView(R.layout.popup_choisir_couleur);
         cadreCreationPartie = creationPartiePopup.findViewById(R.id.cadreCreationPartie);
-        // cadreCouleursCreationPartie = creationPartiePopup.findViewById(R.id.cadreCouleursCreationPartie);
+        // cadreCouleursCreationPartie = choixAction.findViewById(R.id.cadreCouleursCreationPartie);
         backToPlayPopupCreationPartie_btn = creationPartiePopup.findViewById(R.id.backToPlayPopupCreationPartie);
         texteCouleurCreationPartie = creationPartiePopup.findViewById(R.id.textCouleurCreationpartie);
         goToSalonCreation_btn = creationPartiePopup.findViewById(R.id.goToSalonCreation);
@@ -359,7 +359,16 @@ public class SalonRejoindrePartie extends AppCompatActivity {
     }
 
     public static void lancerJeu() {
-       Intent intent = new Intent(context, JouerActivity.class);
+       Intent intent = new Intent(context, EnqueteActivity.class);
        context.startActivity(intent);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (creationPartiePopup != null) {
+            creationPartiePopup.dismiss();
+            creationPartiePopup = null;
+        }
     }
 }

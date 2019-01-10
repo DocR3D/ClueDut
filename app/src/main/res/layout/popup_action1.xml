@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    tools:showIn="@layout/activity_fiche_enquete">
-
+    android:orientation="vertical"
+    android:background="@drawable/fond"
+    android:gravity="center">
 
     <LinearLayout
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/retour"
+            android:id="@+id/valider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="8dp"
-            android:text="Retour"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Valider"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -44,7 +38,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Colonel_Moutarde"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -53,7 +46,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Professeur_Violet"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -62,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reverand_Olive"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -71,7 +62,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Madame_Pervenche"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -80,7 +70,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mademoiselle_Rose"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -89,7 +78,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Madame_Leblanc"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
         </LinearLayout>
@@ -111,7 +99,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Poignard"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -120,7 +107,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chandelier"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -129,7 +115,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Revolver"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -138,7 +123,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Corde"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff" />
 
@@ -147,7 +131,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Matraque"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
 
@@ -156,112 +139,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Clé_Anglaise"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/Salle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salle"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/verenda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vérenda"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/salon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salon"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/salleAManger"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salle_à_Manger"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/bibliotheque"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bibliothèque"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/salleDeBal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salle_de_Bal"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/bureau"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bureau"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/hall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hall"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/Cuisine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cuisine"
-                android:enabled="false"
-                android:buttonTint="#7FDD4C"
-                android:textColor="#fff"/>
-
-            <CheckBox
-                android:id="@+id/billard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salle_de_Billard"
-                android:enabled="false"
                 android:buttonTint="#7FDD4C"
                 android:textColor="#fff"/>
         </LinearLayout>
     </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
