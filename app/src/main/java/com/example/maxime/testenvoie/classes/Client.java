@@ -2,10 +2,12 @@ package com.example.maxime.testenvoie.classes;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.maxime.testenvoie.EnqueteActivity;
 import com.example.maxime.testenvoie.JouerActivity;
@@ -30,7 +32,7 @@ import java.util.List;
 
 public class Client implements Runnable{
 
-    public enum Command {OK, NOK, PLAYER, COLORS, READY, NOTREADY, GAMEOVER, REJECTED, DICE, COLOR, CARTE, START, NUMCOLOR, INITFICHE, WON};
+    public enum Command {OK, NOK, PLAYER, COLORS, READY, NO, YES, HYP, NOTREADY, GAMEOVER, REJECTED, MOVE, DICE, COLOR, CARTE, START, NUMCOLOR, INITFICHE, WON};
 
     private static final String SERVEUR_TCP_IP   = new String("0.0.0.0");
     private static final int    SERVEUR_TCP_PORT = 8001;
@@ -103,8 +105,7 @@ public class Client implements Runnable{
     }
 
     public void hyp(String personnage, String arme, String lieu){
-        System.out.println(personnage + " " + arme + " " + lieu);
-        command = "HYP";
+        command = "HYP" + " " + personnage + " " + arme + " " + lieu;
         out.println(command);
     }
 
@@ -115,6 +116,21 @@ public class Client implements Runnable{
 
     public void dice(){
         command = "DICE";
+        out.println(command);
+    }
+
+    public void no(int numJoueur){
+        command = "NO" + " " + numJoueur;
+        out.println(command);
+    }
+
+    public void yes(String rep, int numJoueur){
+        command = "YES " + rep + " " + numJoueur;
+        out.println(command);
+    }
+
+    public void move(int i, int j){
+        command = "MOVE " + i + " " + j;
         out.println(command);
     }
 
@@ -182,7 +198,6 @@ public class Client implements Runnable{
                 System.out.println("Game Over !");
 
             //scanner.close();
-
             thrReceiver.join();
 
             in.close();
@@ -258,6 +273,18 @@ public class Client implements Runnable{
             if (items[0].compareToIgnoreCase("CARTE") == 0)
                 if (items.length == 3)
                     return Client.Command.CARTE;
+            if (items[0].compareToIgnoreCase("MOVE") == 0)
+                if (items.length == 4)
+                    return Client.Command.MOVE;
+            if (items[0].compareToIgnoreCase("NO") == 0)
+                if (items.length == 2)
+                    return Client.Command.NO;
+            if (items[0].compareToIgnoreCase("YES") == 0)
+                if (items.length == 2)
+                    return Client.Command.YES;
+            if (items[0].compareToIgnoreCase("HYP") == 0)
+                if (items.length == 5)
+                    return Client.Command.HYP;
 
             return null;
         }
@@ -278,14 +305,82 @@ public class Client implements Runnable{
                 items = msg.split(" +");
 
                 switch (checkCommand(items)) {
+                    case NO:
+                        Toast.makeText(JouerActivity.context, "le joueur " + items[1] + " n'a pas montré de carte",Toast.LENGTH_LONG).show();
+                        break;
+                    case YES:
+                        for (int k = 0; k < EnqueteActivity.checkBoxs.length; k++){
+                            if (items[1].equals(EnqueteActivity.checkBoxs[k].getText())){
+                                EnqueteActivity.checkBoxs[k].setChecked(true);
+                            }
+                        }
+                        Toast.makeText(JouerActivity.context, "Carte reçu : " + items[1],Toast.LENGTH_LONG).show();
+                        break;
+
+                    case HYP:
+                        final List<String> rep = new ArrayList<>();
+                        for (int i = 0; i < jeuDeCarte.size(); i++){
+                            if (jeuDeCarte.get(i).getNom().equals(items[1])){
+                                rep.add(items[1]);
+                            }
+                        }
+                        for (int i = 0; i < jeuDeCarte.size(); i++){
+                            if (jeuDeCarte.get(i).getNom().equals(items[2])){
+                                rep.add(items[2]);
+                            }
+                        }
+                        for (int i = 0; i < jeuDeCarte.size(); i++){
+                            if (jeuDeCarte.get(i).getNom().equals(items[3])){
+                                rep.add(items[3]);
+                            }
+                        }
+                        final String[] finalItems = items;
+                        Thread thread;
+                        switch (rep.size()){
+                            case 0:
+                                thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        no(Integer.valueOf(finalItems[4]));
+                                    }
+                                });
+                                thread.start();
+                                thread.interrupt();
+                                break;
+                            case 1:
+                                thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        yes(rep.get(0), Integer.valueOf(finalItems[4]));
+                                    }
+                                });
+                                thread.start();
+                                thread.interrupt();
+                                break;
+                            default:
+                                thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int i = (int) (Math.random() * rep.size());
+                                        yes(rep.get(i), Integer.valueOf(finalItems[4]));
+                                    }
+                                });
+                                thread.start();
+                                thread.interrupt();
+                                break;
+                        }
+                        break;
+
                     case GAMEOVER:
                         System.out.println("LOOOOOOOSE");
                         Client.gameOver = true;
+                        JouerActivity.fin();
                         break;
 
                     case WON:
                         System.out.println("WOOOOOOOOON");
                         Client.gameOver = true;
+                        JouerActivity.fin();
                         break;
 
                     case REJECTED:
@@ -305,6 +400,7 @@ public class Client implements Runnable{
                             SalonRejoindrePartie.afficherJoueur(Server.players[Integer.parseInt(items[1])].getPseudo(),
                                     Integer.valueOf(items[1]), Integer.valueOf(items[2]));
                         }
+                        setNumJoueur(Integer.valueOf(items[1]));
                     break;
 
                     case COLOR:
@@ -340,10 +436,8 @@ public class Client implements Runnable{
                         break;
 
                     case START:
-                        /*if (Menu.client.getPseudo().equalsIgnoreCase(Server.players[0].getPseudo()))
-                            SalonCreerPartie.lancerJeu();
-                         else*/
                             SalonRejoindrePartie.lancerJeu();
+                            JouerActivity.affecterJoueur();
                         break;
 
                     case NUMCOLOR:
@@ -359,6 +453,11 @@ public class Client implements Runnable{
                                     }
                                 }
                             }
+                        break;
+
+                    case MOVE:
+                        System.out.println("Je suis passé ici");
+                        JouerActivity.moveJoueur(Integer.valueOf(items[1]), Integer.valueOf(items[2]), Integer.valueOf(items[3]));
                         break;
 
                     case CARTE:

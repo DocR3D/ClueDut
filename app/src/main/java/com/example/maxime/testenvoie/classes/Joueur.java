@@ -95,7 +95,7 @@ public class Joueur {
         pCase.caseClickable();
     }
 
-    public void changerCaseJoueur(Case pCase, int i, int j, int numJoueur){
+    public void changerCaseJoueur(Case pCase, final int i, final int j, int numJoueur){
         Iterator<Salle> iter = JouerActivity.listSalles.iterator();
         while (iter.hasNext()) {
             Salle element = iter.next();
@@ -143,11 +143,19 @@ public class Joueur {
                 this.deplacementJoueur(0);
             }
         }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Menu.client.move(i,j);
+            }
+        });
+        thread.start();
+        thread.interrupt();
 
         afficherAutreJoueur(numJoueur);
     }
 
-    public void afficherAutreJoueur(int numJoueur) {
+    public static void afficherAutreJoueur(int numJoueur) {
         for (int i = 0; i < 4; i++){
             if (i != numJoueur){
                 if (i == 1){

@@ -125,21 +125,19 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         switch (Menu.client.getNumJoueur()) {
             case 0:
                 Menu.client.setJoueur(j1);
-                joueur = j1;
                 break;
             case 1:
                 Menu.client.setJoueur(j2);
-                joueur = j2;
                 break;
             case 2:
                 Menu.client.setJoueur(j3);
-                joueur = j3;
                 break;
             case 3:
                 Menu.client.setJoueur(j4);
-                joueur = j4;
                 break;
         }
+
+        joueur = Menu.client.getJoueur();
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -508,13 +506,11 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
                                     public void onClick(View v) {
                                         if (checkBoxs[finalI].isChecked()) {
                                             personnage[0] = (String) checkBoxs[finalI].getText();
-                                            System.out.println(personnage[0]);
                                             checkBoxs[finalI].setChecked(true);
                                             dechecker((String)checkBoxs[finalI].getText(), 0, 5);
                                         }
                                         else {
                                             personnage[0] = null;
-                                            System.out.println(personnage[0]);
                                             checker((String) checkBoxs[finalI].getText(), 0, 5);
                                             checkBoxs[finalI].setChecked(false);
                                         }
@@ -529,13 +525,11 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
                                     public void onClick(View v) {
                                         if (checkBoxs[finalI].isChecked()) {
                                             arme[0] = (String) checkBoxs[finalI].getText();
-                                            System.out.println(arme[0]);
                                             checkBoxs[finalI].setChecked(true);
                                             dechecker((String) checkBoxs[finalI].getText(), 6, 11);
                                         }
                                         else {
                                             arme[0] = null;
-                                            System.out.println(arme[0]);
                                             checker((String) checkBoxs[finalI].getText(), 6, 11);
                                             checkBoxs[finalI].setChecked(false);
                                         }
@@ -552,6 +546,7 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
                                             public void run() {
                                                 Menu.client.hyp(personnage[0], arme[0], lieu);
                                                 action.cancel();
+                                                choixAction.cancel();
                                             }
                                         });
                                         thread.start();
@@ -764,9 +759,19 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         imCase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int posI = 0;
+                int posJ = 0;
                 if (pCase.getClickable()) {
                     imCase.setBackgroundResource(R.drawable.pawnrouge);
-                    joueur.changerCaseJoueur(pCase, 0, 0, Menu.client.getNumJoueur());
+                    for (int i = 0; i < plateau.length; i ++){
+                        for (int j = 0; j < plateau.length; j ++){
+                            if (pCase.equals(plateau[i][j])){
+                                posI = i;
+                                posJ = j;
+                            }
+                        }
+                    }
+                    joueur.changerCaseJoueur(pCase, posI, posJ, Menu.client.getNumJoueur());
                 }
             }
         });
@@ -793,5 +798,37 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
                 checkBoxs[i].setEnabled(true);
             }
         }
+    }
+
+    public static void moveJoueur(int numJoueur, int i, int j){
+        System.out.println("Je suis passé ici");
+        switch (numJoueur) {
+            case 0:
+                System.out.println("Je suis passé ici");
+                j1.setCaseJ(plateau[i][j]);
+                break;
+            case 1:
+                System.out.println("Je suis passé ici");
+                j2.setCaseJ(plateau[i][j]);
+                break;
+            case 2:
+                System.out.println("Je suis passé ici");
+                j3.setCaseJ(plateau[i][j]);
+                break;
+            case 3:
+                System.out.println("Je suis passé ici");
+                j4.setCaseJ(plateau[i][j]);
+                break;
+        }
+        Joueur.afficherAutreJoueur(numJoueur);
+    }
+
+    public static void fin(){
+        Intent intent = new Intent(context, FinActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void affecterJoueur(){
+
     }
 }

@@ -5,12 +5,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class JeuDeCarte {
-    ArrayList<Carte> jeuDeCartes = new ArrayList();
+    ArrayList<Carte> jeuDeCartes;
     String[] nomSalles = {"Cuisine", "Salle_de_Bal", "Vérenda", "Salle_de_Billard", "Bibliothèque", "Bureau", "Hall", "Salon", "Salle_à_Manger"};
     String[] nomArmes = {"Corde", "Poignard", "Matraque", "Revolver","Chandelier", "Clé_Anglaise"};
     String[] nomPersonnage = {"Colonel_Moutarde","Mademoiselle_Rose", "Reverand_Olive","Madame_Leblanc","Madame_Pervenche", "Professeur_Violet"};
 
     public JeuDeCarte(){
+        jeuDeCartes = new ArrayList();
         for(int i=0; i<6;i++) jeuDeCartes.add(new Carte(nomPersonnage[i], Carte.Type.PERSONNAGE));
         for(int i=0; i<6;i++) jeuDeCartes.add(new Carte(nomArmes[i], Carte.Type.ARME));
         for(int i=0; i<9;i++) jeuDeCartes.add(new Carte(nomSalles[i], Carte.Type.SALLE));
@@ -31,7 +32,7 @@ public class JeuDeCarte {
         ArrayList<Carte> lesCartesImportantes = new ArrayList<Carte>();
         List<Carte> carteAEnlever = new ArrayList<>();
         //Carte uneCarte = new Carte(nomPersonnage[(int)(Math.random()* nomPersonnage.length)],Carte.Type.PERSONNAGE);
-        int index = (int) Math.random() * 5;
+        int index = (int) (Math.random() * 5);
         lesCartesImportantes.add(jeuDeCartes.get(index));
         carteAEnlever.add(jeuDeCartes.get(index));
         //uneCarte = new Carte(nomArmes[(int)(Math.random()* nomArmes.length)],Carte.Type.ARME);

@@ -8,13 +8,10 @@ public class Message {
 	
 	public Message(int index, String command, Player.State state) {
 		this.index   = index;
-
-		System.out.println(command);
 		
 		// décomposition des éléments de la commande		
 		this.items = command.split(" +");
 
-		System.out.println(items[0]);
 		this.state = state;
 
 		try {
@@ -42,10 +39,18 @@ public class Message {
         		return Server.Command.ACS;
 		}
 
+		if (items[0].compareToIgnoreCase("MOVE") == 0) {
+			return Server.Command.MOVE;
+		}
+
         if (items[0].compareToIgnoreCase("HYP") == 0)
-            if (this.state == Player.State.CONNECTED)
-                if (items.length == 4)
-                    return Server.Command.HYP;
+            return Server.Command.HYP;
+
+		if (items[0].compareToIgnoreCase("NO") == 0)
+				return Server.Command.NO;
+
+		if (items[0].compareToIgnoreCase("YES") == 0)
+				return Server.Command.YES;
 
 		if (items[0].compareToIgnoreCase("START") == 0)
 			if (this.state == Player.State.READY)
