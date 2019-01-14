@@ -823,8 +823,13 @@ public class JouerActivity extends AppCompatActivity implements NavigationView.O
         Joueur.afficherAutreJoueur(numJoueur);
     }
 
-    public static void fin(){
-        Intent intent = new Intent(context, FinActivity.class);
+    public static void finWin(){
+        Intent intent = new Intent(context, FinActivityWin.class);
+        context.startActivity(intent);
+    }
+
+    public static void finLose(){
+        Intent intent = new Intent(context, FinActivityLose.class);
         context.startActivity(intent);
     }
 

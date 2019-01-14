@@ -306,8 +306,9 @@ public class Client implements Runnable{
 
                 switch (checkCommand(items)) {
                     case NO:
-                        Toast.makeText(JouerActivity.context, "le joueur " + items[1] + " n'a pas montré de carte",Toast.LENGTH_LONG).show();
+                        Toast.makeText(JouerActivity.context, "Le joueur " + items[1] + " n'a pas montré de carte",Toast.LENGTH_LONG).show();
                         break;
+
                     case YES:
                         for (int k = 0; k < EnqueteActivity.checkBoxs.length; k++){
                             if (items[1].equals(EnqueteActivity.checkBoxs[k].getText())){
@@ -374,13 +375,13 @@ public class Client implements Runnable{
                     case GAMEOVER:
                         System.out.println("LOOOOOOOSE");
                         Client.gameOver = true;
-                        JouerActivity.fin();
+                        JouerActivity.finLose();
                         break;
 
                     case WON:
                         System.out.println("WOOOOOOOOON");
                         Client.gameOver = true;
-                        JouerActivity.fin();
+                        JouerActivity.finWin();
                         break;
 
                     case REJECTED:
@@ -456,7 +457,6 @@ public class Client implements Runnable{
                         break;
 
                     case MOVE:
-                        System.out.println("Je suis passé ici");
                         JouerActivity.moveJoueur(Integer.valueOf(items[1]), Integer.valueOf(items[2]), Integer.valueOf(items[3]));
                         break;
 

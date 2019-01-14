@@ -33,7 +33,7 @@ public class Server implements Runnable{
     protected static final int           SERVEUR_TCP_PORT = 8001;  // port d'écoute du serveur
 
     protected static final int           MAX_COLORS       = 4;     // nombre max de couleurs
-    public static final int              NB_PLAYERS       = 2;     // nombre de joueurs de la partie
+    public static final int              NB_PLAYERS       = 4;     // nombre de joueurs de la partie
 
     private static   Thread              thrConnexion     = null;  // thread de supervision du jeu
     protected static Thread[]            thrPlayers       = null;  // thread de réception pour chacun des joueurs
@@ -439,26 +439,24 @@ public class Server implements Runnable{
                     // examen de la commande
                     switch (message.getCommand()) {
                         case HYP :
-                            if(verifTour(numJoueur))
-                                Server.sendToAllPlayers(numJoueur,"HYP " + items[1] + " " + items[2] + " " + items[3] + " " + numJoueur);
+                            Server.sendToAllPlayers(numJoueur,"HYP " + items[1] + " " + items[2] + " " + items[3] + " " + numJoueur);
+                            Server.semClient.V();
                             break;
 
                         case NO:
                             Server.sendToPlayer(Integer.valueOf(items[1]),"NO " + numJoueur);
-                            Server.semClient.V();
                             break;
                         case YES:
                             Server.sendToPlayer(Integer.valueOf(items[2]), "YES " + items[1]);
-                            Server.semClient.V();
                             break;
 
-                        case MOVE:
+                        /*case MOVE:
                             if(verifTour(numJoueur)) {
                                 String response = new String("MOVE " + " " + numJoueur + " " + items[1] + " " + items[2]);
                                 Server.sendToAllPlayers(numJoueur, response);
                                 Server.semClient.V();
                             }
-                            break;
+                            break;*/
 
                         case START:
                                 for (int i = 0; i < Server.nbPlayers; i++) {
@@ -486,7 +484,6 @@ public class Server implements Runnable{
                             break;
 
                         case ACS:
-                            if(verifTour(numJoueur)) {
                                 if (Server.compareCard("" + items[1], items[2], items[3])) {
                                     Server.sendToPlayer(this.numJoueur, "WON");
                                     Server.sendToAllPlayers(this.numJoueur, "GAMEOVER");
@@ -498,7 +495,9 @@ public class Server implements Runnable{
                                     Server.sendToPlayer(this.numJoueur, "GAMEOVER");
                                     Server.nbPlayers--;
                                     Server.thrPlayers[this.numJoueur].interrupt();
-                                }
+                                    if (Server.nbPlayers == 1){
+                                        Server.sendToAllPlayers(this.numJoueur, "WON");
+                                    }
                             }
                             Server.semClient.V();
                             break;

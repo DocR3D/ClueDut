@@ -14,7 +14,6 @@ import java.util.Iterator;
 public class Joueur {
 
     private Case caseJ;
-    Bitmap myBitmap;
 
     public Joueur(){
     }

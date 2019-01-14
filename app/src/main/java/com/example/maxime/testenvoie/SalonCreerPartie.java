@@ -32,12 +32,15 @@ public class SalonCreerPartie extends AppCompatActivity {
     private static TextView nomJoueur2;
     private static TextView nomJoueur3;
     private static TextView nomJoueur4;
+    private static TextView ip;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salon_creer_partie);
+
+        ip = findViewById(R.id.ip);
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -53,7 +56,8 @@ public class SalonCreerPartie extends AppCompatActivity {
                     {
                         if (inetAddress.getHostAddress().contains("192.168")) {
                             String Ip = inetAddress.getHostAddress().toString();
-                            Log.e("ip", "" + Ip);
+                            ip.setText(ip.getText() + " " + Ip);
+                            break;
                         }
                     }
                 }
@@ -74,7 +78,7 @@ public class SalonCreerPartie extends AppCompatActivity {
         cadreJoueurs = findViewById(R.id.cadreJoueursCreerPartie);
         backToMenuSalonCreerPartie_btn = findViewById(R.id.backToMenuSalonCreerPartie);
         commencerPartie_btn = findViewById(R.id.commencerPartie);
-        commencerPartie_btn.setEnabled(false);
+        //commencerPartie_btn.setEnabled(false);
         nomJoueur1 = findViewById(R.id.nomJoueur1);
         nomJoueur2 = findViewById(R.id.nomJoueur2);
         nomJoueur3 = findViewById(R.id.nomJoueur3);

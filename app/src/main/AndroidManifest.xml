@@ -46,7 +46,13 @@
             android:label="@string/title_activity_fiche_enquete"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FinActivity"></activity>
+        <activity
+            android:name=".FinActivityWin"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FinActivityLose"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
