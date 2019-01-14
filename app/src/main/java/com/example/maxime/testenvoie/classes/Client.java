@@ -456,10 +456,6 @@ public class Client implements Runnable{
                             }
                         break;
 
-                    case MOVE:
-                        JouerActivity.moveJoueur(Integer.valueOf(items[1]), Integer.valueOf(items[2]), Integer.valueOf(items[3]));
-                        break;
-
                     case CARTE:
                         Carte carte = null;
                         switch(items[2]){

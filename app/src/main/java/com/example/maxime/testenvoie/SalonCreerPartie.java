@@ -78,7 +78,7 @@ public class SalonCreerPartie extends AppCompatActivity {
         cadreJoueurs = findViewById(R.id.cadreJoueursCreerPartie);
         backToMenuSalonCreerPartie_btn = findViewById(R.id.backToMenuSalonCreerPartie);
         commencerPartie_btn = findViewById(R.id.commencerPartie);
-        //commencerPartie_btn.setEnabled(false);
+        commencerPartie_btn.setEnabled(false);
         nomJoueur1 = findViewById(R.id.nomJoueur1);
         nomJoueur2 = findViewById(R.id.nomJoueur2);
         nomJoueur3 = findViewById(R.id.nomJoueur3);

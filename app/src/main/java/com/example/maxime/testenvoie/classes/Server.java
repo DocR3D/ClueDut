@@ -222,14 +222,6 @@ public class Server implements Runnable{
         }
         // la partie peut démarrer
 
-        // tri des joueurs selon l'ordre des couleurs
-        /*for (int i = 1; i < Server.nbPlayers; i++)
-            for (int k = 0; k < i; k++)
-                if (Server.players[k].getColor() > Server.players[k + 1].getColor()) {
-                    int color = Server.players[k].getColor();
-                    Server.players[k].setColor(Server.players[k + 1].getColor());
-                    Server.players[k + 1].setColor(color);
-                }*/
         // démarrage de la partie
         System.out.println("Le jeu peut démarrer");
         // distribution des cartes
@@ -251,62 +243,9 @@ public class Server implements Runnable{
                 Server.playerTour = i;
                 // attente de rÃ©ception d'une commande d'un joueur
                 Server.semClient.P();
-
-                // obtention du numÃ©ro de joueur
-                /*msg = Server.queueCommands.poll();
-                player = msg.getIndex();
-
-                items = msg.getCommandItems();*/
-
-                // examen de la commande
-                //switch (msg.getCommand()) {
-
-                    /*case ACS:
-                        System.out.println("uisdfbgsudjbvujsdbvudb gfuikjs");
-                        *//*if (Server.compareCard(items[1], items[2], items[3])) {
-                            Server.sendToPlayer(player, "WON");
-                            Server.sendToAllPlayers(player, "GAMEOVER");
-                            for (int k = 0; k < Server.NB_PLAYERS; k++)
-                                Server.thrPlayers[k].interrupt();
-                            gameOver = true;
-                            break;
-                        } else {
-                            Server.sendToPlayer(player, "GAMEOVER");
-                            Server.nbPlayers --;
-                            Server.thrPlayers[player].interrupt();
-                        }*//*
-                        break;*/
-
-                // si accusation
-                // alors
-                // si confirmation
-                // alors
-                // envoi GAMEOVER WON au joueur ayant formulÃ© l'hypothÃ¨se
-                // envoi GAMEOVER Ã  tous les autres joueurs
-                // arrÃªt des threads Player
-		/*
-								for (int k = 0; k < Server.NB_PLAYERS; i++)
-									Server.thrPlayers[k].interrupt();
-		*/
-
-                // sinon
-                // je ne sais pas ce que l'on fait
-                // fsi
-
-                // sinon
-                // envoi Ã  tous les autres joueurs du dÃ©placement + de l'hypothÃ¨se
-                // pour chacun des autres joueurs
-                // demande d'une carte (personnage salle arme)
-                // attente de la rÃ©ponse
-                // envoi de la carte au joueur ayant formulÃ© l'hyptohÃ¨se
-                // envoi aux autres joueurs d'une rÃ©ponse affirmative ou nÃ©gative
-                // finpour
-                // finsi
-                //}
-                //}
             }
 
-            }
+        }
 
             Server.gameOver = true;
                 // fintantque
@@ -350,27 +289,6 @@ public class Server implements Runnable{
                     Socket socket = this.socketEcoute.accept();
                     IP = socket.getInetAddress();
 
-                    /*partie permettant de déterminer l'IP du joueur
- * et de déterminer s'il s'agit d'une reconnexion*/
-				/*i = 0;
-				// recherche d'une perte de connexion
-				while ((i < Server.nbPlayers) && (! IP.equals(Server.players[i].getIP()))) i++;
-
-				if (i < Server.nbPlayers) {
-					// reconnexion d'un client
-					System.out.println("Reconnection du joueur " + i);
-
-					Server.players[i].setSocket(socket);
-
-					// création d'un thread de communication avec le joueur
-					Server.thrPlayers[i] = new Thread(new ThreadPlayer(i));
-
-					// démarrage du thread
-					Server.thrPlayers[i].start();
-
-					System.out.println("Lancement d'un thread client");
-				}
-				else {*/
                     if (Server.nbPlayers == Server.NB_PLAYERS) {
                         // le nombre maximum de joueurs est atteint
                         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -449,14 +367,6 @@ public class Server implements Runnable{
                         case YES:
                             Server.sendToPlayer(Integer.valueOf(items[2]), "YES " + items[1]);
                             break;
-
-                        /*case MOVE:
-                            if(verifTour(numJoueur)) {
-                                String response = new String("MOVE " + " " + numJoueur + " " + items[1] + " " + items[2]);
-                                Server.sendToAllPlayers(numJoueur, response);
-                                Server.semClient.V();
-                            }
-                            break;*/
 
                         case START:
                                 for (int i = 0; i < Server.nbPlayers; i++) {
